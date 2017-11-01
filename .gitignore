@@ -3,8 +3,8 @@
 # Ignore java .class files.
 *.java
 
-# Ignore compiled C/C++ files.
-*.o
-
 # Ignore everything in the build directory.
 build/
+
+# Ignore intellij IDE files
+.idea/
