@@ -2,6 +2,17 @@
 
 **Bernard O'Connor**
 
+[TOC]: #
+
+## Table of Contents
+- [Blog #1 (1/11/2017)](#blog-1-1112017)
+- [Blog #2 (19/11/2017)](#blog-2-19112017)
+- [Blog #3 (21/11/2017)](#blog-3-21112017)
+
+
+
+
+
 ## Blog #1 (1/11/2017)
 
 #### What I've Done:
@@ -20,8 +31,9 @@ Next I will work on the Functional Requirements for the Functional Specification
 
 
 
+
 ## Blog #2 (19/11/2017)
-It has been a little while since my last blog post. The various assignments and working on the functional spec has kept me on myt toes.
+It has been a little while since my last blog post. The various assignments and working on the functional spec has kept me on my toes.
 
 #### What I've Done:
 I've fleshed out the Use Case Scenarios and the Functional Requirements some more.
@@ -41,3 +53,33 @@ I am working on getting as much of the functional spec done for the next supervi
 
 #### What I Will Do:
 Finish the Functional Specification for Friday.
+
+
+## Blog #3 (21/11/2017)
+
+
+#### What I've Done:
+I had a meeting today with my supervisor to discuss the diagrams I have made since our last meeting. He was happy with them, though advised me to keep my state diagram for the technical manual.
+
+###### \[Work In Progress\] Sequence Diagram for the SCAE Library
+![Sequence%20Diagram%20WIP%20v2](images/Sequence%20Diagram%20WIP%20v2.png)
+
+###### \[Work In Progress\] System Architecture Diagram
+![System%20Architecture%20WIP_1](images/System%20Architecture%20WIP_1.png)
+
+###### \[Work In Progress\] State Diagram Lexical Analyser
+![State%20Diagram%20Lexical%20Analyser%20WIP_1](images/State%20Diagram%20Lexical%20Analyser%20WIP_1.png)
+
+
+I also finalised the scope of my project, which I then discussed with my supervisor. At the heart of my project is the Source Code Analyser Engine library. What I've added to the scope is then a web-application that not only will host downloads and documentation for the library, but it will also have a public web API that other projects may easily point to.
+These other projects will send a request with the source code to be analysed, and a string representation of the style rulebook and corresponding tokens to be used. This string representation can either be a URL to a raw version of a rulebook, the string may be the rulebook itself, or it may be an enum to point to one of my pre-approved rulebooks.
+
+###### Rough Diagram to highlight new scope / full project architecture
+![Project%20Rough%20Scope_1](images/Project%20Rough%20Scope_1.png)
+
+#### What I am Currently Doing:
+I am currently adding the final touches to the diagrams and reflecting the changes to the scope of the project in my User Scenarios and my Functional Requirements
+
+
+#### What I Will Do:
+Create a Gantt Chart and finish the Functional Specification for Friday.
