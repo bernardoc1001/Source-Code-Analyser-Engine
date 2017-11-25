@@ -8,6 +8,7 @@
 - [Blog #1 (1/11/2017)](#blog-1-1112017)
 - [Blog #2 (19/11/2017)](#blog-2-19112017)
 - [Blog #3 (21/11/2017)](#blog-3-21112017)
+- [Blog #4 (25/11/2017)](#blog-4-25112017)
 
 
 
@@ -83,3 +84,20 @@ I am currently adding the final touches to the diagrams and reflecting the chang
 
 #### What I Will Do:
 Create a Gantt Chart and finish the Functional Specification for Friday.
+
+
+## Blog #4 (25/11/2017)
+
+
+#### What I've Done:
+I finished and submitted the Functional Specification yesterday.
+
+#### What I am Currently Doing:
+Right now in college we are about to go into week 11 of the first Semester. My focus right now is to finish of the last 2 assignments that I have for the semester as soon as I can.
+
+#### What I Will Do:
+As outlined in the below Gantt Chart, before I break to focus on the first semester exams I would like to try and get the supporting website up and running to a very basic degree.
+Mainly just to get the webserver running and to ensure that the routing between blank pages are working. Then I will break for the exams before coming back and getting stuck into the heart of the project.
+
+![gantt%20dates](images/gantt%20dates.png)
+![gantt%20chart](images/gantt%20chart.png)
