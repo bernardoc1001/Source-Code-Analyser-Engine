@@ -1,35 +1,28 @@
 (ns scae-website.core
     (:require [reagent.core :as reagent :refer [atom]]
+              [reagent.session :as session]
               [secretary.core :as secretary :include-macros true]
-              [accountant.core :as accountant]))
-
-;; -------------------------
-;; Views
-
-(defn home-page []
-  [:div [:h2 "Welcome to scae-website"]
-   [:div [:a {:href "/about"} "go to about page"]]])
-
-(defn about-page []
-  [:div [:h2 "About scae-website"]
-   [:div [:a {:href "/"} "go to the home page"]]])
-
-;; -------------------------
-;; Routes
-
-(defonce page (atom #'home-page))
+              [accountant.core :as accountant]
+              [scae-website.views.home :refer [home]]
+              [scae-website.views.documentation :refer [documentation]]
+              [scae-website.views.download :refer [download]]
+              [scae-website.views.code-submission :refer [code-submission]]))
 
 (defn current-page []
-  [:div [@page]])
+  [:div [(session/get :current-page)]])
 
 (secretary/defroute "/" []
-  (reset! page #'home-page))
+  (session/put! :current-page #'home))
 
-(secretary/defroute "/about" []
-  (reset! page #'about-page))
+(secretary/defroute "/documentation" []
+                    (session/put! :current-page #'documentation))
 
-;; -------------------------
-;; Initialize app
+(secretary/defroute "/download" []
+                    (session/put! :current-page #'download))
+
+(secretary/defroute "/code-submission" []
+                    (session/put! :current-page #'code-submission))
+
 
 (defn mount-root []
   (reagent/render [current-page] (.getElementById js/document "app")))
