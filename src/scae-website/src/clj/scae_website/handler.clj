@@ -17,19 +17,36 @@
    [:meta {:charset "utf-8"}]
    [:meta {:name "viewport"
            :content "width=device-width, initial-scale=1"}]
+   [:title "Source Code Analyser Engine"]
+
+   ;; === JQuery ===
+   (include-js "https://code.jquery.com/jquery-2.1.1.min.js")
+   (include-css "http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.min.css")
+   (include-js "http://code.jquery.com/ui/1.11.2/jquery-ui.min.js")
+
+   ;; === Bootstrap ===
+   (include-css "/bootstrap-3.3.7-dist/css/bootstrap.min.css")
+   (include-js "/bootstrap-3.3.7-dist/js/bootstrap.min.js")
+
+   ;; === Simple Sidebar ===
+   (include-css "/css/simple-sidebar.css")
+
+
    (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))])
 
 (defn loading-page []
   (html5
     (head)
-    [:body {:class "body-container"}
+    [:body
      mount-target
      (include-js "/js/app.js")]))
 
 
 (defroutes routes
   (GET "/" [] (loading-page))
-  (GET "/about" [] (loading-page))
+  (GET "/documentation" [] (loading-page))
+  (GET "/download" [] (loading-page))
+  (GET "/code-submission" [] (loading-page))
   
   (resources "/")
   (not-found "Not Found"))
