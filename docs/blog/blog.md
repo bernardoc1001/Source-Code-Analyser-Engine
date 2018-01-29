@@ -9,6 +9,7 @@
 - [Blog #2 (19/11/2017)](#blog-2-19112017)
 - [Blog #3 (21/11/2017)](#blog-3-21112017)
 - [Blog #4 (25/11/2017)](#blog-4-25112017)
+- [Blog #5 (29/01/2018)](#blog-5-29012018)
 
 
 
@@ -101,3 +102,30 @@ Mainly just to get the webserver running and to ensure that the routing between 
 
 ![gantt%20dates](images/gantt%20dates.png)
 ![gantt%20chart](images/gantt%20chart.png)
+
+
+## Blog #5 (29/01/2018)
+
+#### What I've Done:
+It is now Mondary of Week 1 of the Second Semester. Since the last update, I had not worked on the project before the exams as I had hoped.
+Since the exams though, I have more or less caught up with where I plan to be in the Gantt Chart.
+I set up an issues board on gitlab to keep track of which tasks I'm doing, referencing the issue number on each commit I make.
+
+![issue_board_29-01-2018](images/issue_board_29-01-2018.png)
+
+
+Then I setup setup the webserver using lein, the Clojure and Clojurescript project management tool.
+
+Then I create a base layout of the website with a side navigation bar and defined routes for the pages in the backend handler.
+
+Finally I created an initial code submission page for a user to enter both their code and select which rulebook to use. This page still needs to retrieve rulebooks and to then make a post request to the future Web-API of the project.
+
+![initial-code-submission-page.png](images/initial-code-submission-page.png)
+
+#### What I am Currently Doing:
+I am about to start making a dummy Web-API that will have a similar structure to the final product. I want to create this to cement what kind of requests I'll need the library to be able to handle, and to test sending and recieving information to this RESTful API.
+
+
+
+#### What I Will Do:
+The next thing I need to do is organise a supervisor meeting to discuss what I have done so far and what should be my next priority. Per earlier discussions in our previous meeting, after I finish the basics of this website (after I finish my current task), the next step would be to start working on the main Source Code Analyser Library itself, and to leave development of the website for a while.
