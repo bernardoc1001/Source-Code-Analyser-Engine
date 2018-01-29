@@ -16,3 +16,4 @@ pom.xml.asc
 /.idea*
 scae-website.iml
 /resources/public/bootstrap-3.3.7-dist/
+/resources/public/select2-4.0.6-rc.1-dist/
