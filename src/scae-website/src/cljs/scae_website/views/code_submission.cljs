@@ -1,5 +1,7 @@
 (ns scae-website.views.code-submission
   (:require [reagent.core :as reagent]
+            [ajax.core :refer [GET POST]]
+            [scae-website.ajax-handlers :refer [handler error-handler]]
             [scae-website.sidebar :as sidebar]
             [scae-website.common :as common]))
 
@@ -8,11 +10,19 @@
                                :rulebook ""}
                         :rulebook-type ""}))
 
+(defn post-code-submission
+  [submit-body]
+  (POST "/scae-api"
+        {:params {:data submit-body}
+         :handler handler
+         :error-handler error-handler}))
+
 (defn submit-procedure ;;TODO finish procedure with ajax calls
-  [state]
-  (.log js/console "Code: " (:code state))
-  (.log js/console "Rulebook: " (:rulebook state))
-  (.log js/console "Test"))
+  [submit-body]
+  (.log js/console "Code: " (:code submit-body))
+  (.log js/console "Rulebook: " (:rulebook submit-body))
+  (.log js/console "Posting....")
+  (post-code-submission submit-body))
 
 (defn code-submission-input []
   [:div {:class "form-group"}

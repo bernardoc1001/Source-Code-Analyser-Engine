@@ -1,5 +1,5 @@
 (ns scae-website.handler
-  (:require [compojure.core :refer [GET defroutes]]
+  (:require [compojure.core :refer [GET POST defroutes]]
             [compojure.route :refer [not-found resources]]
             [hiccup.page :refer [include-js include-css html5]]
             [scae-website.middleware :refer [wrap-middleware]]
@@ -43,12 +43,19 @@
 
 
 (defroutes routes
-  (GET "/" [] (loading-page))
-  (GET "/documentation" [] (loading-page))
-  (GET "/download" [] (loading-page))
-  (GET "/code-submission" [] (loading-page))
-  
-  (resources "/")
-  (not-found "Not Found"))
+           ;;=== Views ===
+           (GET "/" [] (loading-page))
+           (GET "/documentation" [] (loading-page))
+           (GET "/download" [] (loading-page))
+           (GET "/code-submission" [] (loading-page))
+
+           ;;=== Web-API ===
+           (POST "/scae-api" request
+             (let [response {:status 200
+                             :body   request}]  ;;for the time being just return the request with status code 200
+               response))
+
+           (resources "/")
+           (not-found "Not Found"))
 
 (def app (wrap-middleware #'routes))
