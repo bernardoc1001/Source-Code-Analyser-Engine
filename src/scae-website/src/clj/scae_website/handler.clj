@@ -20,13 +20,13 @@
    [:title "Source Code Analyser Engine"]
 
    ;; === JQuery ===
-   (include-js "https://code.jquery.com/jquery-2.1.1.min.js")
-   (include-css "http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.min.css")
-   (include-js "http://code.jquery.com/ui/1.11.2/jquery-ui.min.js")
+   (include-js "/node_modules/jquery/dist/jquery.min.js")
+   (include-css "/node_modules/jquery-ui-dist/jquery-ui.min.css")
+   (include-js "/node_modules/jquery-ui-dist/jquery-ui.min.js")
 
    ;; === Bootstrap ===
-   (include-css "/bootstrap-3.3.7-dist/css/bootstrap.min.css")
-   (include-js "/bootstrap-3.3.7-dist/js/bootstrap.min.js")
+   (include-css "/node_modules/bootstrap/dist/css/bootstrap.min.css")
+   (include-js "/node_modules/bootstrap/dist/js/bootstrap.min.js")
 
    ;; === Simple Sidebar ===
    (include-css "/css/simple-sidebar.css")
