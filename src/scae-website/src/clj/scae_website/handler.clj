@@ -3,7 +3,8 @@
             [compojure.route :refer [not-found resources]]
             [hiccup.page :refer [include-js include-css html5]]
             [scae-website.middleware :refer [wrap-middleware]]
-            [config.core :refer [env]]))
+            [config.core :refer [env]]
+            [scae-library.core :as scae-lib]))
 
 (def mount-target
   [:div#app
@@ -51,9 +52,8 @@
 
            ;;=== Web-API ===
            (POST "/scae-api" request
-             (let [response {:status 200
-                             :body   request}]  ;;for the time being just return the request with status code 200
-               response))
+             (let [response (scae-lib/foo (get-in request [:params :data]))]
+               {:status 200 :body response})) ;;for the time being just return 200 and the result of the scae library call
 
            (resources "/")
            (not-found "Not Found"))
