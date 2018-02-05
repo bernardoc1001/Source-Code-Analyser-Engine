@@ -17,7 +17,7 @@
          :handler handler
          :error-handler error-handler}))
 
-(defn submit-procedure ;;TODO finish procedure with ajax calls
+(defn submit-procedure
   [submit-body]
   (.log js/console "Code: " (:code submit-body))
   (.log js/console "Rulebook: " (:rulebook submit-body))
