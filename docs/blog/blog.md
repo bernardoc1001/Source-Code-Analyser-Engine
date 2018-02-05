@@ -10,6 +10,7 @@
 - [Blog #3 (21/11/2017)](#blog-3-21112017)
 - [Blog #4 (25/11/2017)](#blog-4-25112017)
 - [Blog #5 (29/01/2018)](#blog-5-29012018)
+- [Blog #6 (05/02/2018)](#blog-6-05022018)
 
 
 
@@ -129,3 +130,43 @@ I am about to start making a dummy Web-API that will have a similar structure to
 
 #### What I Will Do:
 The next thing I need to do is organise a supervisor meeting to discuss what I have done so far and what should be my next priority. Per earlier discussions in our previous meeting, after I finish the basics of this website (after I finish my current task), the next step would be to start working on the main Source Code Analyser Library itself, and to leave development of the website for a while.
+
+
+
+
+## Blog #6 (05/02/2018)
+
+#### What I've Done:
+It is now Monday of Week 2 of the Second Semester.
+
+The first thing I did this sprint is to create an API endpoint for the Source Code Analyser Engine, that just returned the request that was made to it as a placeholder until I get the library processing and returning data. I had some issues with the dependencies of some of the middleware modules whose dependencies conflicted with the version of Clojure I was using, forcing me to rollback to an earlier version. Also I have currently disabled Anti-Forgery Token checks, as currently I don't want users to have to be logged in to access the SCAE API.
+
+Then I looked at how I was managing my dependencies for the website sub-project. Initially I had it where any dev working on this project would have to manually download and install the dependencies in the resources folder.
+After looking into a couple package-management tools such as bower and npm, I've decided to go with yarn, which works similarly to npm. The reason I chose yarn over npm was that yarn allowed me to easily define where I wanted my node_modules folder with my depenencies to be installed, which was a requirement of mine as I couldn't go with npm's default of the root folder of the project, instead I install them to the resources folder with the following command (assuming I am in the src/scae-website directory)
+```
+ yarn --modules-folder ./resources/public/node_modules/
+```
+This automatically installs all of the dependencies defined in the package.json to the specified directory.
+
+Next I spent a day or two reviewing some of the later chapters of the [Clojure For The Brave And True](https://www.braveclojure.com/clojure-for-the-brave-and-true/) book, specifically the chapters dealing with clojure macros (Which allow you to access the AST of the Clojure Program itself as it runs and to manipulate said tree) and the concurrency in clojure chapters. I felt that familiarising myself with these concepts now would be beneficial as I move forward with the project.
+
+Finally I created the Source Code Analyser Engine Library subproject (src/scae-library). Currently this library returns the value of any arguments passed to it. I then looked into installing the library locally, which you do by running
+```
+lein install
+```
+when in the src/scae-library directory. This compiles the library and installs it to the .m2 directory in the user's home directory, where leinigen (the build tool) stores its downloaded dependencies.
+I then added the scae-library as a dependency for the scae-website project, and in the endpoint I created earlier I call the library's dummy function that returns the arguments passed to it, to ensure that I both compiled and imported the library correctly, which I did.
+
+
+#### What I am Currently Doing:
+Currently I am working on the Engin Module in the scae-library, which is what will keep track of and call the different submodules needed to analyse the code.
+
+I am also reviewing what was discussed today with my Supervisor, David Sinclair, about which tasks I should prioritise next.
+
+
+#### What I Will Do:
+The tasks that we discussed that should be accomplished for next week are:
+* Complete the Engine module
+* Create the Tokeniser module
+* Investigate the data structures required for the analysis (determine if Abstract Syntax Tree is necessary, and if so if there are any clojure library's that I can leverage for this processing)
+* Begin work on the Symbol Table and the possible Abstract Syntax Tree
