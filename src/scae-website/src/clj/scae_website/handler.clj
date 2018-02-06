@@ -52,7 +52,7 @@
 
            ;;=== Web-API ===
            (POST "/scae-api" request
-             (let [response (scae-lib/foo (get-in request [:params :data]))]
+             (let [response (scae-lib/analyse-source-code (get-in request [:params :data]))]
                {:status 200 :body response})) ;;for the time being just return 200 and the result of the scae library call
 
            (resources "/")
