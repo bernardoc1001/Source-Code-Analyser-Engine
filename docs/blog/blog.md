@@ -5,18 +5,19 @@
 [TOC]: #
 
 ## Table of Contents
-- [Blog #1 (1/11/2017)](#blog-1-1112017)
-- [Blog #2 (19/11/2017)](#blog-2-19112017)
-- [Blog #3 (21/11/2017)](#blog-3-21112017)
-- [Blog #4 (25/11/2017)](#blog-4-25112017)
-- [Blog #5 (29/01/2018)](#blog-5-29012018)
-- [Blog #6 (05/02/2018)](#blog-6-05022018)
+- [Blog Post 1 (1/11/2017)](#blog-post-1-1112017)
+- [Blog Post 2 (19/11/2017)](#blog-post-2-19112017)
+- [Blog Post 3 (21/11/2017)](#blog-post-3-21112017)
+- [Blog Post 4 (25/11/2017)](#blog-post-4-25112017)
+- [Blog Post 5 (29/01/2018)](#blog-post-5-29012018)
+- [Blog Post 6 (05/02/2018)](#blog-post-6-05022018)
+- [Blog Post 7 (12/02/2018)](#blog-post-7-12022018)
 
 
 
 
 
-## Blog #1 (1/11/2017)
+## Blog Post 1 (1/11/2017)
 
 #### What I've Done:
 My project, the Source Code Analyser Engine, has been approved.
@@ -35,7 +36,7 @@ Next I will work on the Functional Requirements for the Functional Specification
 
 
 
-## Blog #2 (19/11/2017)
+## Blog Post 2 (19/11/2017)
 It has been a little while since my last blog post. The various assignments and working on the functional spec has kept me on my toes.
 
 #### What I've Done:
@@ -58,7 +59,7 @@ I am working on getting as much of the functional spec done for the next supervi
 Finish the Functional Specification for Friday.
 
 
-## Blog #3 (21/11/2017)
+## Blog Post 3 (21/11/2017)
 
 
 #### What I've Done:
@@ -88,7 +89,7 @@ I am currently adding the final touches to the diagrams and reflecting the chang
 Create a Gantt Chart and finish the Functional Specification for Friday.
 
 
-## Blog #4 (25/11/2017)
+## Blog Post 4 (25/11/2017)
 
 
 #### What I've Done:
@@ -105,7 +106,7 @@ Mainly just to get the webserver running and to ensure that the routing between 
 ![gantt%20chart](images/gantt%20chart.png)
 
 
-## Blog #5 (29/01/2018)
+## Blog Post 5 (29/01/2018)
 
 #### What I've Done:
 It is now Mondary of Week 1 of the Second Semester. Since the last update, I had not worked on the project before the exams as I had hoped.
@@ -134,7 +135,7 @@ The next thing I need to do is organise a supervisor meeting to discuss what I h
 
 
 
-## Blog #6 (05/02/2018)
+## Blog Post 6 (05/02/2018)
 
 #### What I've Done:
 It is now Monday of Week 2 of the Second Semester.
@@ -159,7 +160,7 @@ I then added the scae-library as a dependency for the scae-website project, and 
 
 
 #### What I am Currently Doing:
-Currently I am working on the Engin Module in the scae-library, which is what will keep track of and call the different submodules needed to analyse the code.
+Currently I am working on the Engine Module in the scae-library, which is what will keep track of and call the different submodules needed to analyse the code.
 
 I am also reviewing what was discussed today with my Supervisor, David Sinclair, about which tasks I should prioritise next.
 
@@ -170,3 +171,74 @@ The tasks that we discussed that should be accomplished for next week are:
 * Create the Tokeniser module
 * Investigate the data structures required for the analysis (determine if Abstract Syntax Tree is necessary, and if so if there are any clojure library's that I can leverage for this processing)
 * Begin work on the Symbol Table and the possible Abstract Syntax Tree
+
+## Blog Post 7 (12/02/2018)
+
+#### What I've Done:
+It's now Monday of week 3.
+
+In the last sprint I finished the creating the Engine module task,
+the tokeniser task (plus tests), and investigating which data structures
+need to be used (see issue #19 for the result). I am carrying forward
+the tasks for the Symbol Table and Abstract Syntax Tree into the Sprint 4.
+
+The tokeniser task proved to be challenging. I knew going in that I would
+have the user input a token definitions list consisting of regexes for
+the different tokens, along with the code to be analysed. I'll explain
+my solution to this problem, which will be one line of clojure, in detail below
+as clojure code can be hard to decipher without learning the language.
+The rest of the tokeniser.clj contains a lot of collection (a data-structure)
+manipulation that would take too long to explain in detail here.
+
+The challenging
+part was to perform these regex searches while preserving the ordering of
+the tokens (if I iteratively/recursively did regex searches for each token,
+I would lose the ordering of each token). I solved this in the following code fragment
+```
+(clojure.string/join "|" (map :regex (vals (:tokens tokens))))
+```
+To read the above code let us go from right to left. `(:tokens tokens)`
+extracts the value of the key "tokens" from the following hash-map,
+ ```
+ {:tokens {:NEGATE {:regex "~", :type :token},
+           :COLON {:regex ":", :type :token},
+           :ID {:regex "(?:[a-zA-Z])+(?:[0-9]|_|[a-zA-Z])*", :type :token}}
+ ```
+
+where the value is a hash-map containing the keys for the tokens, and an inner
+hash-map for each token containing the regex string and what kind of token
+this is (either a regular token or a skip token).
+
+This hash-map is passed to the vals function `(vals (:tokens tokens))`. This
+creates a collection (a list) of the values for each key in the hash-map,
+e.g `({:regex "~", :type :token}, {:regex ":", :type :token}, {:regex "(?:[a-zA-Z])+(?:[0-9]|_|[a-zA-Z])*", :type :token})`
+
+We then pass this list into the following function `(map :regex (vals (:tokens tokens)))`.
+The map function takes as parameters a function (in this case the keyword :regex
+is being treated as a function that will extract the value of the key from a map)
+and the list (referred to as a collection) that we've made previously. The map
+function applies the given function to every element in the given collection, and returns
+a LazySequence (a non-fully realised list) of every result. So in our example
+we extract the value of the regex key (which is a string) from every single hash-map in the given list,
+and put it into a lazy sequence.
+
+Finally we get to the clojure string join method
+`(clojure.string/join "|" (map :regex (vals (:tokens tokens))))` which combines
+every string in the LazySequence together, separated by "|", which in regexes is the
+OR operator. In subsequent lines of code, I use this string to perform one
+single regex search for every kind of token that we have defined. This solves
+the problem that we faced with trying to preserve the ordering of the regexes.
+
+The reason why I chose to do my project in Clojure is highlighted by the above.
+You are able to do a tremendous amount of data manipulation with very succinct code,
+ which will be useful throughout this project as I perform the Source Code Analysation,
+ manipulating various kinds of data structures such as Syntax Tables and Abstract Syntax Trees.
+
+#### What I am Currently Doing:
+I am just about to move onto the "Create A Symbol Table" task, which will
+allow me to keep track of various things such as scope.
+
+#### What I Will Do:
+The next major task that I want to complete in Sprint 4 is to Create an
+Abstract Syntax Tree.
+
