@@ -1,0 +1,52 @@
+{"tokens" : [
+  {"token" : {
+    "VAR"   : "var",
+    "CONST" : "const",
+    "RET"   : "return",
+    "INT"   : "integer",
+    "BOOL"  : "boolean",
+    "VOID"  : "void",
+    "MAIN"  : "main",
+    "IF"    : "if",
+    "ELSE"  : "else",
+    "TRUE"  : "true",
+    "FALSE" : "false",
+    "WHILE" : "while",
+    "BEGIN" : "begin",
+    "END"   : "end",
+    "IS"    : "is",
+    "SKI"   : "skip"}},
+
+  {"token" : {
+    "COMMA"      : ",",
+    "SEMI_COLON" : ";",
+    "COLON"      : ":",
+    "ASSIGN"     : "=",
+    "PLUS_SIGN"  : "\\+",
+    "MINUS_SIGN" : "-",
+    "NEGATE"     : "~",
+    "OR"         : "\\|\\|",
+    "AND"        : "&&",
+    "EQUALS"     : "==",
+    "NOT_EQUALs" : "!=",
+    "LT"         : "<",
+    "LTE"        : "<=",
+    "GT"         : ">",
+    "GTE"        : ">="}},
+
+
+  {"token" :{
+    "LBR" : "\\(",
+    "RBR" : "\\)"}},
+
+  {"token" : {
+    "NUM" : "(?:0|(?:(?:[1-9])+(?:[0-9])*))",
+    "ID" : "(?:[a-zA-Z])+(?:[0-9]|_|[a-zA-Z])*"}},
+
+  {"skip" :{
+    "SPACE" : " ",
+    "TAB" : "\t",
+    "NEWLINE" : "\n",
+    "CARRIAGE_RETURN" : "\r",
+    "FORM_FEED" : "\f"}}]
+}

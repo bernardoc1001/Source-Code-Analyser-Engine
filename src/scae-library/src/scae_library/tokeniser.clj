@@ -9,7 +9,7 @@
                                      (keys token-definitions)))))
 
 (defn- get-token-definitions
-  "Reads token definitions as a JSON string vector of token or skip hashmaps,
+  "Reads token definitions as a vector of token or skip hash-maps,
   returns hashmap of the type of token and a corresponding hash-map of tokens
   input: [{\"token\": {\"token1\": \"token-regex1\",
                      \"token2\": \"token-regex2\"}},
@@ -21,9 +21,9 @@
                    :token3 \"token-val3\"},
            :skip  {:skip1 \"skip-val1\"}}"
   [token-definitions-json]
-  (as-> (json/read-str token-definitions-json :key-fn keyword) token-definitions
-        (apply merge-with conj token-definitions)
-        (insert-token-type token-definitions)))
+  (->> token-definitions-json
+    (apply merge-with conj)
+    (insert-token-type)))
 
 (defn- val->token
   "Convert value to its corresponding tok~en. Return nil if there is no
@@ -42,8 +42,8 @@
     ))
 
 (defn tokenise-code
-  [code token-json]
-  (let [token-definitions (get-token-definitions token-json)]
+  [code token-vector]
+  (let [token-definitions (get-token-definitions token-vector)]
     (as-> token-definitions tokens
           ;;join regexes separated by | to get in order matches
           (clojure.string/join "|" (map :regex (vals (:tokens tokens))))
