@@ -1,15 +1,16 @@
 (ns scae-library.tokeniser-test
   (:require [clojure.test :refer :all]
             [scae-library.tokeniser :refer :all]
-            [scae-library.sample-inputs :refer [sample-token-json
+            [scae-library.sample-inputs :refer [sample-rulebook-json
                                                 sample-code-1-txt
                                                 tokenised-sample-code-1
                                                 sample-token-definitions-output
-                                                sample-insert-token-type-input]]))
+                                                sample-insert-token-type-input]]
+            [clojure.data.json :as json]))
 
 
 
-
+(def sample-token-vector (:tokens (json/read-str sample-rulebook-json :key-fn keyword)))
 
 (deftest insert-token-type-test
   (testing "Testing inserting the token type into the token definitions"
@@ -20,7 +21,7 @@
 
 (deftest get-token-definitions-test
   (testing "Testing retrieving token definitions from the inputted json"
-    (is (= (@#'scae-library.tokeniser/get-token-definitions sample-token-json) sample-token-definitions-output))))
+    (is (= (@#'scae-library.tokeniser/get-token-definitions sample-token-vector) sample-token-definitions-output))))
 
 (deftest val->token-test
   (testing "Testing transforming matched values to their corresponding tokens"
@@ -36,4 +37,7 @@
 
 (deftest tokenise-code-test
   (testing "Testing tokenising sample code"
-    (is (= (@#'scae-library.tokeniser/tokenise-code sample-code-1-txt sample-token-json) tokenised-sample-code-1))))
+    (is (= (@#'scae-library.tokeniser/tokenise-code
+             sample-code-1-txt
+             sample-token-vector)
+           tokenised-sample-code-1))))

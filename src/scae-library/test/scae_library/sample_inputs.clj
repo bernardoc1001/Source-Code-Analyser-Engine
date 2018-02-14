@@ -1,6 +1,6 @@
 (ns scae-library.sample-inputs)
 
-(def sample-token-json (slurp "resources/sample-tokens.json"))
+(def sample-rulebook-json (slurp "resources/sample-rulebook.json"))
 
 (def sample-code-1-txt (slurp "resources/sample-code-1.txt"))
 
