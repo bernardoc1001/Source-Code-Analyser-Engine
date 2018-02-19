@@ -12,6 +12,7 @@
 - [Blog Post 5 (29/01/2018)](#blog-post-5-29012018)
 - [Blog Post 6 (05/02/2018)](#blog-post-6-05022018)
 - [Blog Post 7 (12/02/2018)](#blog-post-7-12022018)
+- [Blog Post 8 (19/02/2018)](#blog-post-8-19022018)
 
 
 
@@ -242,3 +243,141 @@ allow me to keep track of various things such as scope.
 The next major task that I want to complete in Sprint 4 is to Create an
 Abstract Syntax Tree.
 
+
+## Blog Post 8 (19/02/2018)
+
+#### What I've Done:
+
+It is now Monday of week 4.
+The first thing I did in the last sprint (sprint 4) was to update the structure of json
+rulebooks that I will be reading in, to prepare for reading in production
+rules along with token definitions. This involved updating the tests slightly
+to ensure that they passed with the structure changes.
+
+Last week I said that I was moving on to working on the Symbol Table. I quickly
+realised that it would make more sense to do the Abstract Syntax Tree first,
+so that I can properly test the different features of an Symbol Table. So
+I moved the task (issue #18) back into Todo and started work on the Abstract
+Syntax Tree (issue #20), which I am continuing to work on this week. I'll
+outline the challenges that I've faced in designing the Abstract Syntax Tree
+below, along with my proposed solutions.
+
+##### Challenges with designing Abstract Syntax Tree:
+* **How to represent a tree in a functional language:** Before when learning
+about tree structures for myself it's always been in context of Object Orientated
+Languages where you can make a node class. So I've spent some time looking at
+the idiomatic way of representing a tree in Clojure, which is a series of pairs of
+nested lists/vectors. The first value in the vector is the root node, the next
+set of values in the vector are nested vectors, each representing the immediate
+children of the root. Each of these nested vectors can then containing a value
+representing the node and then a series of vectors representing its children.
+
+* **How to parse through my tokenised code with user submitted/modular production rules:**
+This is a large problem that I struggled with conceptually before breaking
+it down into sub-problems
+
+    * **Read in user submitted production rules:**
+    I need this entire process to be modular so that I can read in the
+    user submitted production rules so that I can support multiple languages
+    with the project. The production rules will be clojure functions that
+    will be read in as a JSON string, in the following example format, where
+    scae-forward-declarations and scae-programs are functions that I will
+    require to be implemented
+
+        ```
+        "productions" : {
+            "scae-forward-declarations" : "(declare optional-lbr optional-rbr identifier number ...etc...)
+            "scae-program" : "(defn scae-program [] [[(decl-list) (function-list) (main)]])",
+
+                "optional-lbr" : "(defn optional-lbr [] [[:LBR] [[]] ])",
+                "optional-rbr" : "(defn optional-rbr [] [[:LBR] [[]] ])",
+                "identifier" : "(defn identifier [] [[:ID]])",
+                "number" : "(defn number [] [[:NUM]])",
+                ... etc ... }
+        ```
+        The first thing I will do is read in the value for forward
+        declarations as a string, convert it to clojure code, then evaluate this.
+        This is because clojure requires all functions to either be defined before
+        they are used, to to be forward declared, and with the nature of the inter-connections
+        of production rules, I have found it necessary to declare them in
+        advance in the rulebook and then invoke that with the following
+        code within the library
+        ```
+        (eval (read-string (:scae-forward-declarations production-rules)))
+        ```
+        The last step in reading in the user submited code is to then
+        evaluate all of the function definitions with the following code
+        ```
+        (map #(eval (read-string %)) (vals production-rules))
+        ```
+    *  ***What format should the production rules take:*** As I've stated
+    before the production rules will be clojure code. These productions rules
+    will be called by some sort of parse method in my library, to see if the
+    next set of tokens in the tokenised stream match. Currently I've decided
+    that I want the production rules to return nested (possibly lazy so as not to
+    evaluate function calls that may end up not being used) vectors
+    of the possible tokens that could match the production. The outer vector will
+    contain a series of vector , with each of these inner vectors containing a
+    series of either tokens or calls to other production rules, or if a vector
+    is empty I will take that as an epsilon production. Each inner vector
+    represents a different set of tokens that could match a production.
+
+        Let's look at some examples to clarify:
+        ```
+        (defn binary-arith-op
+        []
+        [ [:PLUS_SIGN]
+          [:MINUS_SIGN] ])
+        ```
+        In this example, binary-arith-op is a function that takes no
+        parameters and returns a nexted vector. Here we are saying that
+        a PLUS_SIGN token **OR** a MINUS_SIGN token are valid tokens to
+        be resolved by the binary-arith-op production rule.
+
+        ```
+        "(defn function-list
+        []
+        [ [(function) (function-list)]
+          [[]] ])"
+        ```
+        In this example function-list is a function that takes no parameters.
+        The first option in the nested vector are two function calls, which
+        will be resolve the tokens defined in "function", and then recursively
+        call function-list.
+        The next option "[[]]" is an empty vector, which I intend to use
+        to signify an epsilon production (this will end the recursion/allow
+        the function list to be empty).
+
+* ***Parse through the tokens/production rules:*** I have not yet gone to
+implement this, but here is an overview of my plan. In the library I will
+have a Parse function that will take in the list of tokenised code and a
+production function. I will call this production function (which initially
+will be "scae-program", which acts as my entry point to the producion rules)
+to get the (lazy) vector of tokens to be match, and begin matching the
+tokenised code to the result of the production call. As described above,
+the production call returns a nested vector, with each inner vector
+represent an OR choice of a valid set of tokens for the production, so I
+will check each inner vector in order until I either find a successful
+match or failure.
+
+    Each inner vector could itself contain a call to another production
+    rule, for which I will recursively call Parse with the remaining tokens
+    to be processed and the production rule in question.
+
+    If I can successfully the tokens returned, I will add the production
+    rule as a node to the Abstract Syntax Tree. If I can't match the tokens,
+    at the moment I am currently debating if I should throw an error, or
+    to stop parsing and just use what I've successfully parsed up to that
+    point, or a combination of the two.
+
+
+#### What I am Currently Doing:
+I am currently moving onto implementing my proposed solution to the parsing
+issue for the Abstract Syntax Tree.
+
+#### What I Will Do:
+As outlined in my supervisor meeting today, my main goal this week is
+finish creating the AST and to demonstrate it in action for the next
+meeting on Monday. I believe this will take up most of the time for this
+week. If I do have any extra time, I will move onto generating a symbol
+table.
