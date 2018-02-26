@@ -13,6 +13,7 @@
 - [Blog Post 6 (05/02/2018)](#blog-post-6-05022018)
 - [Blog Post 7 (12/02/2018)](#blog-post-7-12022018)
 - [Blog Post 8 (19/02/2018)](#blog-post-8-19022018)
+- [Blog Post 9 (26/02/2018)](#blog-post-9-26022018)
 
 
 
@@ -298,14 +299,14 @@ it down into sub-problems
         The first thing I will do is read in the value for forward
         declarations as a string, convert it to clojure code, then evaluate this.
         This is because clojure requires all functions to either be defined before
-        they are used, to to be forward declared, and with the nature of the inter-connections
+        they are used, or to be forward declared, and with the nature of the inter-connections
         of production rules, I have found it necessary to declare them in
         advance in the rulebook and then invoke that with the following
         code within the library
         ```
         (eval (read-string (:scae-forward-declarations production-rules)))
         ```
-        The last step in reading in the user submited code is to then
+        The last step in reading in the user submitted code is to then
         evaluate all of the function definitions with the following code
         ```
         (map #(eval (read-string %)) (vals production-rules))
@@ -364,7 +365,7 @@ match or failure.
     rule, for which I will recursively call Parse with the remaining tokens
     to be processed and the production rule in question.
 
-    If I can successfully the tokens returned, I will add the production
+    If I can successfully parse the tokens returned, I will add the production
     rule as a node to the Abstract Syntax Tree. If I can't match the tokens,
     at the moment I am currently debating if I should throw an error, or
     to stop parsing and just use what I've successfully parsed up to that
@@ -381,3 +382,183 @@ finish creating the AST and to demonstrate it in action for the next
 meeting on Monday. I believe this will take up most of the time for this
 week. If I do have any extra time, I will move onto generating a symbol
 table.
+
+
+
+## Blog Post 9 (26/02/2018)
+
+#### What I've Done:
+It is now Monday of Week 5.
+
+I have split the task of creating the AST into two parts. The first is
+to parse through the production rules for the tokenised code. The second
+is to create nodes for these production rules and to add them to the AST.
+
+At the time of writing this blog I have nearly finished parsing the
+production rules, but have yet to push those changes to gitlab. I am able
+to correctly parse two out of three of my test programs at the moment, and
+I want to correctly parse the third program before committing.
+
+I've kept the same general design that I outlined in the previous blog
+for the design of the parser. In the `parse-production-rule` function I
+recursively go through every inner nested vector (the OR option vectors),
+calling the `parse-single-option` function, passing in the remaining
+tokens to be parsed and the option-vector itself.
+
+In this function I recursively check if the head of the remaining tokens
+matched the head of the option vector.
+
+* If the head of the option-vec is a function call, I recursively call
+the `parse-production-rule` func with the same tokens and the function call.
+If that call is a successful match, I remove the tokens returned from that
+call from my current remaining tokens to be parsed, and then continue parsing
+the rest of the current option-vector.
+
+* If the two heads match I recursively call the function
+with each head removed, and then return the head (the matching token-key).
+This returned head will recursively build up a lazy-sequence of every token
+that was matched.
+
+* If the head of the option-vector is an empty vector, I treat this as an
+Epsilon (empty) match. I return empty vector, which means that this is a valid
+match while not consuming the current token, so that I can try to match that
+token with another value later.
+
+
+* If the heads don't match I return `nil`, which means that this particular
+option-vec doesn't match.
+
+In the `parse-production-rule` function, I analyse these option vectors in
+order.
+
+* If any one of them match (return a lazy-sequence of matched tokens
+instead of nil), then the production rule is matched, and I return those
+tokens.
+* If multiple are matched, I return the tokens from the first matching
+option.
+* If none match, I return nil for failure.
+
+
+Below I'll outline some of the challenges that I've faced so far with
+implementing the parsing of the production rules.
+
+##### Challenges with Parsing the Production Rules:
+
+* **How to handle issue with the namespace of the production rules:**
+
+    In the last blog I outlined how I was reading in and forward declaring
+    the production rules. While this method worked well in a REPL (Read
+    Eval Print Loop) terminal, I was facing some issues with calling this
+    code from my internal library code. I was having issues calling the
+    first production rule from my code as at the time of compilation, even
+    when I forward declare the production rule, the function does not exist
+    at all until midway through runtime.
+
+    I got around this by creating another key-value pair in my rulebook.
+    The key is `:scae-entry-point` and it has a value of `"(scae-program)"`,
+    which is a function call in string form. I am able to read this string
+    in and evaluate it, which let me call the production.
+
+
+* **How to handle recursive production rules:**
+
+    Many of the production rules require recursive calls in order to get
+    the tokens that I am matching the tokenised code to. To prevent infinite
+    recursion, I initially though that I could use lazy sequences, to prevent
+    values from being evaluated before I needed them. In actuality this
+    did not work, as with the way I was parsing, all of the values were
+    being calculated, and then cached into the lazy sequence, which meant I
+    still had the infinite recursion problem.
+
+    The solution was to "quote" every function call in the production rule
+    in the rulebook itself. Quote is a macro that tells the Clojure compiler
+    not to evaluate the next symbol/expression, and to instead pass the
+    unevaluated symbol.
+
+    For example if I had a function `foo` that took
+    an int as a parameter, I could call `(foo (+ 1 2))` which would
+    evaluate to `(foo 3)`. If I quoted the plus operation (using apostrophe
+    as shorthand for (quote)), `(foo '(+ 1 2))` would pass in a list
+    containing the elements +, 1, 2 to the function foo. I can call `eval`
+    on this list to evaluate the expression and get the value 3.
+
+    So in my production rules, I quote every function call in the nested
+    vectors (outlined in the previous blog). This means that in every nested
+    vector any function calls are essentially turned into lists. This allows
+    me to check if the current element of the nested vector that I am parsing
+    is a funtion (a list), if so then I can evaluate it then and recursively
+    call my parse function on it **only when I am ready to parse it**.
+    This prevents the problem of every recursive function calling itself
+    infinitely before I can parse it and either accept or reject the production
+    rule, ending the recursion.
+
+    An example of this in in a production rule is
+    ```
+    "var-decl" : "(defn var-decl [] [[:VAR '(identifier) :COLON '(data-type)]])",
+    ```
+    So when the var-decl function is called, it will not evaluate the
+    `(identifier)` or `(data-type)` function calls, which would themselves
+    evaluate to nested vectors. This allows me to deal with each element of
+    the vector separately, and only evaluate those functions when I get to
+    that element. In the case of where my parse fails at `:VAR`, I can discard
+    the rest without ever having to call those functions.
+
+* **ID regex in my sample rulebook:**
+
+    When testing the parser I noticed that it was failing many of the rules
+    due to the regex I had defined for the ID. The ID was capturing all of
+    the keywords of the CCAL language as ID tokens instead of their respective
+    tokens. This is the old regex for ID that was causing the issue
+    ```
+    (?:[a-zA-Z])+(?:[0-9]|_|[a-zA-Z])*
+    ```
+
+    which was capturing every word, regardless of whether or not there was
+    a later regex for specific keywords
+
+    Currently this regex, which specifically excludes the indiviual keywords,
+    seems to have solved this issue
+    ```
+    (?!var|const|return|integer|boolean|void|main|if|else|true|false|while|begin|end|is|skip)(?:(?:[a-zA-Z])+(?:[0-9]|_|[a-zA-Z])*)
+    ```
+
+
+#### What I am Currently Doing:
+
+As stated above I am currently finishing parsing the production rules.
+Specifically at the moment I am debugging my parser for the following code input
+```
+var i:integer;
+integer test_fn (x:integer) is
+  var i:integer;
+begin
+  i = 2;
+  return (x);
+end
+
+main
+begin
+  var i:integer;
+  i = 1;
+  i = test_fn (i);
+end
+```
+which is failing the parsing when reading in the 2. I believe this to be
+ a production rule side bug and not a library bug, as I am able to parse
+ some other code inputs. I should resolve this issue relatively quickly,
+ at which point the production rule parsing side of the AST generation will
+ be done.
+
+
+
+#### What I Will Do:
+
+Once I finish the parser I need to create nodes for the production rules
+and add them to the AST. Currently I intend to either have the node
+information for the production rules to either be meta-data, or else I will
+alter the data structure of the return of the parser to include the node
+information along with the token keys matched.
+
+From my meeting with my supervisor today, I will also start investigating
+compiling a testing plan, to complement my workflow of creating integration
+tests as I add a new feature.
