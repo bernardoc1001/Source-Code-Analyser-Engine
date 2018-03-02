@@ -41,12 +41,66 @@
 
   {"token" : {
     "NUM" : "(?:0|(?:(?:[1-9])+(?:[0-9])*))",
-    "ID" : "(?:[a-zA-Z])+(?:[0-9]|_|[a-zA-Z])*"}},
+    "ID" : "(?!var|const|return|integer|boolean|void|main|if|else|true|false|while|begin|end|is|skip)(?:(?:[a-zA-Z])+(?:[0-9]|_|[a-zA-Z])*)"}},
 
   {"skip" :{
     "SPACE" : " ",
     "TAB" : "\t",
     "NEWLINE" : "\n",
     "CARRIAGE_RETURN" : "\r",
-    "FORM_FEED" : "\f"}}]
+    "FORM_FEED" : "\f"}}],
+
+  "productions" : {
+    "scae-forward-declarations" : "(declare scae-program optional-lbr optional-rbr identifier-or-number optional-expression identifier number decl-list decl var-decl const-decl function-list function data-type parameter-list nemp-parameter-list nemp-parameter-list-prime main statement-block statement statement-prime expression binary-arith-op expression-alpha expression-beta fragment-delta fragment-prime fragment condition condition-alpha condition-beta condition-prime comp-op arg-list nemp-arg-list nemp-arg-list-prime)",
+    "scae-program" : "(defn scae-program [] [['(decl-list) '(function-list) '(main)]])",
+    "scae-entry-point" : "(scae-program)",
+
+    "optional-lbr" : "(defn optional-lbr [] [[:LBR] [[]] ])",
+    "optional-rbr" : "(defn optional-rbr [] [[:RBR] [[]] ])",
+    "identifier-or-number" : "(defn identifier-or-number [] [ ['(identifier)] ['(number)] ])",
+    "optional-expression" : "(defn optional-expression [] [['(expression)] [[]] ])",
+
+    "id-or-fragment-delta" : "(defn id-or-fragment-delta [] [['(identifier)] ['(fragment-delta)]])",
+    "optional-expression-beta" : "(defn optional-expression-beta [] [['(expression-beta)] [[]] ])",
+
+
+    "identifier" : "(defn identifier [] [[:ID]])",
+    "number" : "(defn number [] [[:NUM]])",
+    "decl-list" : "(defn decl-list [] [['(decl) :SEMI_COLON '(decl-list)] [[]] ])",
+    "decl" : "(defn decl [] [['(var-decl)] ['(const-decl)]])",
+    "var-decl" : "(defn var-decl [] [[:VAR '(identifier) :COLON '(data-type)]])",
+    "const-decl" : "(defn const-decl [] [[:CONST '(identifier) :COLON '(data-type) :ASSIGN '(expression)]])",
+    "function-list" : "(defn function-list [] [['(function) '(function-list)] [[]] ])",
+    "function" : "(defn function [] [['(data-type) '(identifier) :LBR '(parameter-list) :RBR :IS '(decl-list) :BEGIN '(statement-block) :RET '(optional-lbr) '(optional-expression) '(optional-rbr) :SEMI_COLON :END]])",
+    "data-type" : "(defn data-type [] [[:INT] [:BOOL] [:VOID]])",
+    "parameter-list" : "(defn parameter-list [] [['(nemp-parameter-list)] [[]] ])",
+    "nemp-parameter-list" : "(defn nemp-parameter-list [] [['(identifier) :COLON '(data-type) '(nemp-parameter-list-prime)]])",
+    "nemp-parameter-list-prime" : "(defn nemp-parameter-list-prime [] [[:COMMA '(nemp-parameter-list)] [[]] ])",
+    "main" : "(defn main [] [[:MAIN :BEGIN '(decl-list) '(statement-block) :END]])",
+    "statement-block" : "(defn statement-block [] [['(statement) '(statement-block)] [[]] ])",
+    "statement" : "(defn statement [] [['(identifier) '(statement-prime)] [:BEGIN '(statement-block) :END] [:IF '(condition) :BEGIN '(statement-block) :END :ELSE :BEGIN '(statement-block) :END] [:WHILE '(condition) :BEGIN '(statement-block) :END] [:SKI :SEMI_COLON]])",
+    "statement-prime" : "(defn statement-prime [] [[:ASSIGN '(expression) :SEMI_COLON] [:LBR '(arg-list) :RBR :SEMI_COLON]])",
+    "expression" : "(defn expression [] [['(optional-lbr) '(fragment) '(optional-rbr)]])",
+    "binary-arith-op" : "(defn binary-arith-op [] [[:PLUS_SIGN] [:MINUS_SIGN]])",
+    "expression-alpha" : "(defn expression-alpha [] [['(binary-arith-op) '(fragment)]])",
+    "expression-beta" : "(defn expression-beta [] [[:LBR '(arg-list) :RBR]])",
+    "fragment-delta" : "(defn fragment-delta [] [[:MINUS_SIGN '(identifier-or-number)] ['(number)] [:TRUE] [:FALSE]])",
+    "fragment-prime" : "(defn fragment-prime [] [['(expression-alpha)'(fragment-prime)] [[]] ])",
+
+
+    "fragment" : "(defn fragment [] [['(id-or-fragment-delta) '(optional-expression-beta) '(fragment-prime) ]])",
+
+
+    "condition" : "(defn condition [] [['(optional-lbr) '(condition-beta) '(condition-prime) '(optional-rbr)]])",
+    "condition-alpha" : "(defn condition-alpha [] [[  [[:OR][:AND]] '(condition)]])",
+    "condition-beta" : "(defn condition-beta [] [[:NEGATE '(condition)] ['(expression) '(comp-op) '(expression)]])",
+    "condition-prime" : "(defn condition-prime [] [['(condition-alpha) '(condition-prime)] [[]] ])",
+    "comp-op" : "(defn comp-op [] [[:EQUALS] [:NOT_EQUALS] [:LT] [:LTE] [:GT] [:GTE]])",
+    "arg-list" : "(defn arg-list [] [['(nemp-arg-list)] [[]] ])",
+    "nemp-arg-list" : "(defn nemp-arg-list [] [['(identifier) '(nemp-arg-list-prime)]])",
+    "nemp-arg-list-prime" : "(defn nemp-arg-list-prime [] [[:COMMA '(nemp-arg-list)] [[]] ])"
+
+
+
+  }
 }

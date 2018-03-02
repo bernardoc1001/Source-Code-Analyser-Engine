@@ -3,6 +3,7 @@
   requests and calls the other namespaces to perform the analysis, then returns the
   result to the caller."
   (:require [scae-library.tokeniser :as tokeniser]
+            [scae-library.abstract-syntax-tree :as ast]
             [clojure.data.json :as json]))
 
 (defn analyse-source-code
@@ -11,4 +12,6 @@
   [request]
   (let [code-string (:code request)
         rulebook-map (json/read-str (:rulebook request) :key-fn keyword)]
-    (tokeniser/tokenise-code code-string (:tokens rulebook-map))))
+    (-> code-string
+        (tokeniser/tokenise-code (:tokens rulebook-map))
+        (ast/create-abstract-syntax-tree (:productions rulebook-map)))))
