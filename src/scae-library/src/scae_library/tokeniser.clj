@@ -26,7 +26,7 @@
     (insert-token-type)))
 
 (defn- val->token
-  "Convert value to its corresponding tok~en. Return nil if there is no
+  "Convert value to its corresponding token. Return nil if there is no
   corresponding token"
   [val token-definitions]
   (->>
