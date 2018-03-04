@@ -1,32 +1,47 @@
-(ns scae-library.abstract-syntax-tree)
+(ns scae-library.abstract-syntax-tree
+  (:require [clojure.pprint :refer [pprint]]))
 
-(defn eval-code
+(defn code->node
   [code]
-  (if (string? code)
-    (eval (read-string code))
-    (eval code)))
+  (let [unevaled-code (if (string? code)
+                        (read-string code)
+                        code)]
+    (hash-map :node-name (name (first unevaled-code))
+              :node-value (eval unevaled-code))))
+
+;; Credit for the function count-tokens: https://stackoverflow.com/a/48389794
+(defn count-tokens
+  [coll]
+  (->> coll
+       (tree-seq coll? seq)
+       (keep #(get-in % [:token-key]))
+       count))
 
 (declare parse-production-rule)
 ;;todo investigate loop - recur combo for tail optimisation
-;;recusively check single elem of inner vec at a time to easily parse through tokens
+;;recursively check single elem of inner vec at a time to easily parse through tokens
 (defn parse-single-option
   [tokens option-vec]
   (println "current parse token: " (first tokens))
   (println "current parse option-vec: " option-vec)
   (if (seq option-vec)
-    (do (if (list? (first option-vec))
+    (do (if (and (list? (first option-vec)) (not-empty (first option-vec)))
           (do
             (println "performing function call: " (first option-vec))
-            (let [inner-func-recursive-result  (parse-production-rule tokens (eval (first option-vec)))]
-              (if inner-func-recursive-result
+            (let [inner-func-node (parse-production-rule tokens (first option-vec))]
+              (if (:parsed-node-result inner-func-node)
                 (do
-                  ;;here i want to remove tokens in result from tokens, then remove head of option, then continue
-                  (println "inner func recursive result: " (type inner-func-recursive-result))
-                  (println "about to remove parsed stuff")
+                  (println "inner func node result: \n" (:parsed-node-result inner-func-node))
+                  ;;here i want to remove tokens in result from tokens, then remove head of option,
+                  ;; then continue parsing the rest of the current option vector
                   (let [recursive-result-after-inner-func
-                        (parse-single-option (drop (count inner-func-recursive-result) tokens) (rest option-vec))]
+                        (parse-single-option (drop
+                                               (count-tokens (:parsed-node-result inner-func-node))
+                                               tokens)
+                                             (rest option-vec))]
+                    (println "recursive-result-after-inner-func: " recursive-result-after-inner-func)
                     (if recursive-result-after-inner-func
-                      (concat inner-func-recursive-result recursive-result-after-inner-func)))
+                      (concat [inner-func-node] recursive-result-after-inner-func)))
                   ))))
           (if (= (:token-key (first tokens)) (first option-vec))
             (do (println (first tokens) " == " (first option-vec))
@@ -36,13 +51,16 @@
                     (do
                       (println "recursive call result empty")
                       nil))))
-            (if (vector? (first option-vec)) ;;check for epsilon condition
+
+            ;;check for epsilon condition
+            (if (vector? (first option-vec))
               (do
                 (println "Epsilon condition, token:  " (first tokens) "  and option-vec: " option-vec)
                 [])
               (do
                 (println (first tokens) " != " (first option-vec))
-                nil)))))
+                nil))
+            )))
     []    ;;returning empty vec here so as not to return nil
     ))
 
@@ -51,10 +69,15 @@
   [tokenised-code production-rule]
   (println "prod rule: " production-rule)
   (let [filtered-tokens (filter #(= (:token-type %) :token) tokenised-code)
+        production-node (code->node production-rule)
         all-options-parsed
-        (for [option-vec production-rule]
-          (parse-single-option filtered-tokens option-vec))]
-    (first (filter #(not (nil? %)) all-options-parsed))))
+        (for [option-vec (:node-value production-node)]
+          (do
+            (println "node name: " (:node-name production-node))
+            (hash-map :parsed-node-name (:node-name production-node)
+                      :parsed-node-result (parse-single-option filtered-tokens option-vec))))]
+
+    (first (filter #(not (nil? (:parsed-node-result %))) all-options-parsed))))
 
 (defn create-abstract-syntax-tree
   [tokenised-code production-rules]
@@ -62,9 +85,8 @@
   (eval (read-string (:scae-program production-rules)))
   (doseq [production (vals production-rules)]
     (eval (read-string production)))
-  (let [for-printout (filter #(= (:token-type %) :token) tokenised-code)]
-    (println "Tokenised code:")
-    (doseq [tok for-printout]
-      (println tok))
-    (println "======================================================"))
-  (parse-production-rule tokenised-code (eval-code (:scae-entry-point production-rules))))
+
+  (let [abstract-syntax-tree (parse-production-rule tokenised-code (:scae-entry-point production-rules))]
+    (println "Printing Abstract Syntax Tree: ")
+    (pprint abstract-syntax-tree)
+     abstract-syntax-tree))
