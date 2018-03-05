@@ -5,7 +5,7 @@
 [TOC]: #
 
 ## Table of Contents
-- [Blog Post 1 (1/11/2017)](#blog-post-1-1112017)
+- [Blog Post 1 (01/11/2017)](#blog-post-1-01112017)
 - [Blog Post 2 (19/11/2017)](#blog-post-2-19112017)
 - [Blog Post 3 (21/11/2017)](#blog-post-3-21112017)
 - [Blog Post 4 (25/11/2017)](#blog-post-4-25112017)
@@ -14,12 +14,13 @@
 - [Blog Post 7 (12/02/2018)](#blog-post-7-12022018)
 - [Blog Post 8 (19/02/2018)](#blog-post-8-19022018)
 - [Blog Post 9 (26/02/2018)](#blog-post-9-26022018)
+- [Blog Post 10 (05/03/2018)](#blog-post-10-05032018)
 
 
 
 
 
-## Blog Post 1 (1/11/2017)
+## Blog Post 1 (01/11/2017)
 
 #### What I've Done:
 My project, the Source Code Analyser Engine, has been approved.
@@ -562,3 +563,216 @@ information along with the token keys matched.
 From my meeting with my supervisor today, I will also start investigating
 compiling a testing plan, to complement my workflow of creating integration
 tests as I add a new feature.
+
+
+## Blog Post 10 (05/03/2018)
+
+#### What I've Done:
+It is now Monday of week 6. I have finished both the tasks for parsing the
+production rules (issue #22) and from that generating the Abstract Syntax Tree
+(issue #20). This is a major milestone for the project, as I am now able to
+read in code alongside a provided rulebook, parse it, and understand the
+structure of it in a modular, programmatic fashion. From this milestone,
+the next milestone will be to start detecting possible improvements and
+returning those suggestions.
+
+
+##### Challenges with Parsing the Production Rules:
+
+* **Handling inner OR statements within an option-vector:**
+
+    Last week I mentioned that I was debugging an issue I had parsing one
+    of my test inputs. The issue stemmed from production rules that have
+    an inner OR statement within the a production option. The library currently
+    expects production rules to be in the format `optionA OR optionB OR etc...`.
+    It runs into difficulties with formats like
+    `(sub-optionA1 OR sub-optionA2) OR optionB OR etc...`. Currently I have
+    gotten around this issue by restructuring my production rules to the first
+    format. I will review adding support for the second format at a later date
+    when the project is feature complete. So to make format2 into format1
+    we change `(sub-optionA1 OR sub-optionA2)` to a function call, where the
+    function is in the first format of `optionA1 OR optionA2`.
+
+
+##### Challenges with Generating the Abstract Syntax Tree:
+
+* **Deciding on AST Node Format:**
+
+    Up to this point, my focus was parsing the production rules, and to
+    return the tokens that were parsed. Now I needed to decide on the format
+    I wanted the AST nodes to take. As mentioned last week, I was entertaining
+    the idea of having the tokens parsed by a production rule to be placed in
+    its own vector, and to apply meta data to that vector with the AST node
+    name. The problem that I ran into with this approach was with the
+    immutable nature of Clojure data structures coupled with my method of
+    parsing recursively through the tokens, which resulted in new/copied vectors
+    to be created that would not retain the meta data of the original vector.
+
+    With the meta data approach ruled out, I decided to change the data
+    structure that the parsing returns. Instead of just returning the tokens
+    parsed my the production rule, I decided to return a map containing the
+    name of the production and a list of the tokens parsed by the rule.
+
+    To do this I altered my `eval-code` function, which took in either a
+    string or clojure symbol and evaluated to a piece of clojure code (which
+    would be a clojure function returning the possible tokens for that
+    production rule) and changed the function to `code->node`, which is the
+    Clojure idomatic way of naming a function that converts one datatype to
+    another.
+    ```
+    (defn code->node
+      [code]
+      (let [unevaled-code (if (string? code)
+                            (read-string code)
+                            code)]
+        (hash-map :node-name (name (first unevaled-code))
+                  :node-value (eval unevaled-code))))
+    ```
+    This code can take in a string or a symbol (if it's a string I convert it
+    to a symbol with `read-string`, in the format "(production-rule-name)".
+    I then return a hashmap containing the name of node (the name of the
+    production rule), and the node-value (the evaluated result of the production
+    rule).
+
+    The next step was to then alter the areas of the code that expected
+    a collection of tokens that were parsed by a production rule to point to
+    the value associated with the :node-value key of that map.
+
+
+* **Issue of mismatch of the current token with the remaining tokens available
+in the option vector:**
+
+    Leading on from the previous issue, once I implemented the new data-structure
+    I started having an issue with parsing certain sample programs. I would
+    get halfway through the program, generating the correct nodes throughout,
+    when suddenly I would run out of option tokens to compare with the current
+    token I was parsing.
+
+    The issue lay in one section of the code, right after I parse a function
+    call that is within an option-vector, I drop the tokens that were matched
+    by the function from the list of tokens to parse, then I continue parsing
+    the rest of the remaining tokens with the remains of the option-vector.
+
+    The old code
+    ```
+    (parse-single-option (drop (count inner-func-recursive-result) tokens) (rest option-vec))
+    ```
+
+    In the old code, I was dropping the count of tokens previously matched from
+    the remaining tokens to be matched. The `count` function was taking
+    the count of the tokens matched. I forgot to account for the new
+    data-structure here, where the previously matched tokens are now in
+    a heavily nested hash-map. I researched the idiomatic way of counting
+    the instances of a particular keyword in a heavily nested hash-map of
+    lists, where the lists could either contain another list or another
+    nested hash-map. I found and implemented the following, modified for
+    my own use case:
+    ```
+    ;; Credit for the function count-tokens: https://stackoverflow.com/a/48389794
+    (defn count-tokens
+      [coll]
+      (->> coll
+           (tree-seq coll? seq)
+           (keep #(get-in % [:token-key]))
+           count))
+    ```
+
+    With that count-tokens function, the original problematic code now
+    looks like this:
+    ```
+    (parse-single-option (drop
+                            (count-tokens (:parsed-node-result inner-func-node))
+                            tokens)
+                            (rest option-vec))
+
+    ```
+
+    With this problem solved, I could now generate ASTs.
+
+
+
+
+For the following sample code
+```
+void func () is
+begin
+  return ();
+end
+
+main
+begin
+  func ();
+end
+```
+
+I get the following AST using the sample-rulebook.json
+```
+Printing Abstract Syntax Tree:
+{:parsed-node-name "scae-program",
+ :parsed-node-result
+ ({:parsed-node-name "decl-list", :parsed-node-result []}
+  {:parsed-node-name "function-list",
+   :parsed-node-result
+   ({:parsed-node-name "function",
+     :parsed-node-result
+     ({:parsed-node-name "data-type",
+       :parsed-node-result
+       ({:token-key :VOID, :token-value "void", :token-type :token})}
+      {:parsed-node-name "identifier",
+       :parsed-node-result
+       ({:token-key :ID, :token-value "func", :token-type :token})}
+      {:token-key :LBR, :token-value "(", :token-type :token}
+      {:parsed-node-name "parameter-list", :parsed-node-result []}
+      {:token-key :RBR, :token-value ")", :token-type :token}
+      {:token-key :IS, :token-value "is", :token-type :token}
+      {:parsed-node-name "decl-list", :parsed-node-result []}
+      {:token-key :BEGIN, :token-value "begin", :token-type :token}
+      {:parsed-node-name "statement-block", :parsed-node-result []}
+      {:token-key :RET, :token-value "return", :token-type :token}
+      {:parsed-node-name "optional-lbr",
+       :parsed-node-result
+       ({:token-key :LBR, :token-value "(", :token-type :token})}
+      {:parsed-node-name "optional-expression", :parsed-node-result []}
+      {:parsed-node-name "optional-rbr",
+       :parsed-node-result
+       ({:token-key :RBR, :token-value ")", :token-type :token})}
+      {:token-key :SEMI_COLON, :token-value ";", :token-type :token}
+      {:token-key :END, :token-value "end", :token-type :token})}
+    {:parsed-node-name "function-list", :parsed-node-result []})}
+  {:parsed-node-name "main",
+   :parsed-node-result
+   ({:token-key :MAIN, :token-value "main", :token-type :token}
+    {:token-key :BEGIN, :token-value "begin", :token-type :token}
+    {:parsed-node-name "decl-list", :parsed-node-result []}
+    {:parsed-node-name "statement-block",
+     :parsed-node-result
+     ({:parsed-node-name "statement",
+       :parsed-node-result
+       ({:parsed-node-name "identifier",
+         :parsed-node-result
+         ({:token-key :ID, :token-value "func", :token-type :token})}
+        {:parsed-node-name "statement-prime",
+         :parsed-node-result
+         ({:token-key :LBR, :token-value "(", :token-type :token}
+          {:parsed-node-name "arg-list", :parsed-node-result []}
+          {:token-key :RBR, :token-value ")", :token-type :token}
+          {:token-key :SEMI_COLON,
+           :token-value ";",
+           :token-type :token})})}
+      {:parsed-node-name "statement-block", :parsed-node-result []})}
+    {:token-key :END, :token-value "end", :token-type :token})})}
+```
+
+
+The program works for more complex pieces of code, but as you could imagine
+from the simple example above, its Abstract Syntax Tree is rather large, so
+I won't post it here.
+
+#### What I am Currently Doing:
+Currently I am about to create tests for the Abstract Syntax Tree generation.
+
+
+#### What I Will Do:
+
+I will then move onto creating the symbol table, and depending on time this
+week look into beginning work on the style rules.
