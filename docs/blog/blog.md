@@ -15,8 +15,7 @@
 - [Blog Post 8 (19/02/2018)](#blog-post-8-19022018)
 - [Blog Post 9 (26/02/2018)](#blog-post-9-26022018)
 - [Blog Post 10 (05/03/2018)](#blog-post-10-05032018)
-
-
+- [Blog Post 11 (12/03/2018)](#blog-post-11-12032018)
 
 
 
@@ -776,3 +775,55 @@ Currently I am about to create tests for the Abstract Syntax Tree generation.
 
 I will then move onto creating the symbol table, and depending on time this
 week look into beginning work on the style rules.
+
+
+## Blog Post 11 (12/03/2018)
+
+#### What I've Done:
+It is now Monday of week 7.
+
+I have made significant progress on creating the Symbol Table (task #18).
+I have created the coded all of the functionality needed for a Symbol Table
+to function.
+
+A Symbol Table is used to track certain information about different symbols,
+such as what scopes that symbol is available in.
+
+I have implemented the ability to change the current scope, while optionally
+keeping track of previous scopes by pushing them to a stack before updating the
+current scope. I also have the functionality to pop off a previous scope and
+set it as the current scope again. For each scope I can keep tracks of all of the
+symbols in it, using is a nested hash-map of hash-maps to keep track of the
+symbol name and value under its respective scope-name.
+
+
+#### What I am Currently Doing:
+
+Currently I am working on building the Symbol Table during a parse. I
+have run into some challenges with this, which I think I have a valid solution
+for that I want to implement.
+
+##### Challenges with Building The Symbol Table:
+
+* **When to build the table to avoid branches of execution that were never
+taken, thus polluting the Symbol Table:**
+
+    Initially I was considering building the Symbol Table in the same parse
+    that I built the Abstract Syntax Tree. The issue here is that during
+    the parsing for the Abstract Syntax Tree we visit multiple possible
+    nodes, and then discard the nodes that do not match our input stream.
+    If I were to build up the Symbol Table in this Parse, there would be
+    additions to the Symbol Table made from nodes that were never executed.
+
+    My proposed solution is to do two parses, one to build the AST from the
+    submitted code, the second to build the Symbol Table from the completed
+    AST. In the user defined AST nodes I would include optional Symbol Table
+    function calls that would be ignored by the AST when it performs a pretty
+    print.
+
+    These optional Symbol Table function calls would only be evaluated in
+    the second parse, so that they can build the correct Symbol Table.
+
+#### What I Will Do:
+Once I finish the Symbol Table I will do some testing before moving onto
+working on style rules.
