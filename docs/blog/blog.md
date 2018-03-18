@@ -16,6 +16,7 @@
 - [Blog Post 9 (26/02/2018)](#blog-post-9-26022018)
 - [Blog Post 10 (05/03/2018)](#blog-post-10-05032018)
 - [Blog Post 11 (12/03/2018)](#blog-post-11-12032018)
+- [Blog Post 12 (18/03/2018)](#blog-post-12-18032018)
 
 
 
@@ -827,3 +828,105 @@ taken, thus polluting the Symbol Table:**
 #### What I Will Do:
 Once I finish the Symbol Table I will do some testing before moving onto
 working on style rules.
+
+
+## Blog Post 12 (18/03/2018)
+
+#### What I've Done:
+
+It is now Sunday of Week 7. I'm writing this blog post early as tomorrow
+is a bank holiday so it won't be until Tuesday that I see my supervisor
+again, and I need to spend most of tomorrow studying for class tests.
+
+I have finished Task #18 , Create a Symbol Table. Last week I talked about
+the functionality of the Symbol Table, and now I can build that Symbol Table
+by doing a parse of the previously generated Abstract Syntax Tree.
+
+##### Challenges with Building The Symbol Table from the Parse:
+* **Accessing the correct token values to add to the symbol table mid-parse
+from the user submitted rulebook:**
+This was the main challenge I found when generating the Symbol Table while
+parsing the Abstract Syntax Tree.
+
+    For Example, for a variable-declaration node I want to access the ID
+    token to add it to the symbol table. Here is the corresponding Abstract
+    Syntax Tree node.
+    ```
+    {:parsed-node-name "var-decl",
+           :parsed-node-result
+           ({:token-key :VAR, :token-value "var", :token-type :token}
+            {:parsed-node-name "identifier",
+             :parsed-node-result
+             ({:token-key :ID, :token-value "i", :token-type :token})}
+            {:token-key :COLON, :token-value ":", :token-type :token}
+            {:parsed-node-name "data-type",
+             :parsed-node-result
+             ({:token-key :INT,
+               :token-value "integer",
+               :token-type :token})})}
+    ```
+    Notice that the ID token is in a nested AST node called `identifier`.
+
+    I needed to figure out a way to reference the values that I wanted from the
+    rulebook. As discussed in the previous blog, I made an optional
+    `st-func-calls` token that is put into the AST. This token contains
+    the symbol table function calls (which can be anonymous function calls
+    that call symbol table functions) that I will evaluate from the Symbol
+    Table namespace.
+
+    For the above example, I pass to an anonymous function the list of
+    tokens in the root `:parsed-node-result`, and call this list `ast-entry`.
+    I then use the following code snippet to access the value of the ID token
+
+    ```
+    (:token-value (nth (:parsed-node-result (nth ast-entry 1)) 0))
+    ```
+    To break this down, I
+    * Select the ID AST-node with `(nth ast-entry 1)` (which for this production
+    rule will always be in the second position on the list).
+    * I then select its list of tokens with `(:parsed-node-result (nth ast-entry 1))`
+    * Then we select the desired token (in this casealways in the first position)
+    with `(nth (:parsed-node-result (nth ast-entry 1)) 0)`
+    * Finally we then get the value of the desired token with `(:token-value (nth (:parsed-node-result (nth ast-entry 1)) 0))`
+
+    The above code gets the name of the symbol that we wish to add to the
+    Symbol Table. We do something similar to get the value of the symbol.
+    Then with the following snippet we can add that symbol name & value to
+    the current scope
+    ```
+    (st/add-to-scope name {:symbol-name name :symbol-value value})
+
+    ```
+
+    Below is the full entry for the `var-decl` production rule in the user
+    submitted rulebook that I am creating to test out my project
+    ```
+        "var-decl" : "(defn var-decl []
+                    [[:VAR '(identifier) :COLON '(data-type)
+                    {:st-func-calls [(fn
+                                      [ast-entry]
+                                      (let [name (:token-value (nth (:parsed-node-result (nth ast-entry 1)) 0))
+                                           value (:token-value (nth (:parsed-node-result (nth ast-entry 3)) 0))]
+                                           (st/add-to-scope name {:symbol-name name :symbol-value value})))]} ]])",
+
+    ```
+
+    I have taken it upon myself to format the above example. In the actual
+    rulebook that I am creating, that above example is all
+    on a single line without any sort of indentation, as the value is a string
+    and I can't have multi-line string when writing  sample-rulebook.json file,
+    as specified by the JSON format.
+    As you can imagine that can get rather annoying with having to deal
+    with such long single line production rules, especially as now I have to
+    write anonymous functions as part of those single lines.
+
+#### What I am Currently Doing:
+Currently I am studying for some class tests that will take place mid-week
+this week. After that I will resume work on the Final Year Project.
+
+#### What I Will Do:
+
+I will meet with my supervisor again on Tuesday as mentioned earlier. We will
+discuss which tasks should take precedence next. I believe it will be to start
+working on defining and returning style suggestions to the user, which I envision
+will take a couple weeks.
