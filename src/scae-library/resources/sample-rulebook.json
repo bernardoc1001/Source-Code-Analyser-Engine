@@ -68,15 +68,15 @@
     "number" : "(defn number [] [[:NUM]])",
     "decl-list" : "(defn decl-list [] [['(decl) :SEMI_COLON '(decl-list)] [[]] ])",
     "decl" : "(defn decl [] [['(var-decl)] ['(const-decl)]])",
-    "var-decl" : "(defn var-decl [] [[:VAR '(identifier) :COLON '(data-type)]])",
-    "const-decl" : "(defn const-decl [] [[:CONST '(identifier) :COLON '(data-type) :ASSIGN '(expression)]])",
+    "var-decl" : "(defn var-decl [] [[:VAR '(identifier) :COLON '(data-type) {:st-func-calls [(fn [ast-entry] (let [name (:token-value (nth (:parsed-node-result (nth ast-entry 1)) 0)) value (:token-value (nth (:parsed-node-result (nth ast-entry 3)) 0))] (st/add-to-scope name {:symbol-name name :symbol-value value})))]} ]])",
+    "const-decl" : "(defn const-decl [] [[:CONST '(identifier) :COLON '(data-type) :ASSIGN '(expression) {:st-func-calls [(fn [ast-entry] (let [name (:token-value (nth (:parsed-node-result (nth ast-entry 1)) 0)) value (:token-value (nth (:parsed-node-result (nth ast-entry 3)) 0))] (st/add-to-scope name {:symbol-name name :symbol-value value})))]} ]])",
     "function-list" : "(defn function-list [] [['(function) '(function-list)] [[]] ])",
-    "function" : "(defn function [] [['(data-type) '(identifier) :LBR '(parameter-list) :RBR :IS '(decl-list) :BEGIN '(statement-block) :RET '(optional-lbr) '(optional-expression) '(optional-rbr) :SEMI_COLON :END]])",
+    "function" : "(defn function [] [['(data-type) '(identifier) :LBR '(parameter-list) :RBR :IS {:st-func-calls [(fn [ast-entry] (let [name (:token-value (nth (:parsed-node-result (nth ast-entry 1)) 0)) value (:token-value (nth (:parsed-node-result (nth ast-entry 0)) 0))] (st/set-current-scope-name! name) (st/add-to-scope name {:symbol-name name :symbol-value value} st/GLOBAL_SCOPE_NAME)))]} '(decl-list) :BEGIN '(statement-block) :RET '(optional-lbr) '(optional-expression) '(optional-rbr) :SEMI_COLON :END  {:st-func-calls [(fn [ast-entry] (st/set-current-scope-name-to-previous!))]} ]])",
     "data-type" : "(defn data-type [] [[:INT] [:BOOL] [:VOID]])",
     "parameter-list" : "(defn parameter-list [] [['(nemp-parameter-list)] [[]] ])",
     "nemp-parameter-list" : "(defn nemp-parameter-list [] [['(identifier) :COLON '(data-type) '(nemp-parameter-list-prime)]])",
     "nemp-parameter-list-prime" : "(defn nemp-parameter-list-prime [] [[:COMMA '(nemp-parameter-list)] [[]] ])",
-    "main" : "(defn main [] [[:MAIN :BEGIN '(decl-list) '(statement-block) :END]])",
+    "main" : "(defn main [] [[ {:st-func-calls [(fn [ast-entry] (st/set-current-scope-name! \"main\"))]} :MAIN :BEGIN '(decl-list) '(statement-block) :END {:st-func-calls [(fn [ast-entry] (st/set-current-scope-name-to-previous!))]} ]])",
     "statement-block" : "(defn statement-block [] [['(statement) '(statement-block)] [[]] ])",
     "statement" : "(defn statement [] [['(identifier) '(statement-prime)] [:BEGIN '(statement-block) :END] [:IF '(condition) :BEGIN '(statement-block) :END :ELSE :BEGIN '(statement-block) :END] [:WHILE '(condition) :BEGIN '(statement-block) :END] [:SKI :SEMI_COLON]])",
     "statement-prime" : "(defn statement-prime [] [[:ASSIGN '(expression) :SEMI_COLON] [:LBR '(arg-list) :RBR :SEMI_COLON]])",
@@ -99,8 +99,5 @@
     "arg-list" : "(defn arg-list [] [['(nemp-arg-list)] [[]] ])",
     "nemp-arg-list" : "(defn nemp-arg-list [] [['(identifier) '(nemp-arg-list-prime)]])",
     "nemp-arg-list-prime" : "(defn nemp-arg-list-prime [] [[:COMMA '(nemp-arg-list)] [[]] ])"
-
-
-
   }
 }
