@@ -842,6 +842,36 @@ I have finished Task #18 , Create a Symbol Table. Last week I talked about
 the functionality of the Symbol Table, and now I can build that Symbol Table
 by doing a parse of the previously generated Abstract Syntax Tree.
 
+For the following input source code:
+```
+var i:integer;
+integer test_fn (x:integer) is
+  var i:integer;
+begin
+  i = 2;
+  return (x);
+end
+
+main
+begin
+  var i:integer;
+  i = 1;
+  i = test_fn (i);
+end
+```
+
+We get the following Symbol Table:
+```
+{:current-scope-name "global",
+ :previous-scope-name-stack [],
+ :scope-map
+ {"global"
+  {"i" {:symbol-name "i", :symbol-value "integer"},
+   "test_fn" {:symbol-name "test_fn", :symbol-value "integer"}},
+  "test_fn" {"i" {:symbol-name "i", :symbol-value "integer"}},
+  "main" {"i" {:symbol-name "i", :symbol-value "integer"}}}}
+```
+
 ##### Challenges with Building The Symbol Table from the Parse:
 * **Accessing the correct token values to add to the symbol table mid-parse
 from the user submitted rulebook:**
