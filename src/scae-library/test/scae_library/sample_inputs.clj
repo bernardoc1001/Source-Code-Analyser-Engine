@@ -2,7 +2,7 @@
 
 (def sample-rulebook-json (slurp "resources/sample-rulebook.json"))
 
-(def sample-code-1-txt (slurp "resources/sample-code-1.txt"))
+(def sample-code-1-txt (slurp "resources/sample-ccal-code-1.txt"))
 
 (def tokenised-sample-code-1 (seq [{:token-key :ID, :token-value "var", :token-type :token}
                                    {:token-key :SPACE, :token-value " ", :token-type :skip}

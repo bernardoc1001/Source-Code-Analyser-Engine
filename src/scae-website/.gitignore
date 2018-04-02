@@ -16,3 +16,4 @@ pom.xml.asc
 /.idea*
 /resources/public/node_modules
 /resources/public/lib
+/resources/public/css/site.min.css
