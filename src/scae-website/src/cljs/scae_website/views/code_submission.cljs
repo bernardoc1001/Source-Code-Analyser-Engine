@@ -8,27 +8,49 @@
 (defonce page-state
          (reagent/atom {:data {:code     ""
                                :rulebook ""}
-                        :rulebook-type ""}))
+                        :rulebook-type ""
+                        :returned-suggestions ""
+                        :returned-errors ""}))
+
+
+(defn code-submission-success-handler
+  [response]
+  (let [formatted-response
+        (clojure.string/join "\n" response)]
+    (.log js/console (str "Code Submission Success Handler Response: " formatted-response))
+    (swap! page-state assoc-in [:returned-suggestions] formatted-response)))
+
+(defn code-submission-error-handler
+  [response]
+  (let [formatted-response
+        (str "Status Code: " (:status response)
+             "\nStatus Text: " (:status-text response)
+             "\nFailure Type: " (:failure response))]
+    (.log js/console (str "Code Submission Error Handler Response: " response))
+    (swap! page-state assoc-in [:returned-errors] formatted-response)))
 
 (defn post-code-submission
   [submit-body]
   (POST "/scae-api"
-        {:params {:data submit-body}
-         :handler handler
-         :error-handler error-handler}))
+        {:params  {:data submit-body}
+         :handler code-submission-success-handler           ;;handler
+         :error-handler code-submission-error-handler       ;;error-handler
+         }))
 
 (defn submit-procedure
   [submit-body]
-  (.log js/console "Code: " (:code submit-body))
-  (.log js/console "Rulebook: " (:rulebook submit-body))
+  ;(.log js/console "Code: " (:code submit-body))
+  ;(.log js/console "Rulebook: " (:rulebook submit-body))
   (.log js/console "Posting....")
-  (post-code-submission submit-body))
+  (post-code-submission submit-body)
+  (.scrollTop (js/$ "html,body") 0))
 
 (defn code-submission-input []
   [:div {:class "form-group"}
    [:label {:for "code-input"} "Code: "]
    [:textarea {:id          "code-input"
                :form        "code-submission-form"
+               :rows        "15"
                :class       "form-control"
                :placeholder "Enter Code Here..."
                :on-change   #(common/onchange-swap-atom! page-state [:data :code] %)}]])
@@ -71,6 +93,7 @@
        (= rulebook-type "manually-enter")
        [:textarea {:id "rulebook-text-area"
                    :form "code-submission-form"
+                   :rows "15"
                    :class "form-control"
                    :placeholder "Enter Rulebook Here..."
                    :on-change #(common/onchange-swap-atom! page-state [:data :rulebook] %)}]
@@ -89,6 +112,31 @@
                            :on-click #(submit-procedure (:data @page-state))}
      "Submit"]]])
 
+(defn returned-suggestions-panel
+  [de-ref-page-state]
+  (if (not (empty? (:returned-suggestions de-ref-page-state)))
+    ;;if suggestions are there, render the panel
+    [:div {:class "panel panel-default"}
+     [:div {:class "panel-heading"} "Returned Suggestions"]
+     [:div {:class "panel-body"}
+      [:div {:class "row"}
+       [:div {:class "col-sm-12"}
+        [:pre
+         (:returned-suggestions de-ref-page-state)]]]]]
+
+    ;; else if any errors were returned, display them
+    (if (not (empty? (:returned-errors de-ref-page-state)))
+      [:div {:class "panel panel-default"}
+       [:div {:class "panel-heading"} "Returned Errors"]
+       [:div {:class "panel-body"}
+        [:div {:class "row"}
+         [:div {:class "col-sm-12"}
+          [:pre (:returned-errors de-ref-page-state)]]]]]
+
+      ;;else return an empty div (i.e don't render the panel).
+      ;;Note return empty div so as not to return null, which generates an error
+      [:div])))
+
 (defn code-submission-page []
   [:div
    [:div#wrapper
@@ -97,6 +145,7 @@
      [sidebar/menu-toggle]
      [:h2 "Code Submission"]]
     [:div.page-content-wrapper>div.container-fluid>div.row>div.col-xs-12
+     [returned-suggestions-panel @page-state]
      [:div {:class "panel panel-default"}
       [:div {:class "panel-heading"} "Code Submission"]
       [:div {:class "panel-body"}
@@ -104,8 +153,11 @@
         [:div {:class "col-sm-12"}
          [code-submission-form]
 
-         [:p "pagestate: " @page-state]
-         [:p "value in dropdown: " (.val (js/$ "#rulebook-type-selection"))]
+         ;;todo remove debugging info below
+         ;;[:p "pagestate: " @page-state]
+         ;;[:p "returned suggestons: " (:returned-suggestions @page-state)]
+         ;;[:p "returned errors: " (:returned-errors @page-state)]
+         ;;[:p "value in dropdown: " (.val (js/$ "#rulebook-type-selection"))]
          ]]]]]]])
 
 (defn code-submission []

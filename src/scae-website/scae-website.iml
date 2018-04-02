@@ -52,6 +52,7 @@
     <orderEntry type="library" name="Leiningen: com.google.protobuf/protobuf-java:3.0.2" level="project" />
     <orderEntry type="library" name="Leiningen: com.googlecode.json-simple/json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Leiningen: com.ibm.icu/icu4j:58.2" level="project" />
+    <orderEntry type="library" name="Leiningen: com.rpl/specter:1.1.0" level="project" />
     <orderEntry type="library" name="Leiningen: com.stuartsierra/component:0.3.2" level="project" />
     <orderEntry type="library" name="Leiningen: com.stuartsierra/dependency:0.2.0" level="project" />
     <orderEntry type="library" name="Leiningen: commons-codec:1.6" level="project" />
@@ -114,6 +115,7 @@
     <orderEntry type="library" name="Leiningen: prone:1.1.4" level="project" />
     <orderEntry type="library" name="Leiningen: reagent-utils:0.2.1" level="project" />
     <orderEntry type="library" name="Leiningen: reagent:0.7.0" level="project" />
+    <orderEntry type="library" name="Leiningen: riddley:0.1.12" level="project" />
     <orderEntry type="library" name="Leiningen: ring-cors:0.1.11" level="project" />
     <orderEntry type="library" name="Leiningen: ring-middleware-format:0.7.2" level="project" />
     <orderEntry type="library" name="Leiningen: ring-refresh:0.1.2" level="project" />
