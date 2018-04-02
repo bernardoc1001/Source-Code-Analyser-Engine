@@ -32,7 +32,7 @@
 
   :min-lein-version "2.5.0"
 
-  :uberjar-name "scae-website.jar"
+  ;; :uberjar-name "scae-website.jar"
 
   :main scae-website.server
 
@@ -55,7 +55,7 @@
              {:output-to        "target/cljsbuild/public/js/app.js"
               :output-dir       "target/cljsbuild/public/js"
               :source-map       "target/cljsbuild/public/js/app.js.map"
-              :optimizations :advanced
+              :optimizations  :simple     ;; todo put back in :advanced
               :externs ["resources/public/js/includes/externs.js"]
               :pretty-print  false}}
             :app
@@ -121,6 +121,7 @@
 
              :uberjar {:hooks [minify-assets.plugin/hooks]
                        :source-paths ["env/prod/clj"]
+                       :dependencies [[prone "1.1.4"]]
                        :prep-tasks ["compile" ["cljsbuild" "once" "min"]]
                        :env {:production true}
                        :aot :all
