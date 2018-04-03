@@ -27,7 +27,7 @@
 (defn get-parsed-node-result
   "This returns the parsed node result. If the parsed node result is a string, it
   reads the string and returns the eval'd result. This is due to elsewhere
-  in the program having to quote the parsed node result so that internal hashmaps
+  in the program having to quote the parsed node result so that internal hash-maps
   would not try to be evaluated as a function if they were at the head of a list
   and eval were called on them"
   [ast-node]

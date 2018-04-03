@@ -17,6 +17,7 @@
 - [Blog Post 10 (05/03/2018)](#blog-post-10-05032018)
 - [Blog Post 11 (12/03/2018)](#blog-post-11-12032018)
 - [Blog Post 12 (18/03/2018)](#blog-post-12-18032018)
+- [Blog Post 13 (03/04/2018)](#blog-post-13-03042018)
 
 
 
@@ -960,3 +961,141 @@ I will meet with my supervisor again on Tuesday as mentioned earlier. We will
 discuss which tasks should take precedence next. I believe it will be to start
 working on defining and returning style suggestions to the user, which I envision
 will take a couple weeks.
+
+
+## Blog Post 13 (03/04/2018)
+
+#### What I've Done:
+It is now Tuesday of Week 10, the day after Easter Monday (which is why
+I met with my supervisor today instead of yesterday).
+
+As stated in my previous blog, this past sprint (Sprint 9) was a two
+week sprint. And at the end of these two weeks, I have finally produced
+a "minimum viable demo". That is, finally have an end to end implementation
+of my project where a user can submit a piece of source code along with
+a style-rulebook on my website, that will go to my library on the backend,
+I will analyse that code, and return to the frontend any suggested changes
+to the code. Having this end to end viable demo is a large milestone of the
+project, especially as I am aiming to be finished with the Final Year
+Project by the end of Week 12 to give myself time to study for the exams.
+
+
+![First%20End%20to%20Demo](images/first-end-to-end-demo.png)
+
+So in the past two weeks I created the style-analyser.clj, which takes in
+the Abstract Syntax Tree that I have previously created, and then goes through
+every node. On each node, I check if there are any style rules that have
+been defined for that node in the style-rulebook. If there are, then I
+execute that style rule, which will check if they node matches an example
+of poor styling/structure (as outlined in the style-rulebook), and if it does
+then it will return its style suggestion string. If it doesn't match, i.e
+this node doesn't fail to meet the standard set out by this style-rule, then
+we return an empty string (i.e no suggestion), and move on to the next style
+rule if any for this node. After exhausting all of the style rules defined
+for this node, we move on to the next node and repeat this process. I call
+this type of style-rule checking "Node-Based Style Checking".
+
+To aid both myself and any user who is defining their own rulebook, I also
+created another namespace, node-ops.clj. This namespace contain useful
+functions for navigating my abstract syntax tree, in an attempt to shift back
+some of the coding effort and logic from the user side to the library side,
+to abstract away some of the gritter implementation details from the user.
+I felt this is necessary as as I have said before, when defining any function
+in the json rulebook, as per the the JSON format the strings can only be on
+a single line. So anything I can do to simplify / shorten what needs to be
+written in the rulebook the better.
+
+##### Challenges with performing Node Based Style Checking:
+
+* **Passing in the current AST node to the user submitted style rule:**
+
+    This was the major difficulty I faced in implementing the style checking.
+    When developing the style check, I was able to work with the REPL terminal
+    (Read Eval Print Loop) to see that the style rule I was developing would
+    logically work. Yet when trying to perform that same style check from within
+    the program, I came up against an issue with passing in the AST node to be
+    checked to the style rule.
+
+    The issue was that due to the structure of my nodes in the AST
+    ```
+    {:parsed-node-name "identifier",
+             :parsed-node-result
+             ({:token-key :ID, :token-value "func", :token-type :token})}
+    ```
+    with the `:parsed-node-result` being a lazy sequence of hash-maps
+    (with the hash-maps being either tokens or other child nodes). When
+    I would try to pass in the node to the style-rule, the Clojure evaluater
+    would see the lazy-sequence, interpret as a list, then try to call
+    the first element of that list as a function, instead of passing it in
+    as a list. The solution to get around such issues normally is to just
+    "quote" the list using either the `(quote)` function or an apostrophe
+    as shorthand. This will prevent the list being evaluated as a function.
+
+    The difficulty of this though was to try and programmatically quote
+    a data structure that would only be available at run-time instead of
+    compile time. See if I write a function that calls quote on its argument,
+    instead of quoting the evaluated value of that argument, I instead quote
+    the symbol used to represent the argument.
+
+    The solution I cam up with for this problem, is to convert the value
+    of `:parsed-node-result` to a string. Then I can insert an apostrophe
+    at the head of the string. I do this in the function
+    `quote-first-parsed-node-result` in the style analyser namespace, as
+    it is a once off issue that only occurs in this namespace. I can
+    now pass the node to the style-rule without error.
+
+    Then in the in order for the style rules to be able to properly read
+    the value of `:parsed-node-result` I define the following function
+    in the node-ops namespace, which also is a reason for users to
+    use this abstracted namespace instead of manually going through the tree
+    itself
+    ```
+    (defn get-parsed-node-result
+      "This returns the parsed node result. If the parsed node result is a string, it
+      reads the string and returns the eval'd result. This is due to elsewhere
+      in the program having to quote the parsed node result so that internal hashmaps
+      would not try to be evaluated as a function if they were at the head of a list
+      and eval were called on them"
+      [ast-node]
+      (let [parsed-node-result (:parsed-node-result ast-node)]
+        (if (string? parsed-node-result)
+          ;;If string read it, eval it, then return it
+          (eval (read-string parsed-node-result))
+          ;;else it is not a string, so can return it straight away
+          parsed-node-result)))
+    ```
+
+    And with that, I am able to successfully implement style rules
+    like the following (again indentation added for readability).
+    ```
+    (defn funcBInParamOfFuncA->funcC
+        [ast-node]
+         (if (and
+            (= (-> (scae-library.node-ops/get-nth-named-child ast-node 0 \"identifier\")
+                   (scae-library.node-ops/get-nth-named-child 0 :ID)
+                   (:token-value))
+               \"funcA\")
+            (= (-> (scae-library.node-ops/get-nth-named-child ast-node 0 \"statement-prime\")
+                   (scae-library.node-ops/get-nth-named-child 0 \"arg-list\")
+                   (scae-library.node-ops/get-nth-named-child 0 \"nemp-arg-list\")
+                   (scae-library.node-ops/get-nth-named-child 0 \"identifier\")
+                   (scae-library.node-ops/get-nth-named-child 0 :ID)
+                   (:token-value))
+               \"funcB\"))
+            \"Instead of calling funcB as the first parameter of funcA, try calling funcC\"
+            \"\"))"
+
+    ```
+
+#### What I am Currently Doing:
+
+Currently in week 10 there are 3 weeks left before the end of week 12, which is my
+self-imposed deadline. For this week I want to mainly focus on testing
+and code quality improvement (some refactoring), and to also work on VMs
+for my project server to run on so that I can deploy my application to a
+cloud hosting service.
+
+#### What I Will Do:
+Next week, week 11, I want to mainly focus on fleshing out some more
+rule-book styling rules. Then in week 12 I want to focus on finishing
+off my documentation.
