@@ -18,6 +18,7 @@
 - [Blog Post 11 (12/03/2018)](#blog-post-11-12032018)
 - [Blog Post 12 (18/03/2018)](#blog-post-12-18032018)
 - [Blog Post 13 (03/04/2018)](#blog-post-13-03042018)
+- [Blog Post 14 (18/04/2018)](#blog-post-14-18042018)
 
 
 
@@ -1099,3 +1100,45 @@ cloud hosting service.
 Next week, week 11, I want to mainly focus on fleshing out some more
 rule-book styling rules. Then in week 12 I want to focus on finishing
 off my documentation.
+
+## Blog Post 14 (18/04/2018)
+
+#### What I've Done:
+It is now Wednesday of week 12. Since my last blog I have both successfully
+deployed my application to the cloud powered by Amazon Web Services, and
+updated some of the old automated tests.
+
+* **Deploying to the Cloud:**
+
+    Firstly I registered an account with AWS.
+
+    I then configured and launched an AWS EC2 Ubuntu Server  instance.
+    This included specifying the specs of the system (5GB storage, 1GB memory), and
+    generating a key pair to allow me to ssh into my server. With this all
+    set I can spin up my instance from the AWS console, view it's health,
+    and connect to it through ssh. I then installed the latest version of
+    java 8 on the server, so that I can run the web-application.
+
+    Then next step was to build my web-application locally, then SCP it to
+    the Ubuntu Server. The web-application, which contains a jetty server,
+    is built into an uberjar, which can be run directly with java. With
+    the uberjar deployed to the server, I then wrote a systemctl service
+    script to allow me to auto start the web-application, check its
+    status, restart and stop the service.
+
+     Finally, I registered a domain name using Amazon Register,
+     www.source-code-analyser-engine.com/, and routed it to my web-application
+     using Amazon Route 53.
+
+
+#### What I am Currently Doing:
+Currently I am continuing to expand out automated tests.
+
+#### What I Will Do:
+We are now in the final run few weeks leading up to the project. My time
+will now be split between continuing testing different aspects of the project,
+expanding the rulebooks, fleshing out the website side of the project some more,
+tidying up various sections of code for readability, and writing up documentation,
+and of course studying for my final set of exams. Overall I am happy with
+where I am currently am with the project and don't forsee any major issues
+with wrapping up the project in the coming weeks.
