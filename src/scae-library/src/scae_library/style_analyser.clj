@@ -20,11 +20,9 @@
             ;;eval all style rules
             (let [style-rule-vector (read-string (second node-key-style-vector-val-pair))]
               (for [style-rule style-rule-vector]
-                (do
-                  (println "Style rule: " style-rule " : argument: " (quote-first-parsed-node-result ast-node))
-                  ;;note when putting a vector into a list it is done in reverse order
-                  ;;also note I have to insert a quoted string to prevent unintended evaluation
-                  (eval (into (list) [(quote-first-parsed-node-result ast-node) style-rule])))))
+                ;;note when putting a vector into a list it is done in reverse order
+                ;;also note I have to insert a quoted string to prevent unintended evaluation
+                (eval (into (list) [(quote-first-parsed-node-result ast-node) style-rule]))))
 
             ;;Else return an empty string
             ""))

@@ -19,6 +19,7 @@
 
 (declare parse-production-rule)
 ;;todo investigate loop - recur combo for tail optimisation
+
 ;;recursively check single elem of inner vec at a time to easily parse through tokens
 (defn parse-single-option
   [tokens option-vec]
@@ -43,13 +44,13 @@
                     (concat [inner-func-node] recursive-result-after-inner-func)))
                 )))
           (if (= (:token-key (first tokens)) (first option-vec))
-            (do ;;(println (first tokens) " == " (first option-vec))
-                (let [recursive-call-result (parse-single-option (rest tokens) (rest option-vec))]
-                  (if recursive-call-result
-                    (concat (vector (first tokens)) recursive-call-result)
-                    (do
-                      ;;(println "recursive call result empty")
-                      nil))))
+            (do                                             ;;(println (first tokens) " == " (first option-vec))
+              (let [recursive-call-result (parse-single-option (rest tokens) (rest option-vec))]
+                (if recursive-call-result
+                  (concat (vector (first tokens)) recursive-call-result)
+                  (do
+                    ;;(println "recursive call result empty")
+                    nil))))
 
             ;;check for epsilon condition
             (if (vector? (first option-vec))
@@ -73,10 +74,9 @@
                 ;;else
                 (do
                   ;;(println (first tokens) " != " (first option-vec))
-                  nil))))
-          ))
-    [])                                                     ;;returning empty vec here so as not to return nil
-    )
+                  nil))))))
+    [];;returning empty vec here so as not to return nil
+    ))
 
 
 (defn parse-production-rule
@@ -90,6 +90,9 @@
             ;;(println "node name: " (:node-name production-node))
             (hash-map :parsed-node-name (:node-name production-node)
                       :parsed-node-result (parse-single-option filtered-tokens option-vec))))]
+    ;;TODO remove prints
+    ;;(println "CODE->Node input: \n" production-rule)
+    ;;(println "CODE->NODE output: \n" production-node)
 
     (first (filter #(not (nil? (:parsed-node-result %))) all-options-parsed))))
 
@@ -99,8 +102,4 @@
   (eval (read-string (:scae-program production-rules)))
   (doseq [production (vals production-rules)]
     (eval (read-string production)))
-
-  (let [abstract-syntax-tree (parse-production-rule tokenised-code (:scae-entry-point production-rules))]
-    (println "Printing Abstract Syntax Tree: ")
-    (pprint abstract-syntax-tree)
-     abstract-syntax-tree))
+  (parse-production-rule tokenised-code (:scae-entry-point production-rules)))
