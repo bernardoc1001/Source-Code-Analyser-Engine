@@ -22,7 +22,7 @@
             (tokeniser/tokenise-code (:tokens rulebook-map))
             (ast/create-abstract-syntax-tree (:productions rulebook-map)))]
     (st/create-symbol-table abstract-syntax-tree)
-    (st/pretty-print-symbol-table)
+    ;;(st/pretty-print-symbol-table) ;;todo remove this print
 
     ;;todo tidy up by making symbol table non-global
     (let [suggestions
