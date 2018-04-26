@@ -641,3 +641,155 @@ scae-library.sample-inputs)
                                                           :parsed-node-result []})}})
 
 ;;==============================================================================
+
+;;================== Node Operations ===========================================
+(def ast-entry-type-data-set
+  {:entry-type-check {:ast-entry {:any-sort-of-key "any sort of value"}
+                      :key :any-sort-of-key}
+   :node-check          {:ast-entry {:parsed-node-name   "identifier",
+                                     :parsed-node-result '({:token-key   :ID,
+                                                           :token-value "y",
+                                                           :token-type  :token})}
+                         :key :parsed-node-name}
+
+   :token-check         {:ast-entry {:token-key   :ID,
+                                     :token-value "y",
+                                     :token-type  :token}
+                         :key :token-key}
+
+   :st-func-calls-check {:ast-entry {:st-func-calls "this will equal an auto-generated reference to anonymous functions"}
+                         :key :st-func-calls}
+
+   :line-number-check   {:ast-entry {:line-number 42}
+                         :key :line-number}})
+
+(def get-parsed-node-result-data-set
+  {:non-string-result {:ast-node        {:parsed-node-name   "identifier",
+                                         :parsed-node-result '({:token-key   :ID,
+                                                                :token-value "y", :token-type :token})}
+                       :expected-result '({:token-key :ID, :token-value "y", :token-type :token})}
+
+   :string-result     {:ast-node        {:parsed-node-name   "statement",
+                                         :parsed-node-result "'({:parsed-node-name \"identifier\",
+                                                          :parsed-node-result ({:token-key :ID,
+                                                                                :token-value \"funcA\",
+                                                                                :token-type :token})}
+                                                         {:parsed-node-name \"statement-prime\",
+                                                          :parsed-node-result ({:token-key :LBR,
+                                                                                :token-value \"(\",
+                                                                                :token-type :token}
+                                                                               {:parsed-node-name \"arg-list\",
+                                                                                :parsed-node-result ({:parsed-node-name \"nemp-arg-list\",
+                                                                                                      :parsed-node-result ({:parsed-node-name \"identifier\",
+                                                                                                                            :parsed-node-result ({:token-key :ID,
+                                                                                                                                                  :token-value \"funcB\",
+                                                                                                                                                  :token-type :token})}
+                                                                                                                           {:parsed-node-name \"nemp-arg-list-prime\",
+                                                                                                                           :parsed-node-result []})})}
+                                                                               {:token-key :RBR,
+                                                                               :token-value \")\",
+                                                                               :token-type :token}
+                                                                               {:token-key :SEMI_COLON,
+                                                                               :token-value \";\",
+                                                                               :token-type :token})})"}
+
+                       :expected-result '({:parsed-node-name   "identifier",
+                                           :parsed-node-result ({:token-key   :ID,
+                                                                  :token-value "funcA",
+                                                                  :token-type  :token})}
+                                           {:parsed-node-name   "statement-prime",
+                                            :parsed-node-result ({:token-key   :LBR,
+                                                                  :token-value "(",
+                                                                  :token-type  :token}
+                                                                  {:parsed-node-name   "arg-list",
+                                                                   :parsed-node-result ({:parsed-node-name   "nemp-arg-list",
+                                                                                          :parsed-node-result ({:parsed-node-name   "identifier",
+                                                                                                                 :parsed-node-result ({:token-key   :ID,
+                                                                                                                                        :token-value "funcB",
+                                                                                                                                        :token-type  :token})}
+                                                                                                                 {:parsed-node-name   "nemp-arg-list-prime",
+                                                                                                                  :parsed-node-result []})})}
+                                                                  {:token-key  :RBR, :token-value ")",
+                                                                   :token-type :token}
+                                                                  {:token-key   :SEMI_COLON,
+                                                                   :token-value ";",
+                                                                   :token-type  :token})})
+                       }})
+
+(def sample-identifier-node
+  {:ast-entry {:parsed-node-name   "identifier",
+               :parsed-node-result '({:token-key   :ID,
+                                     :token-value "funcA",
+                                     :token-type  :token})}
+   :parsed-node-name "identifier"
+   :parsed-node-result '({:token-key   :ID,
+                          :token-value "funcA",
+                          :token-type  :token})})
+
+(def get-nth-child-data-set
+  {:ast-entry     {:parsed-node-name "sample-node",
+                   :parsed-node-result '({:parsed-node-name "a-child-node",
+                                          :parsed-node-result ({:token-key :first,
+                                                                :token-value "first",
+                                                                :token-type :token})}
+                                          {:parsed-node-name "a-child-node",
+                                           :parsed-node-result ({:token-key :second,
+                                                                 :token-value "second",
+                                                                 :token-type :token})}
+                                          {:parsed-node-name "a-different-child-node",
+                                           :parsed-node-result ({:token-key :first-different,
+                                                                 :token-value "first-different",
+                                                                 :token-type :token})}
+                                          {:parsed-node-name "a-child-node",
+                                           :parsed-node-result ({:token-key :third,
+                                                                 :token-value "third",
+                                                                 :token-type :token})}
+                                          {:parsed-node-name "a-child-node",
+                                           :parsed-node-result ({:token-key :fourth,
+                                                                 :token-value "fourth",
+                                                                 :token-type :token})}
+                                          {:token-key :FIRST_TOKEN_CHILD,
+                                           :token-value "FIRST_TOKEN_CHILD",
+                                           :token-type :token}
+                                          {:token-key :SECOND_TOKEN_CHILD,
+                                           :token-value "SECOND_TOKEN_CHILD",
+                                           :token-type :token}
+                                          {:parsed-node-name "a-different-child-node",
+                                           :parsed-node-result ({:token-key :second-different,
+                                                                 :token-value "second-different",
+                                                                 :token-type :token})})}})
+
+(def node-contains-data-set
+  {:ast-entry {:parsed-node-name   "statement",
+               :parsed-node-result '({:parsed-node-name   "identifier",
+                                     :parsed-node-result ({:token-key   :ID,
+                                                           :token-value "i",
+                                                           :token-type  :token})}
+                                     {:parsed-node-name   "statement-prime",
+                                      :parsed-node-result ({:token-key   :ASSIGN,
+                                                            :token-value "=",
+                                                            :token-type  :token}
+                                                            {:parsed-node-name   "expression",
+                                                             :parsed-node-result ({:parsed-node-name   "optional-lbr",
+                                                                                   :parsed-node-result []}
+                                                                                   {:parsed-node-name   "fragment",
+                                                                                    :parsed-node-result ({:parsed-node-name   "id-or-fragment-delta",
+                                                                                                          :parsed-node-result ({:parsed-node-name   "fragment-delta",
+                                                                                                                                :parsed-node-result ({:parsed-node-name   "number",
+                                                                                                                                                      :parsed-node-result ({:token-key   :NUM,
+                                                                                                                                                                            :token-value "2",
+                                                                                                                                                                            :token-type  :token})})})}
+                                                                                                          {:parsed-node-name   "optional-expression-beta",
+                                                                                                           :parsed-node-result []}
+                                                                                                          {:parsed-node-name   "fragment-prime",
+                                                                                                           :parsed-node-result []})}
+                                                                                   {:parsed-node-name   "optional-rbr",
+                                                                                    :parsed-node-result []})}
+                                                            {:token-key   :SEMI_COLON,
+                                                             :token-value ";",
+                                                             :token-type  :token})}
+                                      {:token-key   :A_TOKEN_CHILD
+                                       :token-value "a token child",
+                                       :token-type  :token})}})
+
+;;==============================================================================
