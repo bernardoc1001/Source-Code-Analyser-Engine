@@ -25,11 +25,11 @@
   (entry-type-check? ast-entry :line-number))
 
 (defn get-parsed-node-result
-  "This returns the parsed node result. If the parsed node result is a string, it
-  reads the string and returns the eval'd result. This is due to elsewhere
-  in the program having to quote the parsed node result so that internal hash-maps
-  would not try to be evaluated as a function if they were at the head of a list
-  and eval were called on them"
+  "This returns the parsed node result. If the parsed node result is a string,
+  it reads the string and returns the eval'd result. This is due to elsewhere
+  in the program, the style analyser, having to quote the parsed node result so
+  that internal hash-maps would not try to be evaluated as a function if they
+  were at the head of a list and eval were called on them"
   [ast-node]
   (let [parsed-node-result (:parsed-node-result ast-node)]
     (if (string? parsed-node-result)
@@ -49,7 +49,7 @@
 
 (defn get-nth-child
   "Get the nth child of the ast node. Uses zero indexing (0 is first position).
-  Ignores symbol table function calls"
+  Ignores symbol table function calls and line-numbers"
   [ast-node n]
   (let [children (for [entry (get-parsed-node-result ast-node)
                        ;;only compile list of nodes and tokens
