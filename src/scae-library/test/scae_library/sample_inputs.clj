@@ -793,3 +793,90 @@ scae-library.sample-inputs)
                                        :token-type  :token})}})
 
 ;;==============================================================================
+
+;;================== Style Analyser ============================================
+
+(def quote-first-parsed-node-result-data-set
+  {:ast-entry       {:parsed-node-name   "statement",
+                     :parsed-node-result '({:parsed-node-name   "identifier",
+                                            :parsed-node-result ({:token-key   :ID,
+                                                                  :token-value "funcA",
+                                                                  :token-type  :token})}
+                                            {:parsed-node-name   "statement-prime",
+                                             :parsed-node-result ({:token-key   :LBR,
+                                                                   :token-value "(",
+                                                                   :token-type  :token}
+                                                                   {:parsed-node-name   "arg-list",
+                                                                    :parsed-node-result ({:parsed-node-name   "nemp-arg-list",
+                                                                                          :parsed-node-result ({:parsed-node-name   "identifier",
+                                                                                                                :parsed-node-result ({:token-key   :ID,
+                                                                                                                                      :token-value "funcB",
+                                                                                                                                      :token-type  :token})}
+                                                                                                                {:parsed-node-name   "nemp-arg-list-prime",
+                                                                                                                 :parsed-node-result []})})}
+                                                                   {:token-key  :RBR, :token-value ")",
+                                                                    :token-type :token}
+                                                                   {:token-key   :SEMI_COLON,
+                                                                    :token-value ";",
+                                                                    :token-type  :token})})}
+   :expected-result {:parsed-node-name   "statement",
+                     ;;note have to have string on 1 line for the test, else it detects newlines
+                     :parsed-node-result  "'({:parsed-node-name \"identifier\", :parsed-node-result ({:token-key :ID, :token-value \"funcA\", :token-type :token})} {:parsed-node-name \"statement-prime\", :parsed-node-result ({:token-key :LBR, :token-value \"(\", :token-type :token} {:parsed-node-name \"arg-list\", :parsed-node-result ({:parsed-node-name \"nemp-arg-list\", :parsed-node-result ({:parsed-node-name \"identifier\", :parsed-node-result ({:token-key :ID, :token-value \"funcB\", :token-type :token})} {:parsed-node-name \"nemp-arg-list-prime\", :parsed-node-result []})})} {:token-key :RBR, :token-value \")\", :token-type :token} {:token-key :SEMI_COLON, :token-value \";\", :token-type :token})})"}})
+
+(def parse-style-rules-data-set
+  {;;rules
+   :style-rules             {:style-rules-function-definitions {:funcBInParamOfFuncA->funcC "(defn funcBInParamOfFuncA->funcC [ast-node] (if (and (= (-> (scae-library.node-ops/get-nth-named-child ast-node 0 \"identifier\") (scae-library.node-ops/get-nth-named-child 0 :ID) (:token-value)) \"funcA\") (= (-> (scae-library.node-ops/get-nth-named-child ast-node 0 \"statement-prime\") (scae-library.node-ops/get-nth-named-child 0 \"arg-list\") (scae-library.node-ops/get-nth-named-child 0 \"nemp-arg-list\") (scae-library.node-ops/get-nth-named-child 0 \"identifier\") (scae-library.node-ops/get-nth-named-child 0 :ID) (:token-value)) \"funcB\")) \"Instead of calling funcB as the first parameter of funcA, try calling funcC\" \"\"))"}
+                             :node-based-style-rules           {:statement "[funcBInParamOfFuncA->funcC]"}}
+   :node-based-style-rules  {:statement "[funcBInParamOfFuncA->funcC]"}
+
+   ;;nodes
+   :no-match-for-style-rule {:ast-entry       {:parsed-node-name   "statement-prime",
+                                               :parsed-node-result '({:token-key  :LBR, :token-value "(",
+                                                                      :token-type :token}
+                                                                      {:parsed-node-name   "arg-list",
+                                                                       :parsed-node-result ({:parsed-node-name   "nemp-arg-list",
+                                                                                             :parsed-node-result ({:parsed-node-name   "identifier",
+                                                                                                                   :parsed-node-result ({:token-key   :ID,
+                                                                                                                                         :token-value "funcB",
+                                                                                                                                         :token-type  :token})}
+                                                                                                                   {:parsed-node-name   "nemp-arg-list-prime",
+                                                                                                                    :parsed-node-result []})})}
+                                                                      {:token-key  :RBR, :token-value ")",
+                                                                       :token-type :token}
+                                                                      {:token-key   :SEMI_COLON,
+                                                                       :token-value ";",
+                                                                       :token-type  :token})}
+                             :expected-result '()}
+   :node-has-no-children    {:ast-entry       {:parsed-node-name   "statement-block",
+                                               :parsed-node-result []}
+                             :expected-result '()}
+   :style-rule-match        {:ast-entry       {:parsed-node-name   "statement-block",
+                                               :parsed-node-result '({:parsed-node-name   "statement",
+                                                                      :parsed-node-result ({:parsed-node-name   "identifier",
+                                                                                            :parsed-node-result ({:token-key   :ID,
+                                                                                                                  :token-value "funcA",
+                                                                                                                  :token-type  :token})}
+                                                                                            {:parsed-node-name   "statement-prime",
+                                                                                             :parsed-node-result ({:token-key   :LBR,
+                                                                                                                   :token-value "(",
+                                                                                                                   :token-type  :token}
+                                                                                                                   {:parsed-node-name   "arg-list",
+                                                                                                                    :parsed-node-result ({:parsed-node-name   "nemp-arg-list",
+                                                                                                                                          :parsed-node-result ({:parsed-node-name   "identifier",
+                                                                                                                                                                :parsed-node-result ({:token-key   :ID,
+                                                                                                                                                                                      :token-value "funcB",
+                                                                                                                                                                                      :token-type  :token})}
+                                                                                                                                                                {:parsed-node-name   "nemp-arg-list-prime",
+                                                                                                                                                                 :parsed-node-result []})})}
+                                                                                                                   {:token-key   :RBR,
+                                                                                                                    :token-value ")",
+                                                                                                                    :token-type  :token}
+                                                                                                                   {:token-key   :SEMI_COLON,
+                                                                                                                    :token-value ";",
+                                                                                                                    :token-type  :token})})}
+                                                                      {:parsed-node-name   "statement-block",
+                                                                       :parsed-node-result []})}
+                             :expected-result ["Instead of calling funcB as the first parameter of funcA, try calling funcC"]}})
+
+
+                                         ;;==============================================================================
