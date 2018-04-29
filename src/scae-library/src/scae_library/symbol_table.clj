@@ -11,6 +11,10 @@
          :scope-map {GLOBAL_SCOPE_NAME {}}   ;;Key = the string of the scope-name, value = the symbol table entry map
          }))
 
+
+(defn pretty-print-symbol-table []
+  (pprint @symbol-table))
+
 (defn reset-symbol-table! []
   (reset! symbol-table {:current-scope-name GLOBAL_SCOPE_NAME
                         :previous-scope-name-stack []
@@ -71,7 +75,6 @@
    entry is not found in the specified scope, this will try
    to retrieve it from the global scope"
     (let [st-entry-map (get-in @symbol-table [:scope-map scope-name st-entry-name])]
-      (println "st-entry-map: " st-entry-map)
       (if (and (empty? st-entry-map)
                (not= scope-name GLOBAL_SCOPE_NAME))
         (get-from-scope st-entry-name GLOBAL_SCOPE_NAME)
@@ -81,8 +84,12 @@
    (get-from-scope st-entry-name (get-current-scope-name))))
 
 
-(defn pretty-print-symbol-table []
-  (pprint @symbol-table))
+;;todo move this func to a common namespace
+(defn- eval-code
+  [unevaled-code]
+  (if (string? unevaled-code)
+    (eval (read-string unevaled-code))
+    (eval unevaled-code)))
 
 
 (defn create-symbol-table
@@ -100,4 +107,4 @@
       (if (:st-func-calls entry)
         (do
           (doseq [st-func (:st-func-calls entry)]
-            (eval (st-func (:parsed-node-result ast-node)))))))))
+            (eval-code ((eval-code st-func) (:parsed-node-result ast-node)))))))))

@@ -794,6 +794,190 @@ scae-library.sample-inputs)
 
 ;;==============================================================================
 
+;;================== Symbol Table ==============================================
+(def push-previous-scope-name-data-set
+  {:push-to-empty-stack     {:symbol-table-before {:current-scope-name        "global",
+                                                   :previous-scope-name-stack [],
+                                                   :scope-map                 {"global" {}}}
+                              :scope-name "scope-1"
+                             :symbol-table-after  {:current-scope-name        "global",
+                                                   :previous-scope-name-stack ["scope-1"],
+                                                   :scope-map                 {"global" {}}}}
+   :push-to-non-empty-stack {:symbol-table-before {:current-scope-name        "global",
+                                                   :previous-scope-name-stack ["scope-1"],
+                                                   :scope-map                 {"global" {}}}
+                             :scope-name "scope-2"
+                             :symbol-table-after  {:current-scope-name        "global",
+                                                   :previous-scope-name-stack ["scope-1" "scope-2"],
+                                                   :scope-map                 {"global" {}}}}})
+
+(def pop-previous-scope-name-data-set
+  {:multiple-in-stack {:symbol-table-before {:current-scope-name        "global",
+                                             :previous-scope-name-stack ["scope-1" "scope-2" "scope-3"],
+                                             :scope-map                 {"global" {}}}
+                       :expected-result "scope-3"
+                       :symbol-table-after  {:current-scope-name        "global",
+                                             :previous-scope-name-stack ["scope-1" "scope-2"],
+                                             :scope-map                 {"global" {}}}}
+
+   :single-in-stack {:symbol-table-before {:current-scope-name        "global",
+                                           :previous-scope-name-stack ["scope-1"],
+                                           :scope-map                 {"global" {}}}
+                     :expected-result "scope-1"
+                     :symbol-table-after  {:current-scope-name        "global",
+                                           :previous-scope-name-stack [],
+                                           :scope-map                 {"global" {}}}}
+
+   :none-in-stack {:symbol-table-before {:current-scope-name        "global",
+                                        :previous-scope-name-stack [],
+                                        :scope-map                 {"global" {}}}
+                      :expected-result nil
+                      :symbol-table-after  {:current-scope-name        "global",
+                                            :previous-scope-name-stack [],
+                                            :scope-map                 {"global" {}}}}})
+
+(def current-scope-name-data-set
+  {:get-current-scope-name             {:symbol-table    {:current-scope-name        "global",
+                                                          :previous-scope-name-stack [],
+                                                          :scope-map                 {"global" {}}}
+                                        :expected-result "global"}
+
+   :set-current-scope-name             {:symbol-table-before                   {:current-scope-name        "global",
+                                                                                :previous-scope-name-stack [],
+                                                                                :scope-map                 {"global" {}}}
+
+                                        :symbol-table-after-save-previous      {:current-scope-name        "scope-1",
+                                                                                :previous-scope-name-stack ["global"],
+                                                                                :scope-map                 {"global" {}}}
+                                        :symbol-table-after-dont-save-previous {:current-scope-name        "scope-1",
+                                                                                :previous-scope-name-stack [],
+                                                                                :scope-map                 {"global" {}}}}
+
+   :set-current-scope-name-to-previous {:no-previous-scope-name-on-stack {:symbol-table-before {:current-scope-name        "global",
+                                                                                                :previous-scope-name-stack [],
+                                                                                                :scope-map                 {"global" {}}}
+                                                                          :symbol-table-after {:current-scope-name        nil,
+                                                                                               :previous-scope-name-stack [],
+                                                                                               :scope-map                 {"global" {}}}}
+
+                                        :one-scope-name-on-stack {:symbol-table-before {:current-scope-name        "scope-1",
+                                                                                        :previous-scope-name-stack ["global"],
+                                                                                        :scope-map                 {"global" {}}}
+                                                                  :symbol-table-after {:current-scope-name        "global",
+                                                                                       :previous-scope-name-stack [],
+                                                                                       :scope-map                 {"global" {}}}}
+
+                                        :multiple-scope-names-on-stack {:symbol-table-before {:current-scope-name        "scope-3",
+                                                                                              :previous-scope-name-stack ["global" "scope-1" "scope-2"],
+                                                                                              :scope-map                 {"global" {}}}
+                                                                        :symbol-table-after {:current-scope-name        "scope-2",
+                                                                                             :previous-scope-name-stack ["global" "scope-1"],
+                                                                                             :scope-map                 {"global" {}}}}}})
+
+(def scope-entry-data-set
+  {:add-to-scope   {:no-previous-st-entries {:symbol-table-before {:current-scope-name        "funcB",
+                                                                   :previous-scope-name-stack ["global"],
+                                                                   :scope-map                 {"global" {}}}
+                                             :st-entry-name       "funcB"
+                                             :st-entry-map        {:symbol-name  "funcB",
+                                                                   :symbol-value "integer"}
+                                             :scope-name          "global"
+                                             :symbol-table-after  {:current-scope-name        "funcB",
+                                                                   :previous-scope-name-stack ["global"],
+                                                                   :scope-map                 {"global" {"funcB" {:symbol-name  "funcB",
+                                                                                                                  :symbol-value "integer"}}}}}
+                    :multiple-st-entries    {:symbol-table-before {:current-scope-name        "funcA",
+                                                                   :previous-scope-name-stack ["global"],
+                                                                   :scope-map
+                                                                                              {"global"
+                                                                                                       {"funcB" {:symbol-name  "funcB",
+                                                                                                                 :symbol-value "integer"},
+                                                                                                        "funcA" {:symbol-name  "funcA",
+                                                                                                                 :symbol-value "integer"}},
+                                                                                               "funcB" {"i" {:symbol-name  "i",
+                                                                                                             :symbol-value "integer"}}}}
+                                             :st-entry-name       "i"
+                                             :st-entry-map        {:symbol-name  "i",
+                                                                   :symbol-value "integer"}
+                                             :scope-name          "funcA"
+                                             :symbol-table-after  {:current-scope-name        "funcA",
+                                                                   :previous-scope-name-stack ["global"],
+                                                                   :scope-map
+                                                                                              {"global"
+                                                                                                       {"funcB" {:symbol-name  "funcB",
+                                                                                                                 :symbol-value "integer"},
+                                                                                                        "funcA" {:symbol-name  "funcA",
+                                                                                                                 :symbol-value "integer"}},
+                                                                                               "funcB" {"i" {:symbol-name  "i",
+                                                                                                             :symbol-value "integer"}},
+                                                                                               "funcA" {"i" {:symbol-name  "i",
+                                                                                                             :symbol-value "integer"}}}}}}
+
+   :get-from-scope {:no-previous-st-entries {:symbol-table-before {:current-scope-name        "funcB",
+                                                                   :previous-scope-name-stack ["global"],
+                                                                   :scope-map                 {"global" {}}}
+                                             :st-entry-name       "funcB"
+                                             :scope-name          "global"
+                                             :expected-result     nil}
+                    :multiple-st-entries    {:symbol-table-before {:current-scope-name        "funcA",
+                                                                   :previous-scope-name-stack ["global"],
+                                                                   :scope-map
+                                                                                              {"global"
+                                                                                                       {"funcB" {:symbol-name  "funcB",
+                                                                                                                 :symbol-value "integer"},
+                                                                                                        "funcA" {:symbol-name  "funcA",
+                                                                                                                 :symbol-value "integer"}},
+                                                                                               "funcB" {"i" {:symbol-name  "i",
+                                                                                                             :symbol-value "integer"}}}}
+                                             :st-entry-name       "i"
+                                             :scope-name          "funcB"
+                                             :expected-result      {:symbol-name  "i",
+                                                                    :symbol-value "integer"}}}})
+(def create-symbol-table-data-set
+  {:ast-node-with-st-func-calls   {:ast-entry          {:parsed-node-name "main",
+                                                        :parsed-node-result
+                                                                          '({:st-func-calls
+                                                                             ["(fn [ast-entry] (scae-library.symbol-table/set-current-scope-name! \"scope-1\"))"]}
+                                                                             {:parsed-node-name "statement-block",
+                                                                              :parsed-node-result
+                                                                                                ({:parsed-node-name "statement",
+                                                                                                  :parsed-node-result
+                                                                                                                    ({:parsed-node-name "identifier",
+                                                                                                                      :parsed-node-result
+                                                                                                                                        ({:token-key :ID, :token-value "funcA", :token-type :token}
+                                                                                                                                          {:st-func-calls
+                                                                                                                                           ["(fn [ast-entry] (scae-library.symbol-table/add-to-scope \"dummy-symbol\" {:symbol-name  \"dummy-symbol\"
+                                                                                                                                                                                                                    :symbol-value 42}))"]})}
+                                                                                                                      {:parsed-node-name "statement-prime",
+                                                                                                                       :parsed-node-result
+                                                                                                                                         ({:token-key :LBR, :token-value "(", :token-type :token}
+                                                                                                                                           {:parsed-node-name "arg-list",
+                                                                                                                                            :parsed-node-result
+                                                                                                                                                              ({:parsed-node-name "nemp-arg-list",
+                                                                                                                                                                :parsed-node-result
+                                                                                                                                                                                  ({:parsed-node-name "identifier",
+                                                                                                                                                                                    :parsed-node-result
+                                                                                                                                                                                                      ({:token-key   :ID,
+                                                                                                                                                                                                        :token-value "funcB",
+                                                                                                                                                                                                        :token-type  :token})}
+                                                                                                                                                                                    {:parsed-node-name   "nemp-arg-list-prime",
+                                                                                                                                                                                     :parsed-node-result []})})}
+                                                                                                                                           {:token-key :RBR, :token-value ")", :token-type :token}
+                                                                                                                                           {:token-key   :SEMI_COLON,
+                                                                                                                                            :token-value ";",
+                                                                                                                                            :token-type  :token})})}
+                                                                                                  {:parsed-node-name "statement-block", :parsed-node-result []})}
+                                                                             {:token-key :END, :token-value "end", :token-type :token}
+                                                                             {:st-func-calls
+                                                                              ["(fn [ast-entry] (scae-library.symbol-table/set-current-scope-name-to-previous!))"]})}
+                                   :symbol-table-after {:current-scope-name        "global",
+                                                        :previous-scope-name-stack [],
+                                                        :scope-map                 {"global"  {}
+                                                                                    "scope-1" {"dummy-symbol" {:symbol-name  "dummy-symbol"
+                                                                                                               :symbol-value 42}}}}}})
+
+;;==============================================================================
+
 ;;================== Style Analyser ============================================
 
 (def quote-first-parsed-node-result-data-set
@@ -878,5 +1062,4 @@ scae-library.sample-inputs)
                                                                        :parsed-node-result []})}
                              :expected-result ["Instead of calling funcB as the first parameter of funcA, try calling funcC"]}})
 
-
-                                         ;;==============================================================================
+;;==============================================================================
