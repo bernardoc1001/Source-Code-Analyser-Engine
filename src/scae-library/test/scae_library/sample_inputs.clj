@@ -4,9 +4,9 @@
 scae-library.sample-inputs)
 
 ;;================== Core and Tokeniser ========================================
-(def sample-ccal-rulebook-string (slurp "resources/sample-ccal-rulebook-1.json"))
+(def sample-ccal-rulebook-string (slurp "test/scae_library/sample-ccal-rulebook.json"))
 
-(def sample-ccal-code-4-string (slurp "resources/sample-ccal-code-4.txt"))
+(def sample-ccal-code-4-string (slurp "test/scae_library/sample-ccal-code.txt"))
 
 (def sample-ccal-code-4-rulebook-1-suggestion (lazy-seq ["Instead of calling funcB as the first parameter of funcA, try calling funcC"]))
 
