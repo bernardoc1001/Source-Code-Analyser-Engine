@@ -44,7 +44,8 @@
                     (concat [inner-func-node] recursive-result-after-inner-func)))
                 )))
           (if (= (:token-key (first tokens)) (first option-vec))
-            (do                                             ;;(println (first tokens) " == " (first option-vec))
+            (do
+              ;;(println (first tokens) " == " (first option-vec))
               (let [recursive-call-result (parse-single-option (rest tokens) (rest option-vec))]
                 (if recursive-call-result
                   (concat (vector (first tokens)) recursive-call-result)
@@ -87,12 +88,12 @@
         all-options-parsed
         (for [option-vec (:node-value production-node)]
           (do
-            ;;(println "node name: " (:node-name production-node))
+            #_(println "node name: " (:node-name production-node))
             (hash-map :parsed-node-name (:node-name production-node)
                       :parsed-node-result (parse-single-option filtered-tokens option-vec))))]
     ;;TODO remove prints
-    ;;(println "CODE->Node input: \n" production-rule)
-    ;;(println "CODE->NODE output: \n" production-node)
+    #_(println "CODE->Node input: \n" production-rule)
+    #_(println "CODE->NODE output: \n" production-node)
 
     (first (filter #(not (nil? (:parsed-node-result %))) all-options-parsed))))
 
