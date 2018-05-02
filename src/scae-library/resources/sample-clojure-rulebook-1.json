@@ -1,0 +1,74 @@
+{"tokens" : [
+  {"skip":{
+    "COMMENT": "(?:;(?:.)*)",
+    "TAB" : "\t",
+    "NEWLINE" : "\n",
+    "CARRIAGE_RETURN" : "\r",
+    "FORM_FEED" : "\f"
+  }},
+
+
+  {"token" : {
+    "LPAR" : "\\(",
+    "RPAR" : "\\)",
+    "LSQU" : "\\[",
+    "RSQU" : "\\]",
+    "LCUR" : "\\{",
+    "RCUR" : "\\}"}},
+
+  {"token" : {
+    "NUM" : "(?:(?:(?:(?:[0-9]))+(?:r(?:(?:[0-9]))+)?(?:n|l|L|N)?/(?:(?:[0-9]))+(?:r(?:(?:[0-9]))+)?(?:n|l|L|N)?)|(?:(?:[0-9]))+(?:r(?:(?:[0-9]))+)?(?:n|l|L|N)?|(?:(?:[0-9]))+\\.(?:(?:[0-9]))*(?:e(?:(?:[0-9]))+)?)",
+    "NIL" : "nil",
+    "STR" : "(?:\"(?s:.*?)\")",
+    "BOOLEAN" : "(?:true|false)",
+    "CHARACTER": "(?:\\ (?:~[\" \"]|(?:u(?:[0-9])(?:[0-9])(?:[0-9])(?:[0-9]))|(?:o(?:[0-9])(?:[0-9])(?:[0-9]))|newline|space|tab|my-formfeed|backspace|return))",
+    "KEYWORD": "(?::(?::)?(?:(?:(?:[0-9]))*(?:(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*)(?:\\.(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*))*)/)?(?:(?:[0-9]))*(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*))"
+  }},
+
+  {"token": {
+    "SYMBOL" : "(?:(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*)|(?:(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*)(?:\\.(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*))*)|(?:(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*)(?:\\.(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*))*)/(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*)|(?:(?:\\.|\\.-)(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*)|\\.))"
+  }},
+
+
+  {"token":{
+    "HASH": "#",
+    "AT": "@",
+    "APOS":"'",
+    "TILDE": "\\~",
+    "BACK-TICK": "`",
+    "CARET": "\\^",
+    "UNDERSCORE" : "_"
+
+  }}
+
+],
+  "productions": {
+    "scae-forward-declarations":"(declare scae-program my-forms my-form my-list my-vector my-set my-map my-map-prime my-symbol my-literal my-reader-macro my-quote my-lambda my-regex my-var-quote my-discard my-tag my-meta my-meta-prime)",
+    "scae-program": "(defn scae-program [] [['(my-forms)] ])",
+    "scae-entry-point": "(scae-program)",
+    
+    "my-forms": "(defn my-forms [] [['(my-form) '(my-forms-prime)] ])",
+    "my-forms-prime":"(defn my-forms-prime [] [['(my-forms)] [[]] ])",
+    "my-form": "(defn my-form [] [['(my-list)] ['(my-literal)] ['(my-symbol)] ['(my-vector)] ['(my-set)] ['(my-map)] ['(my-reader-macro)] ])",
+    "my-list": "(defn my-list [] [[:LPAR '(my-forms) :RPAR] ])",
+    "my-vector": "(defn my-vector [] [[:LSQU '(my-forms) :RSQU] ])",
+    "my-set": "(defn my-set [] [[:HASH :LCUR '(my-forms) :RCUR] ])",
+    "my-map": "(defn my-map [] [[:LCUR '(my-map-prime) :RCUR] ])",
+    "my-map-prime": "(defn my-map-prime [] [['(my-form) '(my-form) '(my-map-prime)] []])",
+    "my-symbol": "(defn my-symbol [] [[:SYMBOL] ])",
+    "my-literal":"(defn my-literal [] [[:KEYWORD] [:CHARACTER] [:NUM] [:NIL] [:STR] [:BOOLEAN] ])",
+    "my-reader-macro": "(defn my-reader-macro [] [['(my-quote)] ['(my-lambda)] ['(my-regex)] ['(my-var-quote)] ['(my-discard)] ['(my-tag)] ['(my-meta)] ])",
+    "my-quote": "(defn my-quote [] [[:APOS '(my-form)] [:BACK-TICK '(my-form)] [:TILDE '(my-form)] [:TILDE :AT '(my-form)] [:AT '(my-form)] ])",
+    "my-lambda": "(defn my-lambda [] [[:HASH :LPAR '(my-forms) :RPAR] ])",
+    "my-regex": "(defn my-regex [] [[:HASH :STR] ])",
+    "my-var-quote": "(defn my-var-quote [] [[:HASH :APOS '(my-symbol)] ])",
+    "my-discard": "(defn my-discard [] [[:HASH :UNDERSCORE '(my-form)] ])",
+    "my-tag":"(defn my-tag [] [[:CARET '(my-form) '(my-form)]])",
+    "my-meta":"(defn my-meta [] [[:HASH :CARET '(my-meta-prime)]])",
+    "my-meta-prime" : "(defn my-meta-prime [] [['(my-map) '(my-form)] ['(my-form)] ])"
+
+  },
+  "style-rules": {
+    "style-rules-function-definitions":{},
+    "node-based-style-rules" : {}
+  }}

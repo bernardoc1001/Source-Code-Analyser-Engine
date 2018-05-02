@@ -11,7 +11,7 @@
 
 ;;todo make functions to just return ast or just return symbol table
 
-(defn analyse-source-code
+#_(defn analyse-source-code
   "Expects a map with the following keys {:code     'string'
                                           :rulebook 'string'}"
   [request]
@@ -31,12 +31,14 @@
       suggestions)))
 
 
-(defn generate-ast
+(defn analyse-source-code
   "Expects a map with the following keys {:code     'string'
                                           :rulebook 'string'}"
   [request]
   (let [code-string (:code request)
-        rulebook-map (json/read-str (:rulebook request) :key-fn keyword)]
+        rulebook-map (json/read-str (:rulebook request) :key-fn keyword)
+
+        ]
     (-> code-string
         (tokeniser/tokenise-code (:tokens rulebook-map))
         (ast/create-abstract-syntax-tree (:productions rulebook-map)))))
