@@ -47,7 +47,7 @@
     "scae-program": "(defn scae-program [] [['(my-forms)] ])",
     "scae-entry-point": "(scae-program)",
     
-    "my-forms": "(defn my-forms [] [['(my-form) '(my-forms-prime)] ])",
+    "my-forms": "(defn my-forms [] [['(my-form) '(my-forms-prime)] [[]] ])",
     "my-forms-prime":"(defn my-forms-prime [] [['(my-forms)] [[]] ])",
     "my-form": "(defn my-form [] [['(my-list)] ['(my-literal)] ['(my-symbol)] ['(my-vector)] ['(my-set)] ['(my-map)] ['(my-reader-macro)] ])",
     "my-list": "(defn my-list [] [[:LPAR '(my-forms) :RPAR] ])",
@@ -69,6 +69,12 @@
 
   },
   "style-rules": {
-    "style-rules-function-definitions":{},
-    "node-based-style-rules" : {}
+    "style-rules-function-definitions":{
+      "ns-funcs-only-in-repl" : "(defn ns-funcs-only-in-repl [ast-node] (let [token-value (-> ast-node (scae-library.node-ops/get-nth-named-child 0 \"my-forms\") (scae-library.node-ops/get-nth-named-child 0 \"my-form\") (scae-library.node-ops/get-nth-named-child 0 \"my-symbol\") (scae-library.node-ops/get-parsed-node-result) (first) (get :token-value))] (if (or (= token-value \"require\") (= token-value \"refer\")) \"Avoid the use of namespace-manipulating functions like require and refer. They are entirely unnecessary outside of a REPL environment\" \"\")))",
+
+      "vec-instead-of-into" : "(defn vec-instead-of-into [ast-node] (let [symbol-token-value (-> ast-node (scae-library.node-ops/get-nth-named-child 0 \"my-forms\") (scae-library.node-ops/get-nth-named-child 0 \"my-form\") (scae-library.node-ops/get-nth-named-child 0 \"my-symbol\")(scae-library.node-ops/get-parsed-node-result) (first) (get :token-value)) vector-node (-> ast-node (scae-library.node-ops/get-nth-named-child 0 \"my-forms\") (scae-library.node-ops/get-nth-named-child 0 \"my-forms-prime\") (scae-library.node-ops/get-nth-named-child 0 \"my-forms\") (scae-library.node-ops/get-nth-named-child 0 \"my-form\") (scae-library.node-ops/get-nth-named-child 0 \"my-vector\"))] (if (and (= symbol-token-value \"into\") (empty? (-> vector-node (scae-library.node-ops/get-nth-named-child 0 \"my-forms\") (scae-library.node-ops/get-parsed-node-result) (first)))) \"Prefer using vec over into when converting a sequence into a vector. E.g use (vec some-seq) instead of (into [] some-seq)\" \"\")))"
+    },
+    "node-based-style-rules" : {
+      "my-list" : "[ns-funcs-only-in-repl vec-instead-of-into]"
+    }
   }}
