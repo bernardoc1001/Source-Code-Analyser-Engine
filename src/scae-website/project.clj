@@ -20,6 +20,7 @@
                  [venantius/accountant "0.2.3"
                   :exclusions [org.clojure/tools.reader]]
                  [cljs-ajax "0.5.8"]
+                 [cpath-clj "0.1.2"]
                  [scae-library "0.1.0-SNAPSHOT"]]
 
   :plugins [[lein-environ "1.1.0"]
@@ -105,14 +106,11 @@
                                   [figwheel-sidecar "0.5.14"]
                                   [org.clojure/tools.nrepl "0.2.13"]
                                   [com.cemerick/piggieback "0.2.2"]
-                                  [pjstadig/humane-test-output "0.8.3"]
-                                  
- ]
+                                  [pjstadig/humane-test-output "0.8.3"]]
 
                    :source-paths ["env/dev/clj"]
                    :plugins [[lein-figwheel "0.5.14"]
-                             [lein-doo "0.1.8"]
-]
+                             [lein-doo "0.1.8"]]
 
                    :injections [(require 'pjstadig.humane-test-output)
                                 (pjstadig.humane-test-output/activate!)]
