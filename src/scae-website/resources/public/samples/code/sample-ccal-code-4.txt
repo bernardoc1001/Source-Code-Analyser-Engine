@@ -1,0 +1,18 @@
+integer funcB () is
+  var i:integer;
+begin
+  i = 2;
+  return (i);
+end
+
+integer funcA (y:integer) is
+  var i:integer;
+begin
+  i = 3;
+  return (y);
+end
+
+main
+begin
+  funcA (funcB);
+end

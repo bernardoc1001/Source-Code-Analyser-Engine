@@ -4,7 +4,8 @@
             [hiccup.page :refer [include-js include-css html5]]
             [scae-website.middleware :refer [wrap-middleware]]
             [config.core :refer [env]]
-            [scae-library.core :as scae-lib]))
+            [scae-library.core :as scae-lib]
+            [scae-website.sample-files :as scae-sample-files]))
 
 (def mount-target
   [:div#app
@@ -55,6 +56,11 @@
              (let [response (scae-lib/analyse-source-code (get-in request [:params :data]))]
                {:status 200 :body response})) ;;for the time being just return 200 and the result of the scae library call
 
+
+           ;;=== Misc ===
+           (GET "/sample-files" []
+             (let [response (scae-sample-files/get-sample-files )]
+               {:status 200 :body response}))
            (resources "/")
            (not-found "Not Found"))
 

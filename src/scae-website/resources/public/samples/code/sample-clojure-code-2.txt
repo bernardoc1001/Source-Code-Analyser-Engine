@@ -1,0 +1,4 @@
+(refer something)
+(into [] 1)
+(+ 1 2)
+(require something-else)
