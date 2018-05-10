@@ -162,12 +162,12 @@
 
 (defn submit-url
   [input-type]
-  [:input {:id (str input-type "-url-input")
-           :type "text"
-           :form "code-submission-form"
-           :class "form-control"
-           :placeholder "Enter Rulebook URL..."
-           :on-change #(common/onchange-swap-atom! page-state [:data (keyword input-type)] %)}])
+  [:input {:id          (str input-type "-url-input")
+           :type        "text"
+           :form        "code-submission-form"
+           :class       "form-control"
+           :placeholder (str "Enter " (c-str/capitalize input-type) " URL...")
+           :on-change   #(common/onchange-swap-atom! page-state [:data (keyword input-type)] %)}])
 
 (defn submission-input
   [input-type]
