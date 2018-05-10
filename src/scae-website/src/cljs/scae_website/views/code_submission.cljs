@@ -33,6 +33,7 @@
   (let [formatted-response
         (clojure.string/join "\n" response)
         no-suggestion-message "Everything looks ok with your code. No suggestions returned."]
+    (swap! page-state assoc-in [:returned-errors] "")
     (swap! page-state assoc-in [:returned-suggestions] (if (empty? formatted-response)
                                                          no-suggestion-message
                                                          formatted-response))))
@@ -81,6 +82,12 @@
 
 (defn submit-procedure
   [submit-body]
+  ;; firstly set the result display to show a loading icon, and then bring
+  ;; the display into view
+  (swap! page-state assoc-in [:returned-suggestions] "loader")
+  (swap! page-state assoc-in [:returned-errors] "loader")
+  (.scrollTop (js/$ "html,body") 0)
+
   (cond
     ;;check if the rulebook is being submitted by url. If so call it's own method
     ;;to retrieve the data to submit. That method will then check is we need
@@ -96,9 +103,7 @@
 
     ;;Don't need to get any data before submitting
     :else
-    (post-code-submission submit-body))
-
-  #_(.scrollTop (js/$ "html,body") 0))
+    (post-code-submission submit-body)))
 
 (defn valid-input-type?
   [input-type]
@@ -205,8 +210,27 @@
 
 (defn returned-suggestions-panel
   [de-ref-page-state]
-  (if (not (empty? (:returned-suggestions de-ref-page-state)))
-    ;;if suggestions are there, render the panel
+  (cond
+    (and (or (= (:returned-suggestions de-ref-page-state)
+                "loader")
+             (= (:returned-errors de-ref-page-state)
+                "loader"))
+
+         (or
+           (= (:returned-errors de-ref-page-state)
+              "loader")
+           (empty? (:returned-errors de-ref-page-state))))
+    [:div {:class "panel panel-default"}
+     [:div {:class "panel-heading"} "Analysing Code"]
+     [:div {:class "panel-body"}
+      [:div {:class "row"}
+       [:div {:class "loader"}]]]]
+
+    ;; if suggestions are there, render the panel
+    (and
+      (not= (:returned-suggestions de-ref-page-state)
+            "loader")
+      (not (empty? (:returned-suggestions de-ref-page-state))))
     [:div {:class "panel panel-default"}
      [:div {:class "panel-heading"} "Returned Suggestions"]
      [:div {:class "panel-body"}
@@ -216,17 +240,21 @@
          (:returned-suggestions de-ref-page-state)]]]]]
 
     ;; else if any errors were returned, display them
-    (if (not (empty? (:returned-errors de-ref-page-state)))
-      [:div {:class "panel panel-default"}
-       [:div {:class "panel-heading"} "Returned Errors"]
-       [:div {:class "panel-body"}
-        [:div {:class "row"}
-         [:div {:class "col-sm-12"}
-          [:pre (:returned-errors de-ref-page-state)]]]]]
+    (and
+      (not= (:returned-errors de-ref-page-state)
+            "loader")
+      (not (empty? (:returned-errors de-ref-page-state))))
+    [:div {:class "panel panel-default"}
+     [:div {:class "panel-heading"} "Returned Errors"]
+     [:div {:class "panel-body"}
+      [:div {:class "row"}
+       [:div {:class "col-sm-12"}
+        [:pre (:returned-errors de-ref-page-state)]]]]]
 
-      ;;else return an empty div (i.e don't render the panel).
-      ;;Note return empty div so as not to return null, which generates an error
-      [:div])))
+    :else
+    ;;else return an empty div (i.e don't render the panel).
+    ;;Note return empty div so as not to return null, which generates an error
+    [:div]))
 
 (defn code-submission-page []
   (get-sample-files)
