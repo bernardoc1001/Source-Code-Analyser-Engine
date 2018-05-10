@@ -17,7 +17,6 @@
 
 (defn sample-files-success-handler
   [response]
-  (.log js/console (str "Sample Files Get Success Response: " response))
   (swap! page-state assoc-in [:sample-files] response))
 
 (defn get-sample-files []
@@ -34,7 +33,6 @@
   (let [formatted-response
         (clojure.string/join "\n" response)
         no-suggestion-message "Everything looks ok with your code. No suggestions returned."]
-    (.log js/console (str "Code Submission Success Handler Response: " formatted-response))
     (swap! page-state assoc-in [:returned-suggestions] (if (empty? formatted-response)
                                                          no-suggestion-message
                                                          formatted-response))))
@@ -45,7 +43,7 @@
         (str "Status Code: " (:status response)
              "\nStatus Text: " (:status-text response)
              "\nFailure Type: " (:failure response))]
-    (.log js/console (str "Code Submission Error Handler Response: " response))
+    (.error js/console (str "Code Submission Error Handler Response: " response))
     (swap! page-state assoc-in [:returned-errors] formatted-response)))
 
 (defn post-code-submission
@@ -56,13 +54,51 @@
          :error-handler code-submission-error-handler       ;;error-handler
          }))
 
+(defn code-url-success-handler
+  [response]
+  (swap! page-state assoc-in [:data :code] (str response))
+  (post-code-submission (:data @page-state)))
+
+(defn submit-code-url-procedure []
+  (GET (get-in @page-state [:data :code])
+       {:handler       code-url-success-handler
+        :error-handler error-handler}))
+
+(defn rulebook-url-success-handler
+  [response]
+  (swap! page-state assoc-in [:data :rulebook] (str response))
+  ;; now check if we have to retrieve any code from an external url. Else proceed
+  ;; with submitting the data to the library
+  (if (= (:code-method @page-state)
+         "url")
+    (submit-code-url-procedure)
+    (post-code-submission (:data @page-state))))
+
+(defn submit-rulebook-url-procedure []
+  (GET (get-in @page-state [:data :rulebook])
+       {:handler       rulebook-url-success-handler
+        :error-handler error-handler}))
+
 (defn submit-procedure
   [submit-body]
-  ;(.log js/console "Code: " (:code submit-body))
-  ;(.log js/console "Rulebook: " (:rulebook submit-body))
-  (.log js/console "Posting....")
-  (post-code-submission submit-body)
-  (.scrollTop (js/$ "html,body") 0))
+  (cond
+    ;;check if the rulebook is being submitted by url. If so call it's own method
+    ;;to retrieve the data to submit. That method will then check is we need
+    ;;to retrieve any code from a url
+    (= (:rulebook-method @page-state)
+       "url")
+    (submit-rulebook-url-procedure)
+
+    ;;only need to get code data from a url before submitting
+    (= (:code-method @page-state)
+       "url")
+    (submit-code-url-procedure)
+
+    ;;Don't need to get any data before submitting
+    :else
+    (post-code-submission submit-body))
+
+  #_(.scrollTop (js/$ "html,body") 0))
 
 (defn valid-input-type?
   [input-type]
@@ -124,6 +160,15 @@
       (.error js/console "Invalid Input Type: " input-type)
       "ERROR INVALID INPUT TYPE: " input-type)))
 
+(defn submit-url
+  [input-type]
+  [:input {:id (str input-type "-url-input")
+           :type "text"
+           :form "code-submission-form"
+           :class "form-control"
+           :placeholder "Enter Rulebook URL..."
+           :on-change #(common/onchange-swap-atom! page-state [:data (keyword input-type)] %)}])
+
 (defn submission-input
   [input-type]
   (if (valid-input-type? input-type)
@@ -138,12 +183,7 @@
           [submission-text-area input-type]]
 
          (= submission-type "url")
-         [:input {:id (str input-type "-url-input")
-                  :type "text"
-                  :form "code-submission-form"
-                  :class "form-control"
-                  :placeholder "Enter Rulebook URL..."
-                  :on-change #(common/onchange-swap-atom! page-state [:data (keyword input-type)] %)}]
+         [submit-url input-type]
 
          (= submission-type "manually-enter")
          [submission-text-area input-type]
