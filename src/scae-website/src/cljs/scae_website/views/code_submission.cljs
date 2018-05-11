@@ -135,6 +135,8 @@
     (let [sample-files (get-in @page-state [:sample-files (keyword (str input-type "-samples"))])]
       (->>
         (reduce #(conj %1 [:option {:value (second %2)} (first %2)]) [] sample-files)
+        (sort #(compare (last %1)
+                        (last %2)))
         (into [:select {:id           (str "existing-" input-type "-dropdown")
                         :form         "code-submission-form"
                         :defaultValue "default"
