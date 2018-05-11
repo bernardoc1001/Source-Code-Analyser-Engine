@@ -10,7 +10,9 @@
          (reagent/atom {:data {:code     ""
                                :rulebook ""}
                         :code-method ""
+                        :code-url-address ""
                         :rulebook-method ""
+                        :rulebook-url-address ""
                         :returned-suggestions ""
                         :returned-errors ""
                         :sample-files nil}))
@@ -61,7 +63,7 @@
   (post-code-submission (:data @page-state)))
 
 (defn submit-code-url-procedure []
-  (GET (get-in @page-state [:data :code])
+  (GET (get-in @page-state [:code-url-address])
        {:handler       code-url-success-handler
         :error-handler error-handler}))
 
@@ -76,7 +78,7 @@
     (post-code-submission (:data @page-state))))
 
 (defn submit-rulebook-url-procedure []
-  (GET (get-in @page-state [:data :rulebook])
+  (GET (get-in @page-state [:rulebook-url-address])
        {:handler       rulebook-url-success-handler
         :error-handler error-handler}))
 
@@ -132,7 +134,8 @@
 (defn sample-files-dropdown
   [input-type]
   (if (valid-input-type? input-type)
-    (let [sample-files (get-in @page-state [:sample-files (keyword (str input-type "-samples"))])]
+    (let [sample-files (get-in @page-state
+                               [:sample-files (keyword (str input-type "-samples"))])]
       (->>
         (reduce #(conj %1 [:option {:value (second %2)} (first %2)]) [] sample-files)
         (sort #(compare (last %1)
@@ -141,8 +144,11 @@
                         :form         "code-submission-form"
                         :defaultValue "default"
                         :required     "required"
-                        :on-change    #(common/onchange-swap-atom! page-state [:data (keyword input-type)] %)}
-               [:option {:disabled "disabled" :value "default"} (str "Please select a " input-type " sample")]])))
+                        :on-change    #(common/onchange-swap-atom!
+                                         page-state
+                                         [:data (keyword input-type)] %)}
+               [:option {:disabled "disabled" :value "default"}
+                (str "Please select a " input-type " sample")]])))
     (do
       (.error js/console "Invalid Input Type: " input-type)
       "ERROR INVALID INPUT TYPE: " input-type)))
@@ -155,14 +161,17 @@
                 :rows "15"
                 :class "form-control"
                 :placeholder (str "Enter " input-type " here...")
-                :value (let [current-input (get-in @page-state [:data (keyword input-type)])]
+                :value (let [current-input (get-in @page-state
+                                                   [:data (keyword input-type)])]
                          (if (not-empty current-input)
                            ;; If there is a value for the current input
                            ;; (rulebook or code) in the atom, display it as
                            ;; a default value in the text area
                            current-input
                            ""))
-                :on-change #(common/onchange-swap-atom! page-state [:data (keyword input-type)] %)}]
+                :on-change #(common/onchange-swap-atom!
+                              page-state
+                              [:data (keyword input-type)] %)}]
     (do
       (.error js/console "Invalid Input Type: " input-type)
       "ERROR INVALID INPUT TYPE: " input-type)))
@@ -174,7 +183,9 @@
            :form        "code-submission-form"
            :class       "form-control"
            :placeholder (str "Enter " (c-str/capitalize input-type) " URL...")
-           :on-change   #(common/onchange-swap-atom! page-state [:data (keyword input-type)] %)}])
+           :on-change   #(common/onchange-swap-atom!
+                           page-state [(keyword
+                                         (str input-type "-url-address"))] %)}])
 
 (defn submission-input
   [input-type]
