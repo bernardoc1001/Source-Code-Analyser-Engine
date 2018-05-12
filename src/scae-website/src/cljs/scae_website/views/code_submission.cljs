@@ -131,6 +131,37 @@
       (.error js/console "Invalid Input Type: " input-type)
       "ERROR INVALID INPUT TYPE: " input-type)))
 
+(defn remove-editor
+  ([id index]
+   (if (and (.getElementById js/document id)
+            (.next
+              (js/$ (str "#" id))
+              ".CodeMirror"))
+     (let [target-editor (aget
+                           (aget
+                             (.next
+                               (js/$ (str "#" id))
+                               ".CodeMirror")
+                             index)
+                           "CodeMirror")
+           target-dom-node (.getWrapperElement target-editor)]
+       (.remove target-dom-node))))
+  ([id]
+    (remove-editor id 0)))
+
+(defn update-editor
+  [id input-type]
+  (let [original-editor
+        (aget
+          (aget
+            (.next
+              (js/$ (str "#" id))
+              ".CodeMirror")
+            0)
+          "CodeMirror")]
+    (.setValue original-editor (get-in @page-state
+                                       [:data (keyword input-type)]))))
+
 (defn sample-files-dropdown
   [input-type]
   (if (valid-input-type? input-type)
@@ -144,40 +175,69 @@
                         :form         "code-submission-form"
                         :defaultValue "default"
                         :required     "required"
-                        :on-change    #(common/onchange-swap-atom!
-                                         page-state
-                                         [:data (keyword input-type)] %)}
+                        :on-change    #(do
+                                         ;;update the pagestate
+                                         (common/onchange-swap-atom!
+                                           page-state
+                                           [:data (keyword input-type)] %)
+                                         ;;update the contents of the editor to match gotten data
+                                         (let [id (str input-type "-text-area")]
+                                           (update-editor id input-type)))}
                [:option {:disabled "disabled" :value "default"}
                 (str "Please select a " input-type " sample")]])))
     (do
       (.error js/console "Invalid Input Type: " input-type)
       "ERROR INVALID INPUT TYPE: " input-type)))
 
-(defn submission-text-area
-  [input-type]
+
+
+(defn editor-did-mount
+  [page-state-atom input-type id]
+  (fn [this]
+    (let [current-input (get-in @page-state-atom
+                                [:data (keyword input-type)])
+          cm (.fromTextArea js/CodeMirror
+                            #_(.getElementById js/document id)
+                            (reagent/dom-node this)
+                             #js {:mode        (cond
+                                                 (= input-type "code")
+                                                 "clojure"
+
+                                                 (= input-type "rulebook")
+                                                 "application/json")
+                                  :lineNumbers true})]
+
+      ;; When rendering the editor initialise its value to that stored in page-state
+      (update-editor id input-type)
+      ;; on change func call
+      (.on cm "change" #(swap! page-state
+                               assoc-in
+                               [:data (keyword input-type)]
+                               (.getValue %))))))
+
+(defn editor
+  [page-state-atom input-type]
   (if (valid-input-type? input-type)
-    [:textarea {:id (str input-type "-text-area")
-                :form "code-submission-form"
-                :rows "15"
-                :class "form-control"
-                :placeholder (str "Enter " input-type " here...")
-                :value (let [current-input (get-in @page-state
-                                                   [:data (keyword input-type)])]
-                         (if (not-empty current-input)
-                           ;; If there is a value for the current input
-                           ;; (rulebook or code) in the atom, display it as
-                           ;; a default value in the text area
-                           current-input
-                           ""))
-                :on-change #(common/onchange-swap-atom!
-                              page-state
-                              [:data (keyword input-type)] %)}]
+    (let [text-area-id (str input-type "-text-area")
+          url-input-id (str input-type "-url-input")]
+      (reagent/create-class
+        {:reagent-render      (fn []
+                                [:textarea {:id          text-area-id
+                                            :form        "code-submission-form"
+                                            :rows        "15"
+                                            :class       "form-control"
+                                            :placeholder (str "Enter " input-type " here...")
+
+                                            }])
+         :component-did-mount (editor-did-mount page-state-atom input-type text-area-id)}))
     (do
       (.error js/console "Invalid Input Type: " input-type)
       "ERROR INVALID INPUT TYPE: " input-type)))
 
 (defn submit-url
   [input-type]
+  ;;Firstly remove editor if present, then render URL text input
+  (remove-editor (str input-type "-text-area"))
   [:input {:id          (str input-type "-url-input")
            :type        "text"
            :form        "code-submission-form"
@@ -198,13 +258,13 @@
          (= submission-type (str "existing-" input-type))
          [:div
           [sample-files-dropdown input-type]
-          [submission-text-area input-type]]
+          [editor page-state input-type]]
 
          (= submission-type "url")
          [submit-url input-type]
 
          (= submission-type "manually-enter")
-         [submission-text-area input-type]
+         [editor page-state input-type]
 
          :else [:div]))]
     (do

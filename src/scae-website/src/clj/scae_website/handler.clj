@@ -33,7 +33,14 @@
    ;; === Simple Sidebar ===
    (include-css "/css/simple-sidebar.css")
 
+   ;; === Includes for Highlighted Code Editor ===
+   ;;TODO consider hosting locally instead of linking to cdnjs
+   (include-css "//cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.css")
+   (include-js "//cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js" )
+   (include-js "//cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/mode/clojure/clojure.min.js")
+   (include-js "//cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/mode/javascript/javascript.min.js")
 
+   ;; === SCAE-Website CSS ===
    (include-css (if (env :dev) "/css/site.css" "/css/site.min.css"))])
 
 (defn loading-page []
