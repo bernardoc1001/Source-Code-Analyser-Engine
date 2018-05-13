@@ -119,11 +119,12 @@
   (if (valid-input-type? input-type)
     [:div {:class "form-group"}
      [:select {:id           (str input-type "-method-selection")
+               :class "selectpicker"
+               :title (str (c-str/capitalize input-type) " input type")
                :form         "code-submission-form"
                :defaultValue "default"
                :required     "required"
                :on-change    #(common/onchange-swap-atom! page-state [(keyword (str input-type "-method"))] %)}
-      [:option {:disabled "disabled" :value "default"} (str "Please select " input-type " input method")]
       [:option {:value (str "existing-" input-type)} (str "Use existing " input-type)]
       [:option {:value "url"} (str "Link to external " input-type)]
       [:option {:value "manually-enter"} (str "Manually enter " input-type)]
@@ -180,17 +181,25 @@
           "CodeMirror")]
     (.setValue original-editor (get-in @page-state
                                        [:data (keyword input-type)]))))
+(defn refresh-dropdown-by-id
+  [dropdown-id]
+  (->
+    (js/$ (str "#" dropdown-id))
+    (.selectpicker "refresh")))
 
 (defn sample-files-dropdown
   [input-type]
   (if (valid-input-type? input-type)
     (let [sample-files (get-in @page-state
-                               [:sample-files (keyword (str input-type "-samples"))])]
+                               [:sample-files (keyword (str input-type "-samples"))])
+          dropdown-id (str "existing-" input-type "-dropdown")]
       (->>
         (reduce #(conj %1 [:option {:value (second %2)} (first %2)]) [] sample-files)
         (sort #(compare (last %1)
                         (last %2)))
-        (into [:select {:id           (str "existing-" input-type "-dropdown")
+        (into [:select {:id           dropdown-id
+                        :class        "selectpicker"
+                        :title        (str "Select sample " input-type)
                         :form         "code-submission-form"
                         :defaultValue "default"
                         :required     "required"
@@ -201,9 +210,7 @@
                                            [:data (keyword input-type)] %)
                                          ;;update the contents of the editor to match gotten data
                                          (let [id (str input-type "-text-area")]
-                                           (update-editor id input-type)))}
-               [:option {:disabled "disabled" :value "default"}
-                (str "Please select a " input-type " sample")]])))
+                                           (update-editor id input-type)))}])))
     (do
       (.error js/console "Invalid Input Type: " input-type)
       "ERROR INVALID INPUT TYPE: " input-type)))
@@ -224,10 +231,15 @@
 
                                                  (= input-type "rulebook")
                                                  "application/json")
-                                  :lineNumbers true})]
+                                  :lineNumbers true})
+          sample-files-dropdown-id (str "existing-" input-type "-dropdown")]
 
       ;; When rendering the editor initialise its value to that stored in page-state
       (update-editor id input-type)
+
+      ;; When rendering the editor, also refresh the sample-files dropdown to ensure it is rendered aswell
+      (refresh-dropdown-by-id sample-files-dropdown-id)
+
       ;; on change func call
       (.on cm "change" #(swap! page-state
                                assoc-in
@@ -254,7 +266,7 @@
 
 (defn submit-url
   [input-type]
-  ;;Firstly remove editor if present, then render URL text input
+  ;;First remove editor if present, then render URL text input
   (remove-editor (str input-type "-text-area"))
   [:input {:id          (str input-type "-url-input")
            :type        "text"
@@ -268,7 +280,7 @@
                            %)}])
 (defn submit-file
   [input-type]
-  ;;Firstly remove editor if present, then render file submit input
+  ;;First remove editor if present, then render file submit input
   (remove-editor (str input-type "-text-area"))
   [:div {:id (str input-type "-submit-file")}
    [:label {:for (str input-type "-upload-box")} "Upload one source file:"]
@@ -290,6 +302,12 @@
                               (.readAsText reader first-file))))}]
    [editor input-type]])
 
+(defn submit-sample-file
+  [input-type]
+  [:div
+   [sample-files-dropdown input-type]
+   [editor input-type]])
+
 (defn submission-input
   [input-type]
   (if (valid-input-type? input-type)
@@ -299,9 +317,7 @@
      (let [submission-type (get @page-state (keyword (str input-type "-method")))]
        (cond
          (= submission-type (str "existing-" input-type))
-         [:div
-          [sample-files-dropdown input-type]
-          [editor input-type]]
+         [submit-sample-file input-type]
 
          (= submission-type "url")
          [submit-url input-type]
