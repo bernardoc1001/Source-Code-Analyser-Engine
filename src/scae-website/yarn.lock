@@ -10,6 +10,10 @@ bootstrap@3.3.7:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
 
+codemirror-minified@^5.37.0:
+  version "5.37.0"
+  resolved "https://registry.yarnpkg.com/codemirror-minified/-/codemirror-minified-5.37.0.tgz#8f26ad9993c0bd3d29f6afdd2e81061f8c722175"
+
 jquery-ui-dist@1.12.1:
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/jquery-ui-dist/-/jquery-ui-dist-1.12.1.tgz#5c0815d3cc6f90ff5faaf5b268a6e23b4ca904fa"
