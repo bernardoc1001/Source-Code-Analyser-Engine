@@ -126,17 +126,36 @@
       [:option {:disabled "disabled" :value "default"} (str "Please select " input-type " input method")]
       [:option {:value (str "existing-" input-type)} (str "Use existing " input-type)]
       [:option {:value "url"} (str "Link to external " input-type)]
-      [:option {:value "manually-enter"} (str "Manually enter " input-type)]]]
+      [:option {:value "manually-enter"} (str "Manually enter " input-type)]
+      [:option {:value "file-upload"} (str "Upload " input-type " file")]]]
     (do
       (.error js/console "Invalid Input Type: " input-type)
       "ERROR INVALID INPUT TYPE: " input-type)))
 
 (defn remove-editor
   ([id index]
+    ;; If check is messy but is necessary to check the existence of each component
+    ;; separately, as the next component relies on the previous.
+    ;; If we didn't, then if the previous doesn't exist then an error is thrown instead of just
+    ;; failing the if. That is why we check individually in the AND, so we stop
+    ;; as soon as we find a component that doesn't exist
    (if (and (.getElementById js/document id)
+            (js/$ (str "#" id))
             (.next
               (js/$ (str "#" id))
-              ".CodeMirror"))
+              ".CodeMirror")
+            (aget
+              (.next
+                (js/$ (str "#" id))
+                ".CodeMirror")
+              index)
+            (aget
+              (aget
+                (.next
+                  (js/$ (str "#" id))
+                  ".CodeMirror")
+                index)
+              "CodeMirror"))
      (let [target-editor (aget
                            (aget
                              (.next
@@ -192,13 +211,13 @@
 
 
 (defn editor-did-mount
-  [page-state-atom input-type id]
+  [input-type id]
   (fn [this]
-    (let [current-input (get-in @page-state-atom
+    (let [current-input (get-in @page-state
                                 [:data (keyword input-type)])
           cm (.fromTextArea js/CodeMirror
-                            #_(.getElementById js/document id)
-                            (reagent/dom-node this)
+                            (.getElementById js/document id)
+                            #_(reagent/dom-node this)
                              #js {:mode        (cond
                                                  (= input-type "code")
                                                  "clojure"
@@ -216,10 +235,9 @@
                                (.getValue %))))))
 
 (defn editor
-  [page-state-atom input-type]
+  [input-type]
   (if (valid-input-type? input-type)
-    (let [text-area-id (str input-type "-text-area")
-          url-input-id (str input-type "-url-input")]
+    (let [text-area-id (str input-type "-text-area")]
       (reagent/create-class
         {:reagent-render      (fn []
                                 [:textarea {:id          text-area-id
@@ -229,7 +247,7 @@
                                             :placeholder (str "Enter " input-type " here...")
 
                                             }])
-         :component-did-mount (editor-did-mount page-state-atom input-type text-area-id)}))
+         :component-did-mount (editor-did-mount input-type text-area-id)}))
     (do
       (.error js/console "Invalid Input Type: " input-type)
       "ERROR INVALID INPUT TYPE: " input-type)))
@@ -243,9 +261,34 @@
            :form        "code-submission-form"
            :class       "form-control"
            :placeholder (str "Enter " (c-str/capitalize input-type) " URL...")
+           :value       (get-in @page-state [:code-url-address]) ;; initially set to current value
            :on-change   #(common/onchange-swap-atom!
                            page-state [(keyword
-                                         (str input-type "-url-address"))] %)}])
+                                         (str input-type "-url-address"))]
+                           %)}])
+(defn submit-file
+  [input-type]
+  ;;Firstly remove editor if present, then render file submit input
+  (remove-editor (str input-type "-text-area"))
+  [:div {:id (str input-type "-submit-file")}
+   [:label {:for (str input-type "-upload-box")} "Upload one source file:"]
+   [:input {:id        (str input-type "-upload-box")
+            :type      "file"
+            :on-change #(do
+                          (let [editor-id (str input-type "-text-area")
+                                files (.. % -target -files)
+                                first-file (aget files 0)
+                                reader (js/FileReader.)]
+                            (set! (.-onload reader) (fn
+                                                      [e]
+                                                      (->> e
+                                                           (.-target)
+                                                           (.-result)
+                                                           (swap! page-state assoc-in [:data (keyword input-type)]))
+                                                      (update-editor editor-id input-type)))
+                            (when first-file
+                              (.readAsText reader first-file))))}]
+   [editor input-type]])
 
 (defn submission-input
   [input-type]
@@ -258,13 +301,16 @@
          (= submission-type (str "existing-" input-type))
          [:div
           [sample-files-dropdown input-type]
-          [editor page-state input-type]]
+          [editor input-type]]
 
          (= submission-type "url")
          [submit-url input-type]
 
          (= submission-type "manually-enter")
-         [editor page-state input-type]
+         [editor input-type]
+
+         (= submission-type "file-upload")
+         [submit-file input-type]
 
          :else [:div]))]
     (do
