@@ -30,6 +30,10 @@
    (include-css "/node_modules/bootstrap/dist/css/bootstrap.min.css")
    (include-js "/node_modules/bootstrap/dist/js/bootstrap.min.js")
 
+   ;; === Bootstrap Select ===
+   (include-css "/node_modules/bootstrap-select/dist/css/bootstrap-select.min.css")
+   (include-js "/node_modules/bootstrap-select/dist/js/bootstrap-select.min.js")
+
    ;; === Simple Sidebar ===
    (include-css "/css/simple-sidebar.css")
 
