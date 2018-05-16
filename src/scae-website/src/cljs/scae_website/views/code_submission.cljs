@@ -30,15 +30,131 @@
           :error-handler error-handler})
     [:div]))
 
+(defn update-editor
+  [id input-type]
+  (let [original-editor
+        (aget
+          (aget
+            (.next
+              (js/$ (str "#" id))
+              ".CodeMirror")
+            0)
+          "CodeMirror")]
+    (.setValue original-editor (get-in @page-state
+                                       [:data (keyword input-type)]))))
+
+(defn get-target-editor-element
+  ([id index]
+   "Return the editor DOM element matching the id and index, where index specifies
+ which editor on an array of matched editors to return. Normally want first editor."
+    ;; If check is messy but is necessary to check the existence of each component
+    ;; separately, as the next component relies on the previous.
+    ;; If we didn't, then if the previous doesn't exist then an error is thrown instead of just
+    ;; failing the if. That is why we check individually in the AND, so we stop
+    ;; as soon as we find a component that doesn't exist
+   (if (and (.getElementById js/document id)
+            (js/$ (str "#" id))
+            (.next
+              (js/$ (str "#" id))
+              ".CodeMirror")
+            (aget
+              (.next
+                (js/$ (str "#" id))
+                ".CodeMirror")
+              index)
+            (aget
+              (aget
+                (.next
+                  (js/$ (str "#" id))
+                  ".CodeMirror")
+                index)
+              "CodeMirror"))
+     (let [target-editor (aget
+                           (aget
+                             (.next
+                               (js/$ (str "#" id))
+                               ".CodeMirror")
+                             index)
+                           "CodeMirror")
+           target-dom-node (.getWrapperElement target-editor)]
+       target-dom-node)))
+  ([id]
+   "By default return the first editor matching the id"
+   (get-target-editor-element id 0)))
+
+(defn extract-bad-style-to-search
+  "This extracts any samples of bad style from the from the response of suggestions.
+  If any are found this will later be used to search the code-editor
+  for lines to highlight."
+  [suggestions-response]
+  (let
+    ;;regex matches from after "SCAE Bad-Styles: " to the end of line
+    [bad-style-regex "(SCAE Bad-Style:)(.*$)"]
+    (->>
+      (for [suggestion suggestions-response]
+        (->>
+          (re-seq (re-pattern bad-style-regex) suggestion)
+          (first)
+          (last)
+          (c-str/trim)))
+      (distinct)
+      (vec)
+      (remove nil?)
+      (remove empty?))))
+
+(defn highlight-and-number-bad-lines
+  [editor-lines bad-styles-to-search]
+  (let [line-number-atom (reagent/atom {:current-line-num         1
+                                        :lines-with-bad-style []})]
+    (js/$.each editor-lines (fn
+                              [index line]
+                              (doseq [bad-style bad-styles-to-search]
+                                (if (c-str/includes? (.-innerText line)
+                                                     bad-style)
+                                  (do
+                                    ;;update the vector of bad style detection line numbers
+                                    (swap! line-number-atom assoc-in
+                                           [:lines-with-bad-style]
+                                           (conj (:lines-with-bad-style @line-number-atom)
+                                                 (str "Line " (:current-line-num @line-number-atom) ": ")))
+
+                                    ;;Highlight the bad line style in orange
+                                    (->
+                                      line
+                                      (js/$)
+                                      (.css "background-color" "orange")))))
+
+                              ;;increment the current line number count
+                              (swap! line-number-atom assoc-in
+                                     [:current-line-num]
+                                     (inc (:current-line-num @line-number-atom)))))
+    ;;Return vector of by style line numbers
+    (:lines-with-bad-style @line-number-atom)))
+
+(defn highlight-bad-styles-and-match-with-response
+  "This will examine the suggestion response returned, search the code editor for
+  matching bad styles, then highlight those lines."
+  [suggestions-response]
+  (let [bad-styles-to-search (extract-bad-style-to-search suggestions-response)
+        code-editor-id "code-text-area"
+        target-editor-element (get-target-editor-element code-editor-id)
+        target-editor-lines (-> target-editor-element
+                                (js/$)
+                                (.find ".CodeMirror-line"))]
+    (if (not-empty bad-styles-to-search)
+      (->>
+        (highlight-and-number-bad-lines target-editor-lines bad-styles-to-search)
+        (map #(str %2 %1) suggestions-response)
+        (c-str/join "\n"))
+      suggestions-response)))
+
 (defn code-submission-success-handler
   [response]
-  (let [formatted-response
-        (clojure.string/join "\n" response)
-        no-suggestion-message "Everything looks ok with your code. No suggestions returned."]
+  (let [no-suggestion-message "Everything looks ok with your code. No suggestions returned."]
     (swap! page-state assoc-in [:returned-errors] "")
-    (swap! page-state assoc-in [:returned-suggestions] (if (empty? formatted-response)
+    (swap! page-state assoc-in [:returned-suggestions] (if (empty? response)
                                                          no-suggestion-message
-                                                         formatted-response))))
+                                                         (highlight-bad-styles-and-match-with-response response)))))
 
 (defn code-submission-error-handler
   [response]
@@ -59,7 +175,12 @@
 
 (defn code-url-success-handler
   [response]
+  ;; Swap data into page-state
   (swap! page-state assoc-in [:data :code] (str response))
+  ;; Reflect the gotten data in the editors
+  (update-editor "code-text-area" "code")
+  (update-editor "rulebook-text-area" "rulebook")
+  ;;post to the library
   (post-code-submission (:data @page-state)))
 
 (defn submit-code-url-procedure []
@@ -88,6 +209,10 @@
   ;; the display into view
   (swap! page-state assoc-in [:returned-suggestions] "loader")
   (swap! page-state assoc-in [:returned-errors] "loader")
+
+  ;; Update the editor, which will get rid of any previous bad style highlighting
+  (update-editor "code-text-area" "code")
+
   (.scrollTop (js/$ "html,body") 0)
 
   (cond
@@ -135,52 +260,12 @@
 
 (defn remove-editor
   ([id index]
-    ;; If check is messy but is necessary to check the existence of each component
-    ;; separately, as the next component relies on the previous.
-    ;; If we didn't, then if the previous doesn't exist then an error is thrown instead of just
-    ;; failing the if. That is why we check individually in the AND, so we stop
-    ;; as soon as we find a component that doesn't exist
-   (if (and (.getElementById js/document id)
-            (js/$ (str "#" id))
-            (.next
-              (js/$ (str "#" id))
-              ".CodeMirror")
-            (aget
-              (.next
-                (js/$ (str "#" id))
-                ".CodeMirror")
-              index)
-            (aget
-              (aget
-                (.next
-                  (js/$ (str "#" id))
-                  ".CodeMirror")
-                index)
-              "CodeMirror"))
-     (let [target-editor (aget
-                           (aget
-                             (.next
-                               (js/$ (str "#" id))
-                               ".CodeMirror")
-                             index)
-                           "CodeMirror")
-           target-dom-node (.getWrapperElement target-editor)]
+   (let [target-dom-node (get-target-editor-element id index)]
+     (if (not (nil? target-dom-node))
        (.remove target-dom-node))))
   ([id]
     (remove-editor id 0)))
 
-(defn update-editor
-  [id input-type]
-  (let [original-editor
-        (aget
-          (aget
-            (.next
-              (js/$ (str "#" id))
-              ".CodeMirror")
-            0)
-          "CodeMirror")]
-    (.setValue original-editor (get-in @page-state
-                                       [:data (keyword input-type)]))))
 (defn refresh-dropdown-by-id
   [dropdown-id]
   (->
@@ -215,8 +300,6 @@
       (.error js/console "Invalid Input Type: " input-type)
       "ERROR INVALID INPUT TYPE: " input-type)))
 
-
-
 (defn editor-did-mount
   [input-type id]
   (fn [this]
@@ -250,6 +333,8 @@
   [input-type]
   (if (valid-input-type? input-type)
     (let [text-area-id (str input-type "-text-area")]
+      ;;remove any old editors
+      (remove-editor text-area-id)
       (reagent/create-class
         {:reagent-render      (fn []
                                 [:textarea {:id          text-area-id
@@ -266,22 +351,21 @@
 
 (defn submit-url
   [input-type]
-  ;;First remove editor if present, then render URL text input
-  (remove-editor (str input-type "-text-area"))
-  [:input {:id          (str input-type "-url-input")
-           :type        "text"
-           :form        "code-submission-form"
-           :class       "form-control"
-           :placeholder (str "Enter " (c-str/capitalize input-type) " URL...")
-           :value       (get-in @page-state [:code-url-address]) ;; initially set to current value
-           :on-change   #(common/onchange-swap-atom!
-                           page-state [(keyword
-                                         (str input-type "-url-address"))]
-                           %)}])
+  [:div {:id (str input-type "-url-area")}
+   [:input {:id          (str input-type "-url-input")
+            :type        "text"
+            :form        "code-submission-form"
+            :class       "form-control"
+            :placeholder (str "Enter " (c-str/capitalize input-type) " URL...")
+            :value       (get-in @page-state [:code-url-address]) ;; initially set to current value
+            :on-change   #(common/onchange-swap-atom!
+                            page-state [(keyword
+                                          (str input-type "-url-address"))]
+                            %)}]
+   [editor input-type]])
+
 (defn submit-file
   [input-type]
-  ;;First remove editor if present, then render file submit input
-  (remove-editor (str input-type "-text-area"))
   [:div {:id (str input-type "-submit-file")}
    [:label {:for (str input-type "-upload-box")} "Upload one source file:"]
    [:input {:id        (str input-type "-upload-box")
@@ -337,8 +421,10 @@
   [:div
    [:form {:id       "submission-form"
            :onSubmit #(submit-procedure (:data @page-state))} ;;TODO look into ajax calls instead of form submission
-    [submission-input "code"]
-    [submission-input "rulebook"]
+    [:div {:id "code"}
+     [submission-input "code"]]
+    [:div {:id "rulebook"}
+     [submission-input "rulebook"]]
     [:div.btn.btn-primary {:type     "submit"
                            :on-click #(submit-procedure (:data @page-state))}
      "Submit"]]])
@@ -416,4 +502,5 @@
          ]]]]]]])
 
 (defn code-submission []
+  ;;TODO on page mount refresh/update dropdown. Issue: https://gitlab.computing.dcu.ie/oconnb47/2018-ca400-oconnb47/issues/51
   (reagent/create-class {:reagent-render code-submission-page}))
