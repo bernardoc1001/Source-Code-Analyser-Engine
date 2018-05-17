@@ -15,18 +15,22 @@
       [:div {:class "panel-body"}
        [:div {:class "row"}
         [:div {:class "col-sm-12"}
-         [:p "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-   Sed vel sem erat. Pellentesque dapibus sem quis elementum blandit.
-   Pellentesque risus arcu, scelerisque at egestas eget, pellentesque eget turpis.
-   Vestibulum posuere mi sed nulla ullamcorper, nec pellentesque erat semper.
-   Suspendisse luctus arcu nec justo consectetur dignissim. Aliquam ac aliquam
-   ligula, sed placerat est. Ut ac malesuada urna. Praesent vel malesuada dui.
-   Quisque viverra velit a nibh fermentum, vel sollicitudin neque sodales.
-   Aliquam iaculis, ante dictum ornare blandit, dui dolor dictum urna,
-   id dictum sem leo eget augue. In lobortis tortor at varius mollis.
-   Aliquam aliquam velit in rutrum ultrices. Class aptent taciti sociosqu ad
-   litora torquent per conubia nostra, per inceptos himenaeos. "]
-         ]]]]]]])
+
+         ;;Library Download
+         [:label {:for "library-download"}
+          "Download Latest SCAE Library: "]
+         [:a {:id       "library-download"
+              :href     "/downloads/scae-library-0.1.0-SNAPSHOT.jar"
+              :download "scae-library-latest.jar"}
+          " scae-library-latest.jar"]
+         [:div
+          ;;Website Download
+          [:label {:for "library-download"}
+           "Download Latest SCAE Website: "]
+          [:a {:id       "website-download"
+               :href     "/downloads/scae-website-0.1.0-SNAPSHOT-standalone.jar"
+               :download "scae-website-latest-uberjar.jar"}
+           " scae-website-latest-uberjar.jar"]]]]]]]]])
 
 (defn download []
   (reagent/create-class {:reagent-render download-page}))
