@@ -154,7 +154,7 @@
   (let [no-suggestion-message "Everything looks ok with your code. No suggestions returned."
         message-to-display (if (:ast-flag @page-state)
                              ;; Displaying an AST
-                             (cljs.pprint/write response :stream nil)
+                             response
                              ;;Displaying Suggestions
                              (if (empty? response)
                                no-suggestion-message

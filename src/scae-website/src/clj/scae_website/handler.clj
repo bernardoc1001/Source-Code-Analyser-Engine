@@ -4,6 +4,7 @@
             [hiccup.page :refer [include-js include-css html5]]
             [scae-website.middleware :refer [wrap-middleware]]
             [config.core :refer [env]]
+            [clojure.pprint :refer [pprint]]
             [scae-library.core :as scae-lib]
             [scae-website.sample-files :as scae-sample-files]))
 
@@ -67,8 +68,9 @@
                {:status 200 :body response}))
 
            (POST "/scae-api/generate-ast" request
-             (let [response (scae-lib/generate-ast (get-in request [:params :data]))]
-               {:status 200 :body response}))
+             (let [response (scae-lib/generate-ast (get-in request [:params :data]))
+                   formatted-response (with-out-str (pprint response))]
+               {:status 200 :body formatted-response}))
 
 
            ;;=== Misc ===
