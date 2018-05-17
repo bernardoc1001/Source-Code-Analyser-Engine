@@ -1,6 +1,7 @@
 (ns scae-library.symbol-table
   (:require [clojure.string :refer [blank?]]
-            [clojure.pprint :refer [pprint]]))
+            [clojure.pprint :refer [pprint]]
+            [com.rpl.specter :refer :all]))
 
 (def ^:const GLOBAL_SCOPE_NAME "global")  ;; define the global scope name
 
@@ -108,3 +109,16 @@
         (do
           (doseq [st-func (:st-func-calls entry)]
             (eval-code ((eval-code st-func) (:parsed-node-result ast-node)))))))))
+
+(defn strip-st-functions
+  "Replaces the value for :st-func-calls with a string stating why it was stripped.
+  This is neccessary as anonymous functions are replaced with an auto-generated
+  reference. So if two identical anonymous functions are stored two separate
+  data strucutres, they will fail any comparison as the references are different.
+  This is why we must strip out these functions."
+  [ast-tree]
+  (setval
+    [(recursive-path [] p
+                     [(walker :st-func-calls) (stay-then-continue [:st-func-calls p])])
+     :st-func-calls] "SYMBOL TABLE FUNCTIONS ARE HERE. THE AUTO-GENERATED IDENTIFIER FOR THE FUNCTION CALL HAS BEEN STRIPPED OUT AND REPLACED WITH THIS MESSAGE"
+    ast-tree))

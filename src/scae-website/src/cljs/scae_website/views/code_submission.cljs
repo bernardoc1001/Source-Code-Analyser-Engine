@@ -15,7 +15,8 @@
                         :rulebook-url-address ""
                         :returned-suggestions ""
                         :returned-errors ""
-                        :sample-files nil}))
+                        :sample-files nil
+                        :ast-flag false}))
 
 (defn sample-files-success-handler
   [response]
@@ -150,11 +151,16 @@
 
 (defn code-submission-success-handler
   [response]
-  (let [no-suggestion-message "Everything looks ok with your code. No suggestions returned."]
+  (let [no-suggestion-message "Everything looks ok with your code. No suggestions returned."
+        message-to-display (if (:ast-flag @page-state)
+                             ;; Displaying an AST
+                             (cljs.pprint/write response :stream nil)
+                             ;;Displaying Suggestions
+                             (if (empty? response)
+                               no-suggestion-message
+                               (highlight-bad-styles-and-match-with-response response)))]
     (swap! page-state assoc-in [:returned-errors] "")
-    (swap! page-state assoc-in [:returned-suggestions] (if (empty? response)
-                                                         no-suggestion-message
-                                                         (highlight-bad-styles-and-match-with-response response)))))
+    (swap! page-state assoc-in [:returned-suggestions] message-to-display)))
 
 (defn code-submission-error-handler
   [response]
@@ -167,11 +173,18 @@
 
 (defn post-code-submission
   [submit-body]
-  (POST "/scae-api"
-        {:params  {:data submit-body}
-         :handler code-submission-success-handler           ;;handler
-         :error-handler code-submission-error-handler       ;;error-handler
-         }))
+  (if (:ast-flag @page-state)
+    (POST "/scae-api/generate-ast"
+          {:params        {:data submit-body}
+           :handler       code-submission-success-handler   ;;handler
+           :error-handler code-submission-error-handler     ;;error-handler
+           })
+
+    (POST "/scae-api/analyse-source-code"
+          {:params        {:data submit-body}
+           :handler       code-submission-success-handler   ;;handler
+           :error-handler code-submission-error-handler     ;;error-handler
+           })))
 
 (defn code-url-success-handler
   [response]
@@ -204,8 +217,16 @@
         :error-handler error-handler}))
 
 (defn submit-procedure
-  [submit-body]
-  ;; firstly set the result display to show a loading icon, and then bring
+  "Submits the data to the backend. IF the AST Flag is set to false, will
+  get the suggestions from applying style rules. If AST Flag is set to
+  true, will instead get the generated Abstract Syntax Tree"
+  [submit-body ast-flag]
+
+  ;; set the ast flag in the page-state
+  (swap! page-state assoc-in [:ast-flag] ast-flag)
+
+
+  ;; set the result display to show a loading icon, and then bring
   ;; the display into view
   (swap! page-state assoc-in [:returned-suggestions] "loader")
   (swap! page-state assoc-in [:returned-errors] "loader")
@@ -420,14 +441,17 @@
 (defn submission-form []
   [:div
    [:form {:id       "submission-form"
-           :onSubmit #(submit-procedure (:data @page-state))} ;;TODO look into ajax calls instead of form submission
+           :onSubmit #(submit-procedure (:data @page-state) false)} ;;TODO look into ajax calls instead of form submission
     [:div {:id "code"}
      [submission-input "code"]]
     [:div {:id "rulebook"}
      [submission-input "rulebook"]]
     [:div.btn.btn-primary {:type     "submit"
-                           :on-click #(submit-procedure (:data @page-state))}
-     "Submit"]]])
+                           :on-click #(submit-procedure (:data @page-state) false)}
+     "Get Suggestions"]
+    [:div.btn.btn-primary {:type     "submit"
+                           :on-click #(submit-procedure (:data @page-state) true)}
+     "Get AST"]]])
 
 (defn returned-suggestions-panel
   [de-ref-page-state]
@@ -453,7 +477,9 @@
             "loader")
       (not (empty? (:returned-suggestions de-ref-page-state))))
     [:div {:class "panel panel-default"}
-     [:div {:class "panel-heading"} "Returned Suggestions"]
+     [:div {:class "panel-heading"} (if (:ast-flag @page-state)
+                                      "Returned Abstract Syntax Tree"
+                                      "Returned Suggestions")]
      [:div {:class "panel-body"}
       [:div {:class "row"}
        [:div {:class "col-sm-12"}
