@@ -501,6 +501,10 @@
          ;;[:p "value in dropdown: " (.val (js/$ "#rulebook-type-selection"))]
          ]]]]]]])
 
+(defn code-submission-did-mount []
+  (refresh-dropdown-by-id "code-method-selection")
+  (refresh-dropdown-by-id "rulebook-method-selection"))
+
 (defn code-submission []
-  ;;TODO on page mount refresh/update dropdown. Issue: https://gitlab.computing.dcu.ie/oconnb47/2018-ca400-oconnb47/issues/51
-  (reagent/create-class {:reagent-render code-submission-page}))
+  (reagent/create-class {:reagent-render code-submission-page
+                         :component-did-mount code-submission-did-mount}))
