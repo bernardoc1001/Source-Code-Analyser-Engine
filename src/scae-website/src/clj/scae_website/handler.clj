@@ -62,9 +62,13 @@
            (GET "/code-submission" [] (loading-page))
 
            ;;=== Web-API ===
-           (POST "/scae-api" request
+           (POST "/scae-api/analyse-source-code" request
              (let [response (scae-lib/analyse-source-code (get-in request [:params :data]))]
-               {:status 200 :body response})) ;;for the time being just return 200 and the result of the scae library call
+               {:status 200 :body response}))
+
+           (POST "/scae-api/generate-ast" request
+             (let [response (scae-lib/generate-ast (get-in request [:params :data]))]
+               {:status 200 :body response}))
 
 
            ;;=== Misc ===

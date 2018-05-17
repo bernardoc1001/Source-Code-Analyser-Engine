@@ -39,4 +39,5 @@
         rulebook-map (json/read-str (:rulebook request) :key-fn keyword)]
     (-> code-string
         (tokeniser/tokenise-code (:tokens rulebook-map))
-        (ast/create-abstract-syntax-tree (:productions rulebook-map)))))
+        (ast/create-abstract-syntax-tree (:productions rulebook-map))
+        (st/strip-st-functions))))
