@@ -19,10 +19,7 @@
   [ast-entry]
   (entry-type-check? ast-entry :st-func-calls))
 
-;;todo implement tracking of line numbers. Implemented check below in preparation
-(defn line-number?
-  [ast-entry]
-  (entry-type-check? ast-entry :line-number))
+
 
 (defn get-parsed-node-result
   "This returns the parsed node result. If the parsed node result is a string,
@@ -46,6 +43,33 @@
   [ast-entry]
   (get-parsed-node-result ast-entry))
 
+(defn node-contains-nested-token?
+  "Returns true if the node contains a token that has a value of token-value
+  with key of token-key anywhere in its children or their sub-trees"
+  [ast-entry token-key token-value]
+  (cond
+    ;;if current entry is a token, check its value and return true if match is found
+    (token? ast-entry)
+    (if (and
+          (= token-key
+             (:token-key ast-entry))
+          (= token-value
+            (:token-value ast-entry)))
+      true)
+
+    ;;if current entry is a node, recursively check all its children
+    (node? ast-entry)
+    (let [contains-nested-value?
+          (some true?
+                (for [child (get-parsed-node-result ast-entry)]
+                  (node-contains-nested-token? child token-key token-value)))]
+      (if contains-nested-value?
+        true))
+
+    ;;Node does not contain nested token value, return nil
+    :else
+    nil
+    ))
 
 (defn get-nth-child
   "Get the nth child of the ast node. Uses zero indexing (0 is first position).
@@ -79,12 +103,32 @@
       (nth matching-children n nil)
       nil)))
 
+(defn get-in-nested-entry
+  "Gets the nested entry of the node following the path-pair. The path-pair
+  is a vector of vectors. The inner vectors have 2 values, n and child-name, which
+  are passed into the get-nth-name-child function."
+  [ast-entry path-pairs]
+  (if (empty? path-pairs)
+    ;;the current entry is our target entry
+    ast-entry
+
+    ;;else follow the first path-pair and recursively call
+    (let [path-pair (first path-pairs)
+          n (first path-pair)
+          child-name (second path-pair)]
+      (->
+        ast-entry
+        (get-nth-named-child n child-name)
+        (get-in-nested-entry (rest path-pairs))))))
+
 (defn node-contains-top-layer-child?
   [ast-node child-name]
   ;;if a single (first) instance of child exists, return true, else nil
   (if (get-nth-named-child ast-node 0 child-name)
     true
     nil))
+
+
 
 ;;todo are the below as useful as I think they are? Because child-name would be "function", not "funcA"
 (defn node-contains-nested-child?

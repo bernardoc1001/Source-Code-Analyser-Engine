@@ -4,7 +4,8 @@
                                                 get-parsed-node-result-data-set
                                                 sample-identifier-node
                                                 get-nth-child-data-set
-                                                node-contains-data-set]]))
+                                                node-contains-data-set
+                                                get-in-nested-entry-data-set]]))
 
 (deftest entry-type-check?-test
   (testing "Testing the checking of the ast entry type")
@@ -47,18 +48,6 @@
     (is (= (@#'scae-library.node-ops/st-func-calls?
              {:invalid-data nil})
            nil))))
-
-;;todo implement line numbers
-(deftest line-number?-test
-  (testing "Testing the check if an ast entry is of type line-number")
-  (let [line-number-check-data (:line-number-check ast-entry-type-data-set)]
-    (is (= (@#'scae-library.node-ops/line-number?
-             (:ast-entry line-number-check-data))
-           true))
-    (is (= (@#'scae-library.node-ops/line-number?
-             {:invalid-data nil})
-           nil))))
-
 
 (deftest get-parsed-node-result-test
   (testing "Testing getting the pared node result")
@@ -221,6 +210,32 @@
              0
              :a-non-existent-child-name)
            nil))))
+
+(deftest node-contains-nested-token?-test
+  (testing "Testing if the node contains a token in any of its subtrees")
+  (let [with-target (:ast-with-target get-in-nested-entry-data-set)
+        with-out-target (:ast-with-out-target get-in-nested-entry-data-set)]
+    (is (true? (@#'scae-library.node-ops/node-contains-nested-token?
+                 (:ast-entry with-target)
+                 (:token-key (:token-expected-result with-target))
+                 (:token-value (:token-expected-result with-target)))))
+    (is (nil? (@#'scae-library.node-ops/node-contains-nested-token?
+                 (:ast-entry with-out-target)
+                 (:token-key (:token-expected-result with-out-target))
+                 (:token-value (:token-expected-result with-out-target)))))))
+
+(deftest get-in-nested-entry-test
+  (testing "Testing if the node contains an entry")
+  (let [with-target (:ast-with-target get-in-nested-entry-data-set)
+        with-out-target (:ast-with-out-target get-in-nested-entry-data-set)]
+    (is (= (@#'scae-library.node-ops/get-in-nested-entry
+             (:ast-entry with-target)
+             (:token-path-pairs with-target))
+           (:token-expected-result with-target)))
+    (is (= (@#'scae-library.node-ops/get-in-nested-entry
+             (:ast-entry with-out-target)
+             (:token-path-pairs with-out-target))
+           (:token-expected-result with-out-target)))))
 
 (deftest node-contains-top-layer-child?-test
   (testing "Testing if the node contains a certain child as a direct descendant")
