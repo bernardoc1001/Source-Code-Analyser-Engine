@@ -21,7 +21,7 @@
     "NIL" : "nil",
     "STR" : "(?:\"(?s:.*?)\")",
     "BOOLEAN" : "(?:true|false)",
-    "CHARACTER": "(?:\\ (?:~[\" \"]|(?:u(?:[0-9])(?:[0-9])(?:[0-9])(?:[0-9]))|(?:o(?:[0-9])(?:[0-9])(?:[0-9]))|newline|space|tab|my-formfeed|backspace|return))",
+    "CHARACTER": "(?:\\ (?:~[\" \"]|(?:u(?:[0-9])(?:[0-9])(?:[0-9])(?:[0-9]))|(?:o(?:[0-9])(?:[0-9])(?:[0-9]))|newline|space|tab|my-scae-formfeed|backspace|return))",
     "KEYWORD": "(?::(?::)?(?:(?:(?:[0-9]))*(?:(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*)(?:\\.(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*))*)/)?(?:(?:[0-9]))*(?:(?:(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$]))(?:(?:[0-9])|(?:[a-zA-Z])|(?:[\\*\\+!\\-_\\?=%&><$])|#|')*))"
   }},
 
@@ -43,40 +43,49 @@
 
 ],
   "productions": {
-    "scae-forward-declarations":"(declare scae-program my-forms my-form my-list my-vector my-set my-map my-map-prime my-symbol my-literal my-reader-macro my-quote my-lambda my-regex my-var-quote my-discard my-tag my-meta my-meta-prime)",
-    "scae-program": "(defn scae-program [] [['(my-forms)] ])",
+    "scae-forward-declarations":"(declare scae-program my-scae-forms my-scae-form my-scae-list my-scae-vector my-scae-set my-scae-map my-scae-map-prime my-scae-symbol my-scae-literal my-scae-reader-macro my-scae-quote my-scae-lambda my-scae-regex my-scae-var-quote my-scae-discard my-scae-tag my-scae-meta my-scae-meta-prime)",
+    "scae-program": "(defn scae-program [] [['(my-scae-forms)] ])",
     "scae-entry-point": "(scae-program)",
     
-    "my-forms": "(defn my-forms [] [['(my-form) '(my-forms-prime)] [[]] ])",
-    "my-forms-prime":"(defn my-forms-prime [] [['(my-forms)] [[]] ])",
-    "my-form": "(defn my-form [] [['(my-list)] ['(my-literal)] ['(my-symbol)] ['(my-vector)] ['(my-set)] ['(my-map)] ['(my-reader-macro)] ])",
-    "my-list": "(defn my-list [] [[:LPAR '(my-forms) :RPAR] ])",
-    "my-vector": "(defn my-vector [] [[:LSQU '(my-forms) :RSQU] ])",
-    "my-set": "(defn my-set [] [[:HASH :LCUR '(my-forms) :RCUR] ])",
-    "my-map": "(defn my-map [] [[:LCUR '(my-map-prime) :RCUR] ])",
-    "my-map-prime": "(defn my-map-prime [] [['(my-form) '(my-form) '(my-map-prime)] []])",
-    "my-symbol": "(defn my-symbol [] [[:SYMBOL] ])",
-    "my-literal":"(defn my-literal [] [[:KEYWORD] [:CHARACTER] [:NUM] [:NIL] [:STR] [:BOOLEAN] ])",
-    "my-reader-macro": "(defn my-reader-macro [] [['(my-quote)] ['(my-lambda)] ['(my-regex)] ['(my-var-quote)] ['(my-discard)] ['(my-tag)] ['(my-meta)] ])",
-    "my-quote": "(defn my-quote [] [[:APOS '(my-form)] [:BACK-TICK '(my-form)] [:TILDE '(my-form)] [:TILDE :AT '(my-form)] [:AT '(my-form)] ])",
-    "my-lambda": "(defn my-lambda [] [[:HASH :LPAR '(my-forms) :RPAR] ])",
-    "my-regex": "(defn my-regex [] [[:HASH :STR] ])",
-    "my-var-quote": "(defn my-var-quote [] [[:HASH :APOS '(my-symbol)] ])",
-    "my-discard": "(defn my-discard [] [[:HASH :UNDERSCORE '(my-form)] ])",
-    "my-tag":"(defn my-tag [] [[:CARET '(my-form) '(my-form)]])",
-    "my-meta":"(defn my-meta [] [[:HASH :CARET '(my-meta-prime)]])",
-    "my-meta-prime" : "(defn my-meta-prime [] [['(my-map) '(my-form)] ['(my-form)] ])"
+    "my-scae-forms": "(defn my-scae-forms [] [['(my-scae-form) '(my-scae-forms-prime)] [[]] ])",
+    "my-scae-forms-prime":"(defn my-scae-forms-prime [] [['(my-scae-forms)] [[]] ])",
+    "my-scae-form": "(defn my-scae-form [] [['(my-scae-list)] ['(my-scae-literal)] ['(my-scae-symbol)] ['(my-scae-vector)] ['(my-scae-set)] ['(my-scae-map)] ['(my-scae-reader-macro)] ])",
+    "my-scae-list": "(defn my-scae-list [] [[:LPAR '(my-scae-forms) :RPAR] ])",
+    "my-scae-vector": "(defn my-scae-vector [] [[:LSQU '(my-scae-forms) :RSQU] ])",
+    "my-scae-set": "(defn my-scae-set [] [[:HASH :LCUR '(my-scae-forms) :RCUR] ])",
+    "my-scae-map": "(defn my-scae-map [] [[:LCUR '(my-scae-map-prime) :RCUR] ])",
+    "my-scae-map-prime": "(defn my-scae-map-prime [] [['(my-scae-form) '(my-scae-form) '(my-scae-map-prime)] []])",
+    "my-scae-symbol": "(defn my-scae-symbol [] [[:SYMBOL] ])",
+    "my-scae-literal":"(defn my-scae-literal [] [[:KEYWORD] [:CHARACTER] [:NUM] [:NIL] [:STR] [:BOOLEAN] ])",
+    "my-scae-reader-macro": "(defn my-scae-reader-macro [] [['(my-scae-quote)] ['(my-scae-lambda)] ['(my-scae-regex)] ['(my-scae-var-quote)] ['(my-scae-discard)] ['(my-scae-tag)] ['(my-scae-meta)] ])",
+    "my-scae-quote": "(defn my-scae-quote [] [[:APOS '(my-scae-form)] [:BACK-TICK '(my-scae-form)] [:TILDE '(my-scae-form)] [:TILDE :AT '(my-scae-form)] [:AT '(my-scae-form)] ])",
+    "my-scae-lambda": "(defn my-scae-lambda [] [[:HASH :LPAR '(my-scae-forms) :RPAR] ])",
+    "my-scae-regex": "(defn my-scae-regex [] [[:HASH :STR] ])",
+    "my-scae-var-quote": "(defn my-scae-var-quote [] [[:HASH :APOS '(my-scae-symbol)] ])",
+    "my-scae-discard": "(defn my-scae-discard [] [[:HASH :UNDERSCORE '(my-scae-form)] ])",
+    "my-scae-tag":"(defn my-scae-tag [] [[:CARET '(my-scae-form) '(my-scae-form)]])",
+    "my-scae-meta":"(defn my-scae-meta [] [[:HASH :CARET '(my-scae-meta-prime)]])",
+    "my-scae-meta-prime" : "(defn my-scae-meta-prime [] [['(my-scae-map) '(my-scae-form)] ['(my-scae-form)] ])"
 
   },
   "style-rules": {
     "style-rules-function-definitions":{
-      "require-only-in-repl": "(defn require-only-in-repl [ast-node] (let [token-value (-> ast-node (scae-library.node-ops/get-nth-named-child 0 \"my-forms\") (scae-library.node-ops/get-nth-named-child 0 \"my-form\") (scae-library.node-ops/get-nth-named-child 0 \"my-symbol\") (scae-library.node-ops/get-parsed-node-result) (first) (get :token-value))] (if (= token-value \"require\") \"Avoid the use of namespace-manipulating functions like require. It is unnecessary outside of a REPL environment. SCAE Bad-Style: (require\" \"\")))",
+      "require-only-in-repl": "(defn require-only-in-repl [ast-node] (let [token-value (:token-value (scae-library.node-ops/get-in-nested-entry ast-node [[0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-symbol\"] [0 :SYMBOL]]))] (if (= token-value \"require\") \"Avoid the use of namespace-manipulating functions like require. It is unnecessary outside of a REPL environment. SCAE Bad-Style: (require\" \"\")))",
 
-      "refer-only-in-repl": "(defn refer-only-in-repl [ast-node] (let [token-value (-> ast-node (scae-library.node-ops/get-nth-named-child 0 \"my-forms\") (scae-library.node-ops/get-nth-named-child 0 \"my-form\") (scae-library.node-ops/get-nth-named-child 0 \"my-symbol\") (scae-library.node-ops/get-parsed-node-result) (first) (get :token-value))] (if (= token-value \"refer\") \"Avoid the use of namespace-manipulating functions like refer. It is unnecessary outside of a REPL environment. SCAE Bad-Style: (refer\" \"\")))",
+      "refer-only-in-repl": "(defn refer-only-in-repl [ast-node] (let [token-value (:token-value (scae-library.node-ops/get-in-nested-entry ast-node [[0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-symbol\"] [0 :SYMBOL]]))] (if (= token-value \"refer\") \"Avoid the use of namespace-manipulating functions like refer. It is unnecessary outside of a REPL environment. SCAE Bad-Style: (refer\" \"\")))",
 
-      "vec-instead-of-into" : "(defn vec-instead-of-into [ast-node] (let [symbol-token-value (-> ast-node (scae-library.node-ops/get-nth-named-child 0 \"my-forms\") (scae-library.node-ops/get-nth-named-child 0 \"my-form\") (scae-library.node-ops/get-nth-named-child 0 \"my-symbol\")(scae-library.node-ops/get-parsed-node-result) (first) (get :token-value)) vector-node (-> ast-node (scae-library.node-ops/get-nth-named-child 0 \"my-forms\") (scae-library.node-ops/get-nth-named-child 0 \"my-forms-prime\") (scae-library.node-ops/get-nth-named-child 0 \"my-forms\") (scae-library.node-ops/get-nth-named-child 0 \"my-form\") (scae-library.node-ops/get-nth-named-child 0 \"my-vector\"))] (if (and (= symbol-token-value \"into\") (empty? (-> vector-node (scae-library.node-ops/get-nth-named-child 0 \"my-forms\") (scae-library.node-ops/get-parsed-node-result) (first)))) \"Prefer using vec over into when converting a sequence into a vector. E.g use (vec some-seq) instead of (into [] some-seq). SCAE Bad-Style: (into [] \" \"\")))"
+      "vec-instead-of-into" : "(defn vec-instead-of-into [ast-node] (let [symbol-token-value (:token-value (scae-library.node-ops/get-in-nested-entry ast-node [[0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-symbol\"] [0 :SYMBOL]])) vector-node (scae-library.node-ops/get-in-nested-entry ast-node [[0 \"my-scae-forms\"] [0 \"my-scae-forms-prime\"] [0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-vector\"]])] (if (and (= symbol-token-value \"into\") (empty? (-> vector-node (scae-library.node-ops/get-nth-named-child 0 \"my-scae-forms\") (scae-library.node-ops/get-parsed-node-result) (first)))) \"Prefer using vec over into when converting a sequence into a vector. E.g use (vec some-seq) instead of (into [] some-seq). SCAE Bad-Style: (into [] \" \"\")))",
+
+      "dont-def-in-func" : "(defn dont-def-in-func [ast-node] (let [defn-symbol? (scae-library.node-ops/node-contains-nested-token? ast-node :SYMBOL \"defn\") func-name (:token-value (scae-library.node-ops/get-in-nested-entry ast-node [[0 \"my-scae-forms\"] [0 \"my-scae-forms-prime\"] [0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-symbol\"] [0 :SYMBOL]])) def-symbol? (scae-library.node-ops/node-contains-nested-token? ast-node :SYMBOL \"def\")] (if (and defn-symbol? def-symbol?) (str \"Don't define variables inside of functions. SCAE Bad-Style: (defn \"func-name) \"\")))",
+
+      "use-if-not" : "(defn use-if-not [ast-node] (let [if-symbol? (= \"if\" (:token-value (scae-library.node-ops/get-in-nested-entry ast-node [[0 \"my-scae-forms\"]  [0 \"my-scae-form\"] [0 \"my-scae-symbol\"] [0 :SYMBOL]])))        not-symbol? (= \"not\" (:token-value (scae-library.node-ops/get-in-nested-entry ast-node [[0 \"my-scae-forms\"] [0 \"my-scae-forms-prime\"] [0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-list\"] [0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-symbol\"] [0 :SYMBOL]])))] (if (and if-symbol? not-symbol?) (str \"Avoid using (if (not ...) ...). Use (if-not ...) instead. SCAE Bad-Style: (if (not\") \"\")))",
+
+      "use-not=" : "(defn use-not= [ast-node] (let [not-symbol? (= \"not\" (:token-value (scae-library.node-ops/get-in-nested-entry ast-node [[0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-symbol\"] [0 :SYMBOL]])))        equals-symbol? (= \"=\" (:token-value (scae-library.node-ops/get-in-nested-entry ast-node [[0 \"my-scae-forms\"] [0 \"my-scae-forms-prime\"] [0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-list\"] [0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-symbol\"] [0 :SYMBOL]])))] (if (and not-symbol? equals-symbol?) (str \"Avoid using (not (= ...) ...). Use (not= ...) instead. SCAE Bad-Style: (not (=\") \"\")))",
+
+      "use-when-not" : "(defn use-when-not [ast-node] (let [when-symbol? (= \"when\" (:token-value (scae-library.node-ops/get-in-nested-entry ast-node [[0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-symbol\"] [0 :SYMBOL]])))  not-symbol? (= \"not\" (:token-value (scae-library.node-ops/get-in-nested-entry ast-node [[0 \"my-scae-forms\"] [0 \"my-scae-forms-prime\"] [0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-list\"] [0 \"my-scae-forms\"] [0 \"my-scae-form\"] [0 \"my-scae-symbol\"] [0 :SYMBOL]])))] (if (and when-symbol? not-symbol?) (str \"Avoid using (when (not ...) ...). Use (when-not ...) instead. SCAE Bad-Style: (when (not\") \"\")))"
+
     },
     "node-based-style-rules" : {
-      "my-list" : "[require-only-in-repl refer-only-in-repl vec-instead-of-into]"
+      "my-scae-list" : "[require-only-in-repl refer-only-in-repl vec-instead-of-into dont-def-in-func use-if-not use-not= use-when-not]"
     }
   }}

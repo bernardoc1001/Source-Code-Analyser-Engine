@@ -6,5 +6,6 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/data.json "0.2.6"]
                  [com.rpl/specter "1.1.0"]]
-  :plugins [[lein-eftest "0.5.1"]]
+  :plugins [[lein-eftest "0.5.1"]
+            [lein-cloverage "1.0.10"]]
   :eftest {:multithread? false})
