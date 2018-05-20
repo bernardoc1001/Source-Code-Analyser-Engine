@@ -13,149 +13,155 @@
 <span class="blank" title="0 out of 0 forms covered">
                  003&nbsp;&nbsp;
                 </span><br/>
-<span class="covered" title="2 out of 2 forms covered">
-                 004&nbsp;&nbsp;(defn-&nbsp;insert-token-type
+<span class="covered" title="1 out of 1 forms covered">
+                 004&nbsp;&nbsp;(defn&nbsp;insert-token-type
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 005&nbsp;&nbsp;&nbsp;&nbsp;[token-definitions]
+                 005&nbsp;&nbsp;&nbsp;&nbsp;&quot;Insert&nbsp;the&nbsp;token&nbsp;type&nbsp;into&nbsp;the&nbsp;token&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 006&nbsp;&nbsp;&nbsp;&nbsp;[token-definitions]
                 </span><br/>
 <span class="covered" title="44 out of 44 forms covered">
-                 006&nbsp;&nbsp;&nbsp;&nbsp;(hash-map&nbsp;:tokens&nbsp;(apply&nbsp;merge&nbsp;(map&nbsp;#(into&nbsp;{}&nbsp;(for&nbsp;[entry&nbsp;(get&nbsp;token-definitions&nbsp;%)]
+                 007&nbsp;&nbsp;&nbsp;&nbsp;(hash-map&nbsp;:tokens&nbsp;(apply&nbsp;merge&nbsp;(map&nbsp;#(into&nbsp;{}&nbsp;(for&nbsp;[entry&nbsp;(get&nbsp;token-definitions&nbsp;%)]
                 </span><br/>
 <span class="covered" title="11 out of 11 forms covered">
-                 007&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{(first&nbsp;entry)&nbsp;{:regex&nbsp;(second&nbsp;entry)
+                 008&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{(first&nbsp;entry)&nbsp;{:regex&nbsp;(second&nbsp;entry)
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 008&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;&nbsp;%}}))
+                 009&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:type&nbsp;&nbsp;%}}))
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 009&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(keys&nbsp;token-definitions)))))
+                 010&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(keys&nbsp;token-definitions)))))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 010&nbsp;&nbsp;
+                 011&nbsp;&nbsp;
                 </span><br/>
-<span class="covered" title="2 out of 2 forms covered">
-                 011&nbsp;&nbsp;(defn-&nbsp;get-token-definitions
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                 012&nbsp;&nbsp;&nbsp;&nbsp;&quot;Reads&nbsp;token&nbsp;definitions&nbsp;as&nbsp;a&nbsp;vector&nbsp;of&nbsp;token&nbsp;or&nbsp;skip&nbsp;hash-maps,
+<span class="covered" title="1 out of 1 forms covered">
+                 012&nbsp;&nbsp;(defn&nbsp;get-token-definitions
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 013&nbsp;&nbsp;&nbsp;&nbsp;returns&nbsp;hashmap&nbsp;of&nbsp;the&nbsp;type&nbsp;of&nbsp;token&nbsp;and&nbsp;a&nbsp;corresponding&nbsp;hash-map&nbsp;of&nbsp;tokens
+                 013&nbsp;&nbsp;&nbsp;&nbsp;&quot;Reads&nbsp;token&nbsp;definitions&nbsp;as&nbsp;a&nbsp;vector&nbsp;of&nbsp;token&nbsp;or&nbsp;skip&nbsp;hash-maps,
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 014&nbsp;&nbsp;&nbsp;&nbsp;input:&nbsp;[{\&quot;token\&quot;:&nbsp;{\&quot;token1\&quot;:&nbsp;\&quot;token-regex1\&quot;,
+                 014&nbsp;&nbsp;&nbsp;&nbsp;returns&nbsp;hashmap&nbsp;of&nbsp;the&nbsp;type&nbsp;of&nbsp;token&nbsp;and&nbsp;a&nbsp;corresponding&nbsp;hash-map&nbsp;of&nbsp;tokens
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 015&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\&quot;token2\&quot;:&nbsp;\&quot;token-regex2\&quot;}},
+                 015&nbsp;&nbsp;&nbsp;&nbsp;input:&nbsp;[{\&quot;token\&quot;:&nbsp;{\&quot;token1\&quot;:&nbsp;\&quot;token-regex1\&quot;,
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 016&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{\&quot;skip\&quot;:&nbsp;{\&quot;skip1\&quot;:&nbsp;\&quot;skip-regex1\&quot;}},
+                 016&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\&quot;token2\&quot;:&nbsp;\&quot;token-regex2\&quot;}},
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{\&quot;token\&quot;:&nbsp;{\&quot;token3\&quot;:&nbsp;\&quot;token-regex3\&quot;}}]
+                 017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{\&quot;skip\&quot;:&nbsp;{\&quot;skip1\&quot;:&nbsp;\&quot;skip-regex1\&quot;}},
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 018&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{\&quot;token\&quot;:&nbsp;{\&quot;token3\&quot;:&nbsp;\&quot;token-regex3\&quot;}}]
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 018&nbsp;&nbsp;
+                 019&nbsp;&nbsp;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 019&nbsp;&nbsp;&nbsp;&nbsp;result:&nbsp;{:token&nbsp;{:token1&nbsp;\&quot;token-val1\&quot;,
+                 020&nbsp;&nbsp;&nbsp;&nbsp;result:&nbsp;{:token&nbsp;{:token1&nbsp;\&quot;token-val1\&quot;,
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 020&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:token2&nbsp;\&quot;token-val2\&quot;,
+                 021&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:token2&nbsp;\&quot;token-val2\&quot;,
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 021&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:token3&nbsp;\&quot;token-val3\&quot;},
+                 022&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:token3&nbsp;\&quot;token-val3\&quot;},
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 022&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:skip&nbsp;&nbsp;{:skip1&nbsp;\&quot;skip-val1\&quot;}}&quot;
+                 023&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:skip&nbsp;&nbsp;{:skip1&nbsp;\&quot;skip-val1\&quot;}}&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 023&nbsp;&nbsp;&nbsp;&nbsp;[token-definitions-json]
+                 024&nbsp;&nbsp;&nbsp;&nbsp;[token-definitions-json]
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 024&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&gt;&nbsp;token-definitions-json
+                 025&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&gt;&nbsp;token-definitions-json
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 025&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(apply&nbsp;merge-with&nbsp;conj)
+                 026&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(apply&nbsp;merge-with&nbsp;conj)
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 026&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(insert-token-type)))
+                 027&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(insert-token-type)))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 027&nbsp;&nbsp;
-                </span><br/>
-<span class="covered" title="2 out of 2 forms covered">
-                 028&nbsp;&nbsp;(defn-&nbsp;val-&gt;token
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                 029&nbsp;&nbsp;&nbsp;&nbsp;&quot;Convert&nbsp;value&nbsp;to&nbsp;its&nbsp;corresponding&nbsp;token.&nbsp;Return&nbsp;nil&nbsp;if&nbsp;there&nbsp;is&nbsp;no
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                 030&nbsp;&nbsp;&nbsp;&nbsp;corresponding&nbsp;token&quot;
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                 031&nbsp;&nbsp;&nbsp;&nbsp;[val&nbsp;token-definitions]
+                 028&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 032&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&gt;
-                </span><br/>
-<span class="covered" title="3 out of 3 forms covered">
-                 033&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;(fn
+                 029&nbsp;&nbsp;(defn&nbsp;val-&gt;token
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 034&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[token]
+                 030&nbsp;&nbsp;&nbsp;&nbsp;&quot;Convert&nbsp;value&nbsp;to&nbsp;its&nbsp;corresponding&nbsp;token.&nbsp;Return&nbsp;nil&nbsp;if&nbsp;there&nbsp;is&nbsp;no
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 031&nbsp;&nbsp;&nbsp;&nbsp;corresponding&nbsp;token&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 032&nbsp;&nbsp;&nbsp;&nbsp;[val&nbsp;token-definitions]
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 033&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&gt;
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                 034&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;(fn
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 035&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[token]
                 </span><br/>
 <span class="covered" title="11 out of 11 forms covered">
-                 035&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(re-matches&nbsp;(re-pattern&nbsp;(:regex&nbsp;(second&nbsp;token)))&nbsp;val)
+                 036&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(re-matches&nbsp;(re-pattern&nbsp;(:regex&nbsp;(second&nbsp;token)))&nbsp;val)
                 </span><br/>
 <span class="covered" title="7 out of 7 forms covered">
-                 036&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:token-key&nbsp;(first&nbsp;token)
+                 037&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:token-key&nbsp;(first&nbsp;token)
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 037&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:token-value&nbsp;&nbsp;&nbsp;&nbsp;val
+                 038&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:token-value&nbsp;&nbsp;&nbsp;&nbsp;val
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                 038&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:token-type&nbsp;(:type&nbsp;(second&nbsp;token))}))
+                 039&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:token-type&nbsp;(:type&nbsp;(second&nbsp;token))}))
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 039&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:tokens&nbsp;token-definitions))
+                 040&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:tokens&nbsp;token-definitions))
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                 040&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(filter&nbsp;(complement&nbsp;nil?))
+                 041&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(filter&nbsp;(complement&nbsp;nil?))
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 041&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(first)&nbsp;&nbsp;;;&nbsp;for&nbsp;an&nbsp;empty&nbsp;collection&nbsp;returns&nbsp;nil
+                 042&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(first)&nbsp;&nbsp;;;&nbsp;for&nbsp;an&nbsp;empty&nbsp;collection&nbsp;returns&nbsp;nil
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 042&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;))
+                 043&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 043&nbsp;&nbsp;
+                 044&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 044&nbsp;&nbsp;(defn&nbsp;tokenise-code
+                 045&nbsp;&nbsp;(defn&nbsp;tokenise-code
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 045&nbsp;&nbsp;&nbsp;&nbsp;[code&nbsp;token-vector]
+                 046&nbsp;&nbsp;&nbsp;&nbsp;&quot;Tokenises&nbsp;the&nbsp;Source&nbsp;Code&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 047&nbsp;&nbsp;&nbsp;&nbsp;[code&nbsp;token-vector]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 046&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[token-definitions&nbsp;(get-token-definitions&nbsp;token-vector)]
+                 048&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[token-definitions&nbsp;(get-token-definitions&nbsp;token-vector)]
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 047&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(as-&gt;&nbsp;token-definitions&nbsp;tokens
+                 049&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(as-&gt;&nbsp;token-definitions&nbsp;tokens
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 048&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;join&nbsp;regexes&nbsp;separated&nbsp;by&nbsp;|&nbsp;to&nbsp;get&nbsp;in&nbsp;order&nbsp;matches
+                 050&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;join&nbsp;regexes&nbsp;separated&nbsp;by&nbsp;|&nbsp;to&nbsp;get&nbsp;in&nbsp;order&nbsp;matches
                 </span><br/>
 <span class="covered" title="11 out of 11 forms covered">
-                 049&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(clojure.string&#x2F;join&nbsp;&quot;|&quot;&nbsp;(map&nbsp;:regex&nbsp;(vals&nbsp;(:tokens&nbsp;tokens))))
+                 051&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(clojure.string&#x2F;join&nbsp;&quot;|&quot;&nbsp;(map&nbsp;:regex&nbsp;(vals&nbsp;(:tokens&nbsp;tokens))))
                 </span><br/>
 <span class="covered" title="6 out of 6 forms covered">
-                 050&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(re-seq&nbsp;(re-pattern&nbsp;tokens)&nbsp;code)
+                 052&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(re-seq&nbsp;(re-pattern&nbsp;tokens)&nbsp;code)
                 </span><br/>
 <span class="covered" title="8 out of 8 forms covered">
-                 051&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;#(val-&gt;token&nbsp;%1&nbsp;token-definitions)&nbsp;tokens))))
+                 053&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(map&nbsp;#(val-&gt;token&nbsp;%1&nbsp;token-definitions)&nbsp;tokens))))
                 </span><br/>
  </body>
 </html>

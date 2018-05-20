@@ -5,481 +5,526 @@
  </head>
  <body>
 <span class="covered" title="1 out of 1 forms covered">
-                 001&nbsp;&nbsp;(ns&nbsp;scae-library.node-ops)
+                 001&nbsp;&nbsp;(ns&nbsp;scae-library.node-ops
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 002&nbsp;&nbsp;&nbsp;&nbsp;&quot;This&nbsp;namespace&nbsp;contains&nbsp;helper&nbsp;functions&nbsp;to&nbsp;help&nbsp;make&nbsp;dealing
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 003&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp;the&nbsp;Abstract&nbsp;Syntax&nbsp;Tree&nbsp;when&nbsp;designing&nbsp;style&nbsp;rules&nbsp;easier&quot;)
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 002&nbsp;&nbsp;
+                 004&nbsp;&nbsp;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 003&nbsp;&nbsp;;;Helper&nbsp;function&nbsp;used&nbsp;to&nbsp;quickly&nbsp;make&nbsp;different&nbsp;kind&nbsp;of&nbsp;type&nbsp;checks
+                 005&nbsp;&nbsp;;;Helper&nbsp;function&nbsp;used&nbsp;to&nbsp;quickly&nbsp;make&nbsp;different&nbsp;kind&nbsp;of&nbsp;type&nbsp;checks
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 004&nbsp;&nbsp;(defn&nbsp;entry-type-check?
+                 006&nbsp;&nbsp;(defn&nbsp;entry-type-check?
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 005&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry&nbsp;key]
+                 007&nbsp;&nbsp;&nbsp;&nbsp;&quot;Used&nbsp;to&nbsp;create&nbsp;ast-entry&nbsp;checks&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 008&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry&nbsp;key]
                 </span><br/>
 <span class="covered" title="7 out of 7 forms covered">
-                 006&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(get&nbsp;ast-entry&nbsp;key)
+                 009&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(get&nbsp;ast-entry&nbsp;key)
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 007&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true
+                 010&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 008&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil))
+                 011&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 009&nbsp;&nbsp;
+                 012&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 010&nbsp;&nbsp;(defn&nbsp;node?
+                 013&nbsp;&nbsp;(defn&nbsp;node?
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 011&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry]
-                </span><br/>
-<span class="covered" title="4 out of 4 forms covered">
-                 012&nbsp;&nbsp;&nbsp;&nbsp;(entry-type-check?&nbsp;ast-entry&nbsp;:parsed-node-name))
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                 013&nbsp;&nbsp;
-                </span><br/>
-<span class="covered" title="1 out of 1 forms covered">
-                 014&nbsp;&nbsp;(defn&nbsp;token?
+                 014&nbsp;&nbsp;&nbsp;&nbsp;&quot;Check&nbsp;if&nbsp;the&nbsp;current&nbsp;ast-entry&nbsp;is&nbsp;of&nbsp;type&nbsp;node&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
                  015&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 016&nbsp;&nbsp;&nbsp;&nbsp;(entry-type-check?&nbsp;ast-entry&nbsp;:token-key))
+                 016&nbsp;&nbsp;&nbsp;&nbsp;(entry-type-check?&nbsp;ast-entry&nbsp;:parsed-node-name))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
                  017&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 018&nbsp;&nbsp;(defn&nbsp;st-func-calls?
+                 018&nbsp;&nbsp;(defn&nbsp;token?
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 019&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry]
+                 019&nbsp;&nbsp;&nbsp;&nbsp;&quot;Check&nbsp;if&nbsp;the&nbsp;current&nbsp;ast-entry&nbsp;is&nbsp;of&nbsp;type&nbsp;token&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 020&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 020&nbsp;&nbsp;&nbsp;&nbsp;(entry-type-check?&nbsp;ast-entry&nbsp;:st-func-calls))
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                 021&nbsp;&nbsp;
+                 021&nbsp;&nbsp;&nbsp;&nbsp;(entry-type-check?&nbsp;ast-entry&nbsp;:token-key))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
                  022&nbsp;&nbsp;
                 </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 023&nbsp;&nbsp;(defn&nbsp;st-func-calls?
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 024&nbsp;&nbsp;&nbsp;&nbsp;&quot;Check&nbsp;if&nbsp;the&nbsp;current&nbsp;ast-entry&nbsp;is&nbsp;of&nbsp;type&nbsp;st-func-calls&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 025&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry]
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                 026&nbsp;&nbsp;&nbsp;&nbsp;(entry-type-check?&nbsp;ast-entry&nbsp;:st-func-calls))
+                </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 023&nbsp;&nbsp;
+                 027&nbsp;&nbsp;
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 028&nbsp;&nbsp;
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 029&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 024&nbsp;&nbsp;(defn&nbsp;get-parsed-node-result
+                 030&nbsp;&nbsp;(defn&nbsp;get-parsed-node-result
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 025&nbsp;&nbsp;&nbsp;&nbsp;&quot;This&nbsp;returns&nbsp;the&nbsp;parsed&nbsp;node&nbsp;result.&nbsp;If&nbsp;the&nbsp;parsed&nbsp;node&nbsp;result&nbsp;is&nbsp;a&nbsp;string,
+                 031&nbsp;&nbsp;&nbsp;&nbsp;&quot;This&nbsp;returns&nbsp;the&nbsp;parsed&nbsp;node&nbsp;result.&nbsp;If&nbsp;the&nbsp;parsed&nbsp;node&nbsp;result&nbsp;is&nbsp;a&nbsp;string,
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 026&nbsp;&nbsp;&nbsp;&nbsp;it&nbsp;reads&nbsp;the&nbsp;string&nbsp;and&nbsp;returns&nbsp;the&nbsp;eval&#x27;d&nbsp;result.&nbsp;This&nbsp;is&nbsp;due&nbsp;to&nbsp;elsewhere
+                 032&nbsp;&nbsp;&nbsp;&nbsp;it&nbsp;reads&nbsp;the&nbsp;string&nbsp;and&nbsp;returns&nbsp;the&nbsp;eval&#x27;d&nbsp;result.&nbsp;This&nbsp;is&nbsp;due&nbsp;to&nbsp;elsewhere
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 027&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;the&nbsp;program,&nbsp;the&nbsp;style&nbsp;analyser,&nbsp;having&nbsp;to&nbsp;quote&nbsp;the&nbsp;parsed&nbsp;node&nbsp;result&nbsp;so
+                 033&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;the&nbsp;program,&nbsp;the&nbsp;style&nbsp;analyser,&nbsp;having&nbsp;to&nbsp;quote&nbsp;the&nbsp;parsed&nbsp;node&nbsp;result&nbsp;so
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 028&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;internal&nbsp;hash-maps&nbsp;would&nbsp;not&nbsp;try&nbsp;to&nbsp;be&nbsp;evaluated&nbsp;as&nbsp;a&nbsp;function&nbsp;if&nbsp;they
+                 034&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;internal&nbsp;hash-maps&nbsp;would&nbsp;not&nbsp;try&nbsp;to&nbsp;be&nbsp;evaluated&nbsp;as&nbsp;a&nbsp;function&nbsp;if&nbsp;they
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 029&nbsp;&nbsp;&nbsp;&nbsp;were&nbsp;at&nbsp;the&nbsp;head&nbsp;of&nbsp;a&nbsp;list&nbsp;and&nbsp;eval&nbsp;were&nbsp;called&nbsp;on&nbsp;them&quot;
+                 035&nbsp;&nbsp;&nbsp;&nbsp;were&nbsp;at&nbsp;the&nbsp;head&nbsp;of&nbsp;a&nbsp;list&nbsp;and&nbsp;eval&nbsp;were&nbsp;called&nbsp;on&nbsp;them&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 030&nbsp;&nbsp;&nbsp;&nbsp;[ast-node]
+                 036&nbsp;&nbsp;&nbsp;&nbsp;[ast-node]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 031&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[parsed-node-result&nbsp;(:parsed-node-result&nbsp;ast-node)]
+                 037&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[parsed-node-result&nbsp;(:parsed-node-result&nbsp;ast-node)]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 032&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(string?&nbsp;parsed-node-result)
+                 038&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(string?&nbsp;parsed-node-result)
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 033&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;If&nbsp;string&nbsp;read&nbsp;it,&nbsp;eval&nbsp;it,&nbsp;then&nbsp;return&nbsp;it
+                 039&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;If&nbsp;string&nbsp;read&nbsp;it,&nbsp;eval&nbsp;it,&nbsp;then&nbsp;return&nbsp;it
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                 034&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(read-string&nbsp;parsed-node-result))
+                 040&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(read-string&nbsp;parsed-node-result))
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 035&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;else&nbsp;it&nbsp;is&nbsp;not&nbsp;a&nbsp;string,&nbsp;so&nbsp;can&nbsp;return&nbsp;it&nbsp;straight&nbsp;away
+                 041&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;else&nbsp;it&nbsp;is&nbsp;not&nbsp;a&nbsp;string,&nbsp;so&nbsp;can&nbsp;return&nbsp;it&nbsp;straight&nbsp;away
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 036&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parsed-node-result)))
+                 042&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;parsed-node-result)))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 037&nbsp;&nbsp;
+                 043&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 038&nbsp;&nbsp;(defn&nbsp;get-node-name
+                 044&nbsp;&nbsp;(defn&nbsp;get-node-name
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 039&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry]
+                 045&nbsp;&nbsp;&nbsp;&nbsp;&quot;Get&nbsp;the&nbsp;nameof&nbsp;a&nbsp;node&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 046&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry]
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 040&nbsp;&nbsp;&nbsp;&nbsp;(:parsed-node-name&nbsp;ast-entry))
+                 047&nbsp;&nbsp;&nbsp;&nbsp;(:parsed-node-name&nbsp;ast-entry))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 041&nbsp;&nbsp;
+                 048&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 042&nbsp;&nbsp;(defn&nbsp;get-node-children
+                 049&nbsp;&nbsp;(defn&nbsp;get-node-children
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 043&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry]
+                 050&nbsp;&nbsp;&nbsp;&nbsp;&quot;Get&nbsp;the&nbsp;children&nbsp;of&nbsp;a&nbsp;node&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 051&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry]
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 044&nbsp;&nbsp;&nbsp;&nbsp;(get-parsed-node-result&nbsp;ast-entry))
+                 052&nbsp;&nbsp;&nbsp;&nbsp;(get-parsed-node-result&nbsp;ast-entry))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 045&nbsp;&nbsp;
+                 053&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 046&nbsp;&nbsp;(defn&nbsp;node-contains-nested-token?
+                 054&nbsp;&nbsp;(defn&nbsp;node-contains-nested-token?
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 047&nbsp;&nbsp;&nbsp;&nbsp;&quot;Returns&nbsp;true&nbsp;if&nbsp;the&nbsp;node&nbsp;contains&nbsp;a&nbsp;token&nbsp;that&nbsp;has&nbsp;a&nbsp;value&nbsp;of&nbsp;token-value
+                 055&nbsp;&nbsp;&nbsp;&nbsp;&quot;Returns&nbsp;true&nbsp;if&nbsp;the&nbsp;node&nbsp;contains&nbsp;a&nbsp;token&nbsp;that&nbsp;has&nbsp;a&nbsp;value&nbsp;of&nbsp;token-value
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 048&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp;key&nbsp;of&nbsp;token-key&nbsp;anywhere&nbsp;in&nbsp;its&nbsp;children&nbsp;or&nbsp;their&nbsp;sub-trees&quot;
+                 056&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp;key&nbsp;of&nbsp;token-key&nbsp;anywhere&nbsp;in&nbsp;its&nbsp;children&nbsp;or&nbsp;their&nbsp;sub-trees&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 049&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry&nbsp;token-key&nbsp;token-value]
+                 057&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry&nbsp;token-key&nbsp;token-value]
                 </span><br/>
 <span class="partial" title="2 out of 4 forms covered">
-                 050&nbsp;&nbsp;&nbsp;&nbsp;(cond
+                 058&nbsp;&nbsp;&nbsp;&nbsp;(cond
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 051&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;if&nbsp;current&nbsp;entry&nbsp;is&nbsp;a&nbsp;token,&nbsp;check&nbsp;its&nbsp;value&nbsp;and&nbsp;return&nbsp;true&nbsp;if&nbsp;match&nbsp;is&nbsp;found
+                 059&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;if&nbsp;current&nbsp;entry&nbsp;is&nbsp;a&nbsp;token,&nbsp;check&nbsp;its&nbsp;value&nbsp;and&nbsp;return&nbsp;true&nbsp;if&nbsp;match&nbsp;is&nbsp;found
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 052&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(token?&nbsp;ast-entry)
+                 060&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(token?&nbsp;ast-entry)
                 </span><br/>
 <span class="covered" title="7 out of 7 forms covered">
-                 053&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(and
+                 061&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(and
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 054&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(=&nbsp;token-key
+                 062&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(=&nbsp;token-key
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 055&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:token-key&nbsp;ast-entry))
+                 063&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:token-key&nbsp;ast-entry))
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 056&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(=&nbsp;token-value
+                 064&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(=&nbsp;token-value
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 057&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:token-value&nbsp;ast-entry)))
+                 065&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:token-value&nbsp;ast-entry)))
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 058&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true)
+                 066&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true)
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 059&nbsp;&nbsp;
+                 067&nbsp;&nbsp;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 060&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;if&nbsp;current&nbsp;entry&nbsp;is&nbsp;a&nbsp;node,&nbsp;recursively&nbsp;check&nbsp;all&nbsp;its&nbsp;children
+                 068&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;if&nbsp;current&nbsp;entry&nbsp;is&nbsp;a&nbsp;node,&nbsp;recursively&nbsp;check&nbsp;all&nbsp;its&nbsp;children
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 061&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(node?&nbsp;ast-entry)
+                 069&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(node?&nbsp;ast-entry)
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 062&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[contains-nested-value?
+                 070&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[contains-nested-value?
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 063&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(some&nbsp;true?
+                 071&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(some&nbsp;true?
                 </span><br/>
 <span class="covered" title="31 out of 31 forms covered">
-                 064&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[child&nbsp;(get-parsed-node-result&nbsp;ast-entry)]
+                 072&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[child&nbsp;(get-parsed-node-result&nbsp;ast-entry)]
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                 065&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(node-contains-nested-token?&nbsp;child&nbsp;token-key&nbsp;token-value)))]
+                 073&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(node-contains-nested-token?&nbsp;child&nbsp;token-key&nbsp;token-value)))]
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 066&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;contains-nested-value?
+                 074&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;contains-nested-value?
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 067&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true))
+                 075&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 068&nbsp;&nbsp;
+                 076&nbsp;&nbsp;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 069&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;Node&nbsp;does&nbsp;not&nbsp;contain&nbsp;nested&nbsp;token&nbsp;value,&nbsp;return&nbsp;nil
+                 077&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;Node&nbsp;does&nbsp;not&nbsp;contain&nbsp;nested&nbsp;token&nbsp;value,&nbsp;return&nbsp;nil
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 070&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:else
+                 078&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:else
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 071&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil
+                 079&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 072&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;))
+                 080&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 073&nbsp;&nbsp;
+                 081&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 074&nbsp;&nbsp;(defn&nbsp;get-nth-child
+                 082&nbsp;&nbsp;(defn&nbsp;get-nth-child
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 075&nbsp;&nbsp;&nbsp;&nbsp;&quot;Get&nbsp;the&nbsp;nth&nbsp;child&nbsp;of&nbsp;the&nbsp;ast&nbsp;node.&nbsp;Uses&nbsp;zero&nbsp;indexing&nbsp;(0&nbsp;is&nbsp;first&nbsp;position).
+                 083&nbsp;&nbsp;&nbsp;&nbsp;&quot;Get&nbsp;the&nbsp;nth&nbsp;child&nbsp;of&nbsp;the&nbsp;ast&nbsp;node.&nbsp;Uses&nbsp;zero&nbsp;indexing&nbsp;(0&nbsp;is&nbsp;first&nbsp;position).
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 076&nbsp;&nbsp;&nbsp;&nbsp;Ignores&nbsp;symbol&nbsp;table&nbsp;function&nbsp;calls&nbsp;and&nbsp;line-numbers&quot;
+                 084&nbsp;&nbsp;&nbsp;&nbsp;Ignores&nbsp;symbol&nbsp;table&nbsp;function&nbsp;calls&nbsp;and&nbsp;line-numbers&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 077&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;n]
+                 085&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;n]
                 </span><br/>
 <span class="partial" title="33 out of 34 forms covered">
-                 078&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[children&nbsp;(for&nbsp;[entry&nbsp;(get-parsed-node-result&nbsp;ast-node)
+                 086&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[children&nbsp;(for&nbsp;[entry&nbsp;(get-parsed-node-result&nbsp;ast-node)
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 079&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;only&nbsp;compile&nbsp;list&nbsp;of&nbsp;nodes&nbsp;and&nbsp;tokens
+                 087&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;only&nbsp;compile&nbsp;list&nbsp;of&nbsp;nodes&nbsp;and&nbsp;tokens
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 080&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(essentially&nbsp;ignore&nbsp;st-func-calls&nbsp;and&nbsp;line&nbsp;numbers)
+                 088&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(essentially&nbsp;ignore&nbsp;st-func-calls&nbsp;and&nbsp;line&nbsp;numbers)
                 </span><br/>
 <span class="covered" title="8 out of 8 forms covered">
-                 081&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:when&nbsp;(or&nbsp;(node?&nbsp;entry)
+                 089&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:when&nbsp;(or&nbsp;(node?&nbsp;entry)
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 082&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(token?&nbsp;entry))]
+                 090&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(token?&nbsp;entry))]
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 083&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;entry)]
+                 091&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;entry)]
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 084&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;return&nbsp;nth&nbsp;element,&nbsp;if&nbsp;it&nbsp;doesn&#x27;t&nbsp;exist&nbsp;return&nbsp;nil
+                 092&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;return&nbsp;nth&nbsp;element,&nbsp;if&nbsp;it&nbsp;doesn&#x27;t&nbsp;exist&nbsp;return&nbsp;nil
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                 085&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(nth&nbsp;children&nbsp;n&nbsp;nil))
+                 093&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(nth&nbsp;children&nbsp;n&nbsp;nil))
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 086&nbsp;&nbsp;&nbsp;&nbsp;)
+                 094&nbsp;&nbsp;&nbsp;&nbsp;)
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 087&nbsp;&nbsp;
+                 095&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 088&nbsp;&nbsp;(defn&nbsp;get-nth-named-child
+                 096&nbsp;&nbsp;(defn&nbsp;get-nth-named-child
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 089&nbsp;&nbsp;&nbsp;&nbsp;&quot;Retrieve&nbsp;the&nbsp;nth&nbsp;instance&nbsp;of&nbsp;the&nbsp;target&nbsp;child.&nbsp;Uses&nbsp;zero&nbsp;indexing&nbsp;&quot;
+                 097&nbsp;&nbsp;&nbsp;&nbsp;&quot;Retrieve&nbsp;the&nbsp;nth&nbsp;instance&nbsp;of&nbsp;the&nbsp;target&nbsp;child.&nbsp;Uses&nbsp;zero&nbsp;indexing&nbsp;&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 090&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;n&nbsp;child-name]
+                 098&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;n&nbsp;child-name]
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 091&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[matching-children
+                 099&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[matching-children
                 </span><br/>
 <span class="covered" title="33 out of 33 forms covered">
-                 092&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[entry&nbsp;(get-parsed-node-result&nbsp;ast-node)
+                 100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[entry&nbsp;(get-parsed-node-result&nbsp;ast-node)
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                 093&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:when&nbsp;(or
+                 101&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:when&nbsp;(or
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 094&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;check&nbsp;for&nbsp;specific&nbsp;child&nbsp;of&nbsp;type&nbsp;node
+                 102&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;check&nbsp;for&nbsp;specific&nbsp;child&nbsp;of&nbsp;type&nbsp;node
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 095&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(=&nbsp;child-name
+                 103&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(=&nbsp;child-name
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 096&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:parsed-node-name&nbsp;entry))
+                 104&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:parsed-node-name&nbsp;entry))
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 097&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;check&nbsp;for&nbsp;specific&nbsp;child&nbsp;of&nbsp;type&nbsp;token
+                 105&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;check&nbsp;for&nbsp;specific&nbsp;child&nbsp;of&nbsp;type&nbsp;token
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 098&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(=&nbsp;child-name
+                 106&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(=&nbsp;child-name
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 099&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:token-key&nbsp;entry)))]
+                 107&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:token-key&nbsp;entry)))]
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;entry)]
+                 108&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;entry)]
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 101&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;check&nbsp;that&nbsp;there&nbsp;are&nbsp;at&nbsp;least&nbsp;n&nbsp;matches.&nbsp;If&nbsp;true&nbsp;return&nbsp;nth,&nbsp;if&nbsp;not&nbsp;return&nbsp;nil
+                 109&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;check&nbsp;that&nbsp;there&nbsp;are&nbsp;at&nbsp;least&nbsp;n&nbsp;matches.&nbsp;If&nbsp;true&nbsp;return&nbsp;nth,&nbsp;if&nbsp;not&nbsp;return&nbsp;nil
                 </span><br/>
 <span class="covered" title="8 out of 8 forms covered">
-                 102&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(&lt;=&nbsp;n&nbsp;(count&nbsp;matching-children))
+                 110&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(&lt;=&nbsp;n&nbsp;(count&nbsp;matching-children))
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                 103&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(nth&nbsp;matching-children&nbsp;n&nbsp;nil)
+                 111&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(nth&nbsp;matching-children&nbsp;n&nbsp;nil)
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 104&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil)))
+                 112&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil)))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 105&nbsp;&nbsp;
+                 113&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 106&nbsp;&nbsp;(defn&nbsp;get-in-nested-entry
+                 114&nbsp;&nbsp;(defn&nbsp;get-in-nested-entry
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 107&nbsp;&nbsp;&nbsp;&nbsp;&quot;Gets&nbsp;the&nbsp;nested&nbsp;entry&nbsp;of&nbsp;the&nbsp;node&nbsp;following&nbsp;the&nbsp;path-pair.&nbsp;The&nbsp;path-pair
+                 115&nbsp;&nbsp;&nbsp;&nbsp;&quot;Gets&nbsp;the&nbsp;nested&nbsp;entry&nbsp;of&nbsp;the&nbsp;node&nbsp;following&nbsp;the&nbsp;path-pair.&nbsp;The&nbsp;path-pair
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 108&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;a&nbsp;vector&nbsp;of&nbsp;vectors.&nbsp;The&nbsp;inner&nbsp;vectors&nbsp;have&nbsp;2&nbsp;values,&nbsp;n&nbsp;and&nbsp;child-name,&nbsp;which
+                 116&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;a&nbsp;vector&nbsp;of&nbsp;vectors.&nbsp;The&nbsp;inner&nbsp;vectors&nbsp;have&nbsp;2&nbsp;values,&nbsp;n&nbsp;and&nbsp;child-name,&nbsp;which
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 109&nbsp;&nbsp;&nbsp;&nbsp;are&nbsp;passed&nbsp;into&nbsp;the&nbsp;get-nth-name-child&nbsp;function.&quot;
+                 117&nbsp;&nbsp;&nbsp;&nbsp;are&nbsp;passed&nbsp;into&nbsp;the&nbsp;get-nth-name-child&nbsp;function.&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 110&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry&nbsp;path-pairs]
+                 118&nbsp;&nbsp;&nbsp;&nbsp;[ast-entry&nbsp;path-pairs]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 111&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(empty?&nbsp;path-pairs)
+                 119&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(empty?&nbsp;path-pairs)
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 112&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;the&nbsp;current&nbsp;entry&nbsp;is&nbsp;our&nbsp;target&nbsp;entry
+                 120&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;the&nbsp;current&nbsp;entry&nbsp;is&nbsp;our&nbsp;target&nbsp;entry
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 113&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ast-entry
+                 121&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ast-entry
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 114&nbsp;&nbsp;
+                 122&nbsp;&nbsp;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 115&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;else&nbsp;follow&nbsp;the&nbsp;first&nbsp;path-pair&nbsp;and&nbsp;recursively&nbsp;call
+                 123&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;else&nbsp;follow&nbsp;the&nbsp;first&nbsp;path-pair&nbsp;and&nbsp;recursively&nbsp;call
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 116&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[path-pair&nbsp;(first&nbsp;path-pairs)
+                 124&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[path-pair&nbsp;(first&nbsp;path-pairs)
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 117&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;(first&nbsp;path-pair)
+                 125&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;(first&nbsp;path-pair)
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 118&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;child-name&nbsp;(second&nbsp;path-pair)]
+                 126&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;child-name&nbsp;(second&nbsp;path-pair)]
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 119&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;
+                 127&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 120&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ast-entry
+                 128&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ast-entry
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 121&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(get-nth-named-child&nbsp;n&nbsp;child-name)
+                 129&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(get-nth-named-child&nbsp;n&nbsp;child-name)
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 122&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(get-in-nested-entry&nbsp;(rest&nbsp;path-pairs))))))
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                 123&nbsp;&nbsp;
-                </span><br/>
-<span class="covered" title="1 out of 1 forms covered">
-                 124&nbsp;&nbsp;(defn&nbsp;node-contains-top-layer-child?
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                 125&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;child-name]
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                 126&nbsp;&nbsp;&nbsp;&nbsp;;;if&nbsp;a&nbsp;single&nbsp;(first)&nbsp;instance&nbsp;of&nbsp;child&nbsp;exists,&nbsp;return&nbsp;true,&nbsp;else&nbsp;nil
-                </span><br/>
-<span class="covered" title="8 out of 8 forms covered">
-                 127&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(get-nth-named-child&nbsp;ast-node&nbsp;0&nbsp;child-name)
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                 128&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                 129&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil))
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                 130&nbsp;&nbsp;
+                 130&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(get-in-nested-entry&nbsp;(rest&nbsp;path-pairs))))))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
                  131&nbsp;&nbsp;
                 </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                 132&nbsp;&nbsp;
+<span class="covered" title="1 out of 1 forms covered">
+                 132&nbsp;&nbsp;(defn&nbsp;node-contains-top-layer-child?
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 133&nbsp;&nbsp;;;todo&nbsp;are&nbsp;the&nbsp;below&nbsp;as&nbsp;useful&nbsp;as&nbsp;I&nbsp;think&nbsp;they&nbsp;are?&nbsp;Because&nbsp;child-name&nbsp;would&nbsp;be&nbsp;&quot;function&quot;,&nbsp;not&nbsp;&quot;funcA&quot;
+                 133&nbsp;&nbsp;&nbsp;&nbsp;&quot;Check&nbsp;if&nbsp;a&nbsp;node&nbsp;contains&nbsp;a&nbsp;certain&nbsp;direct&nbsp;child.&nbsp;Note&nbsp;that&nbsp;child-name&nbsp;is&nbsp;the&nbsp;name
                 </span><br/>
-<span class="covered" title="1 out of 1 forms covered">
-                 134&nbsp;&nbsp;(defn&nbsp;node-contains-nested-child?
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 134&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;the&nbsp;node&nbsp;&#x2F;&nbsp;token&nbsp;and&nbsp;not&nbsp;its&nbsp;value.&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
                  135&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;child-name]
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 136&nbsp;&nbsp;&nbsp;&nbsp;;;if&nbsp;check&nbsp;for&nbsp;result&nbsp;on&nbsp;top&nbsp;layer
+                 136&nbsp;&nbsp;&nbsp;&nbsp;;;if&nbsp;a&nbsp;single&nbsp;(first)&nbsp;instance&nbsp;of&nbsp;child&nbsp;exists,&nbsp;return&nbsp;true,&nbsp;else&nbsp;nil
+                </span><br/>
+<span class="covered" title="8 out of 8 forms covered">
+                 137&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(get-nth-named-child&nbsp;ast-node&nbsp;0&nbsp;child-name)
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 137&nbsp;&nbsp;&nbsp;&nbsp;;;else&nbsp;loop&nbsp;through&nbsp;and&nbsp;recursive&nbsp;call&nbsp;for&nbsp;each&nbsp;element&nbsp;that&nbsp;is&nbsp;a&nbsp;node
+                 138&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 139&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 140&nbsp;&nbsp;
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 141&nbsp;&nbsp;
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 142&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 143&nbsp;&nbsp;(defn&nbsp;node-contains-nested-child?
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 144&nbsp;&nbsp;&nbsp;&nbsp;&quot;Check&nbsp;if&nbsp;a&nbsp;node&nbsp;contains&nbsp;a&nbsp;certain&nbsp;child.&nbsp;Note&nbsp;that&nbsp;child-name&nbsp;is&nbsp;the&nbsp;name
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 145&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;the&nbsp;node&nbsp;&#x2F;&nbsp;token&nbsp;and&nbsp;not&nbsp;its&nbsp;value.&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 146&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;child-name]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 147&nbsp;&nbsp;&nbsp;&nbsp;;;if&nbsp;check&nbsp;for&nbsp;result&nbsp;on&nbsp;top&nbsp;layer
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 148&nbsp;&nbsp;&nbsp;&nbsp;;;else&nbsp;loop&nbsp;through&nbsp;and&nbsp;recursive&nbsp;call&nbsp;for&nbsp;each&nbsp;element&nbsp;that&nbsp;is&nbsp;a&nbsp;node
                 </span><br/>
 <span class="covered" title="6 out of 6 forms covered">
-                 138&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(node-contains-top-layer-child?&nbsp;ast-node&nbsp;child-name)
+                 149&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(node-contains-top-layer-child?&nbsp;ast-node&nbsp;child-name)
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 139&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true
+                 150&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;true
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 140&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(some&nbsp;true?
+                 151&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(some&nbsp;true?
                 </span><br/>
 <span class="covered" title="33 out of 33 forms covered">
-                 141&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[entry&nbsp;(get-parsed-node-result&nbsp;ast-node)
+                 152&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[entry&nbsp;(get-parsed-node-result&nbsp;ast-node)
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 142&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:when&nbsp;(node?&nbsp;entry)]
+                 153&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:when&nbsp;(node?&nbsp;entry)]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 143&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(node-contains-nested-child?&nbsp;entry&nbsp;child-name)))))
+                 154&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(node-contains-nested-child?&nbsp;entry&nbsp;child-name)))))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 144&nbsp;&nbsp;
+                 155&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 145&nbsp;&nbsp;(defn&nbsp;sub-node-contains-top-layer-child?
+                 156&nbsp;&nbsp;(defn&nbsp;sub-node-contains-top-layer-child?
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 146&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;sub-node-name&nbsp;child-name]
+                 157&nbsp;&nbsp;&nbsp;&nbsp;&quot;Check&nbsp;if&nbsp;a&nbsp;sub&nbsp;node&nbsp;contains&nbsp;a&nbsp;certain&nbsp;direct&nbsp;child.&nbsp;Note&nbsp;that&nbsp;child-name&nbsp;is&nbsp;the&nbsp;name
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 158&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;the&nbsp;node&nbsp;&#x2F;&nbsp;token&nbsp;and&nbsp;not&nbsp;its&nbsp;value.&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 159&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;sub-node-name&nbsp;child-name]
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 147&nbsp;&nbsp;&nbsp;&nbsp;(some&nbsp;true?
+                 160&nbsp;&nbsp;&nbsp;&nbsp;(some&nbsp;true?
                 </span><br/>
 <span class="covered" title="33 out of 33 forms covered">
-                 148&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[entry&nbsp;(get-parsed-node-result&nbsp;ast-node)
+                 161&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[entry&nbsp;(get-parsed-node-result&nbsp;ast-node)
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 149&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:when&nbsp;(=&nbsp;sub-node-name
+                 162&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:when&nbsp;(=&nbsp;sub-node-name
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 150&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:parsed-node-name&nbsp;entry))]
+                 163&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:parsed-node-name&nbsp;entry))]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 151&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(node-contains-top-layer-child?&nbsp;entry&nbsp;child-name))))
+                 164&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(node-contains-top-layer-child?&nbsp;entry&nbsp;child-name))))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 152&nbsp;&nbsp;
+                 165&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 153&nbsp;&nbsp;(defn&nbsp;sub-node-contains-nested-child?
+                 166&nbsp;&nbsp;(defn&nbsp;sub-node-contains-nested-child?
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 154&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;sub-node-name&nbsp;child-name]
+                 167&nbsp;&nbsp;&nbsp;&nbsp;&quot;Check&nbsp;if&nbsp;a&nbsp;sub&nbsp;node&nbsp;contains&nbsp;a&nbsp;certain&nbsp;child.&nbsp;Note&nbsp;that&nbsp;child-name&nbsp;is&nbsp;the&nbsp;name
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 168&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;the&nbsp;node&nbsp;&#x2F;&nbsp;token&nbsp;and&nbsp;not&nbsp;its&nbsp;value.&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 169&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;sub-node-name&nbsp;child-name]
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 155&nbsp;&nbsp;&nbsp;&nbsp;(some&nbsp;true?
+                 170&nbsp;&nbsp;&nbsp;&nbsp;(some&nbsp;true?
                 </span><br/>
 <span class="covered" title="33 out of 33 forms covered">
-                 156&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[entry&nbsp;(get-parsed-node-result&nbsp;ast-node)
+                 171&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[entry&nbsp;(get-parsed-node-result&nbsp;ast-node)
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 157&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:when&nbsp;(=&nbsp;sub-node-name
+                 172&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:when&nbsp;(=&nbsp;sub-node-name
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 158&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:parsed-node-name&nbsp;entry))]
+                 173&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(:parsed-node-name&nbsp;entry))]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 159&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(node-contains-nested-child?&nbsp;entry&nbsp;child-name))))
+                 174&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(node-contains-nested-child?&nbsp;entry&nbsp;child-name))))
                 </span><br/>
  </body>
 </html>

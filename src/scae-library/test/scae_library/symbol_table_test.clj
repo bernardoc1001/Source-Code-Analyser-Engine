@@ -161,6 +161,7 @@
         multiple-st-entries (get-in scope-entry-data-set
                                     [:get-from-scope
                                      :multiple-st-entries])]
+    ;;multi arity
     (reset! @#'scae-library.symbol-table/symbol-table
             (:symbol-table-before no-previous-scope-entries))
     (is (= (@#'scae-library.symbol-table/get-from-scope
@@ -174,6 +175,19 @@
              (:st-entry-name multiple-st-entries)
              (:scope-name multiple-st-entries))
            (:expected-result multiple-st-entries)))
+
+    ;;single arity
+    (reset! @#'scae-library.symbol-table/symbol-table
+            (:symbol-table-before no-previous-scope-entries))
+    (is (= (@#'scae-library.symbol-table/get-from-scope
+             (:st-entry-name no-previous-scope-entries))
+           (:expected-result no-previous-scope-entries)))
+
+    (reset! @#'scae-library.symbol-table/symbol-table
+            (:symbol-table-before multiple-st-entries))
+    (is (= (@#'scae-library.symbol-table/get-from-scope
+             (:st-entry-name multiple-st-entries))
+           nil))
 
 
     (@#'scae-library.symbol-table/reset-symbol-table!)))
