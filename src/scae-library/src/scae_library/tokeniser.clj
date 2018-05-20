@@ -1,14 +1,15 @@
 (ns scae-library.tokeniser
   (:require [clojure.data.json :as json]))
 
-(defn- insert-token-type
+(defn insert-token-type
+  "Insert the token type into the token"
   [token-definitions]
   (hash-map :tokens (apply merge (map #(into {} (for [entry (get token-definitions %)]
                                                  {(first entry) {:regex (second entry)
                                                                  :type  %}}))
                                      (keys token-definitions)))))
 
-(defn- get-token-definitions
+(defn get-token-definitions
   "Reads token definitions as a vector of token or skip hash-maps,
   returns hashmap of the type of token and a corresponding hash-map of tokens
   input: [{\"token\": {\"token1\": \"token-regex1\",
@@ -25,7 +26,7 @@
     (apply merge-with conj)
     (insert-token-type)))
 
-(defn- val->token
+(defn val->token
   "Convert value to its corresponding token. Return nil if there is no
   corresponding token"
   [val token-definitions]
@@ -42,6 +43,7 @@
     ))
 
 (defn tokenise-code
+  "Tokenises the Source Code"
   [code token-vector]
   (let [token-definitions (get-token-definitions token-vector)]
     (as-> token-definitions tokens

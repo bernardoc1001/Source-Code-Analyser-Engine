@@ -1,6 +1,7 @@
 (ns scae-website.views.documentation
   (:require [reagent.core :as reagent]
-            [scae-website.sidebar :as sidebar]))
+            [scae-website.sidebar :as sidebar]
+            [scae-website.common :as common]))
 
 (defn documentation-page []
   [:div
@@ -9,24 +10,50 @@
     [:div {:class "jumbotron"}
      [sidebar/menu-toggle]
      [:h2 "Documentation"]]
-    [:div.page-content-wrapper>div.container-fluid>div.row>div.col-xs-12
-     [:div {:class "panel panel-default"}
-      [:div {:class "panel-heading"} "Documentation"]
-      [:div {:class "panel-body"}
-       [:div {:class "row"}
-        [:div {:class "col-sm-12"}
-         [:p "Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-   Sed vel sem erat. Pellentesque dapibus sem quis elementum blandit.
-   Pellentesque risus arcu, scelerisque at egestas eget, pellentesque eget turpis.
-   Vestibulum posuere mi sed nulla ullamcorper, nec pellentesque erat semper.
-   Suspendisse luctus arcu nec justo consectetur dignissim. Aliquam ac aliquam
-   ligula, sed placerat est. Ut ac malesuada urna. Praesent vel malesuada dui.
-   Quisque viverra velit a nibh fermentum, vel sollicitudin neque sodales.
-   Aliquam iaculis, ante dictum ornare blandit, dui dolor dictum urna,
-   id dictum sem leo eget augue. In lobortis tortor at varius mollis.
-   Aliquam aliquam velit in rutrum ultrices. Class aptent taciti sociosqu ad
-   litora torquent per conubia nostra, per inceptos himenaeos. "]
-         ]]]]]]])
+    [:div.page-content-wrapper>div.container-fluid
+     [:div.row
+      [common/text-pannel-template "col-xs-12"
+       "Video"
+       [:div {:class "text-center"}
+        [:embed-responsive
+         [:iframe {:width  "560"
+                   :height "315"
+                   :src    "https://www.youtube.com/embed/1J9sGMddxmo"
+                   :allowFullScreen "allowFullScreen"}]]]
+       ]]
+     [:div.row
+      [common/text-pannel-template "col-xs-12 col-lg-4"
+       "Code Documentation"
+       [:div
+        [:p "You can find the code documentation for the library"
+         [:a {:href "library-docs/doc/intro.html"} " here "]]]]
+      [common/text-pannel-template "col-xs-12 col-lg-4"
+       "RESTful API Docs"
+       [:div
+        [:p "You can find the RESTful API documentation"
+         [:a {:href "https://documenter.getpostman.com/view/4021417/RW87op7E"} " here "]]]]
+      [common/text-pannel-template "col-xs-12 col-lg-4"
+       "Test Coverage Report"
+       [:div
+        [:p "You can find the test coverage documentation for the library"
+         [:a {:href "library-docs/coverage/index.html"} " here "]]
+        ]]
+      ]
+     [:div.row
+      [common/text-pannel-template "col-xs-12 col-lg-6"
+       "User Manual"
+       [:div {:class "text-center"}
+        [:embed-responsive
+         [:iframe {:width  "640"
+                   :height "720"
+                   :src    "library-docs/User%20Manual.pdf"}]]]]
+      [common/text-pannel-template "col-xs-12 col-lg-6"
+       "Technical Guide"
+       [:div {:class "text-center"}
+        [:embed-responsive
+         [:iframe {:width  "640"
+                   :height "720"
+                   :src    "library-docs/Technical%20Guide.pdf"}]]]]]]]])
 
 (defn documentation []
   (reagent/create-class {:reagent-render documentation-page}))

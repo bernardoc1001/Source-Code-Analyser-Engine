@@ -1,21 +1,27 @@
-(ns scae-library.node-ops)
+(ns scae-library.node-ops
+  "This namespace contains helper functions to help make dealing
+  with the Abstract Syntax Tree when designing style rules easier")
 
 ;;Helper function used to quickly make different kind of type checks
 (defn entry-type-check?
+  "Used to create ast-entry checks"
   [ast-entry key]
   (if (get ast-entry key)
     true
     nil))
 
 (defn node?
+  "Check if the current ast-entry is of type node"
   [ast-entry]
   (entry-type-check? ast-entry :parsed-node-name))
 
 (defn token?
+  "Check if the current ast-entry is of type token"
   [ast-entry]
   (entry-type-check? ast-entry :token-key))
 
 (defn st-func-calls?
+  "Check if the current ast-entry is of type st-func-calls"
   [ast-entry]
   (entry-type-check? ast-entry :st-func-calls))
 
@@ -36,10 +42,12 @@
       parsed-node-result)))
 
 (defn get-node-name
+  "Get the nameof a node"
   [ast-entry]
   (:parsed-node-name ast-entry))
 
 (defn get-node-children
+  "Get the children of a node"
   [ast-entry]
   (get-parsed-node-result ast-entry))
 
@@ -122,6 +130,8 @@
         (get-in-nested-entry (rest path-pairs))))))
 
 (defn node-contains-top-layer-child?
+  "Check if a node contains a certain direct child. Note that child-name is the name
+  of the node / token and not its value."
   [ast-node child-name]
   ;;if a single (first) instance of child exists, return true, else nil
   (if (get-nth-named-child ast-node 0 child-name)
@@ -130,8 +140,9 @@
 
 
 
-;;todo are the below as useful as I think they are? Because child-name would be "function", not "funcA"
 (defn node-contains-nested-child?
+  "Check if a node contains a certain child. Note that child-name is the name
+  of the node / token and not its value."
   [ast-node child-name]
   ;;if check for result on top layer
   ;;else loop through and recursive call for each element that is a node
@@ -143,6 +154,8 @@
             (node-contains-nested-child? entry child-name)))))
 
 (defn sub-node-contains-top-layer-child?
+  "Check if a sub node contains a certain direct child. Note that child-name is the name
+  of the node / token and not its value."
   [ast-node sub-node-name child-name]
   (some true?
         (for [entry (get-parsed-node-result ast-node)
@@ -151,6 +164,8 @@
           (node-contains-top-layer-child? entry child-name))))
 
 (defn sub-node-contains-nested-child?
+  "Check if a sub node contains a certain child. Note that child-name is the name
+  of the node / token and not its value."
   [ast-node sub-node-name child-name]
   (some true?
         (for [entry (get-parsed-node-result ast-node)

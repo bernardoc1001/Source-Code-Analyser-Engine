@@ -1,15 +1,19 @@
 (ns scae-library.style-analyser
+  "This namespace is responsible for analysing an Abstract Syntax Tree for
+  Style Suggestions"
   (:require [scae-library.node-ops :as node-ops]
             [clojure.string :as string]
             [com.rpl.specter :refer :all]
             [clojure.walk :as walk]))
 
 (defn quote-first-parsed-node-result
+  "Quotes the parsed node result of a node. This is needed to prevent the
+  Clojure Reader/Evaluater from pre-emptively evaluating the node as a function"
   [ast-node]
-  ;;todo check if ordering of statement is free of side effects, check if I can get rid of specter
   (transform [:parsed-node-result] #(str "'" (reverse (into (list) %))) ast-node))
 
 (defn parse-style-rules
+  "Evaluate a particular node on the Abstract Syntax Tree for any style suggestions"
   [ast-node node-based-style-rules]
   (let [current-node-suggestions
         (for [node-key-style-vector-val-pair node-based-style-rules]
@@ -39,6 +43,8 @@
                 children-node-suggestions)))))
 
 (defn analyse-style
+  "Analyses the Abstract Syntax Tree and returns a collection of strings
+  denoting any style suggestions that were returned."
   [root-ast-node style-rules]
   ;;define the style rules in the namespace
   (doseq [style-function-definition (vals (:style-rules-function-definitions style-rules))]

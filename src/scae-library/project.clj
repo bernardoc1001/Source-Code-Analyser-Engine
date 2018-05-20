@@ -7,5 +7,6 @@
                  [org.clojure/data.json "0.2.6"]
                  [com.rpl/specter "1.1.0"]]
   :plugins [[lein-eftest "0.5.1"]
-            [lein-cloverage "1.0.10"]]
+            [lein-cloverage "1.0.10"]
+            [viebel/lein-codox "0.10.2"]]
   :eftest {:multithread? false})
