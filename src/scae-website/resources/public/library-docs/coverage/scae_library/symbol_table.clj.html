@@ -1,0 +1,380 @@
+<html>
+ <head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" href="../coverage.css"/>  <title> scae_library/symbol_table.clj </title>
+ </head>
+ <body>
+<span class="covered" title="1 out of 1 forms covered">
+                 001&nbsp;&nbsp;(ns&nbsp;scae-library.symbol-table
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 002&nbsp;&nbsp;&nbsp;&nbsp;(:require&nbsp;[clojure.string&nbsp;:refer&nbsp;[blank?]]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 003&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[clojure.pprint&nbsp;:refer&nbsp;[pprint]]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 004&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[com.rpl.specter&nbsp;:refer&nbsp;:all]))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 005&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="2 out of 2 forms covered">
+                 006&nbsp;&nbsp;(def&nbsp;^:const&nbsp;GLOBAL_SCOPE_NAME&nbsp;&quot;global&quot;)&nbsp;&nbsp;;;&nbsp;define&nbsp;the&nbsp;global&nbsp;scope&nbsp;name
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 007&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 008&nbsp;&nbsp;(def&nbsp;^:private&nbsp;symbol-table
+                </span><br/>
+<span class="covered" title="7 out of 7 forms covered">
+                 009&nbsp;&nbsp;&nbsp;&nbsp;(atom&nbsp;{:current-scope-name&nbsp;GLOBAL_SCOPE_NAME&nbsp;;;Scopes&nbsp;are&nbsp;either&nbsp;&quot;global&quot;,&nbsp;&quot;main&quot;,&nbsp;or&nbsp;named&nbsp;after&nbsp;a&nbsp;function&nbsp;name&nbsp;(e.g&nbsp;&quot;foobar&quot;)
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 010&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:previous-scope-name-stack&nbsp;[]&nbsp;;;Keep&nbsp;track&nbsp;of&nbsp;previous&nbsp;scope&nbsp;on&nbsp;a&nbsp;stack&nbsp;(implemented&nbsp;with&nbsp;a&nbsp;vector)
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 011&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;&nbsp;So&nbsp;if&nbsp;func2&nbsp;is&nbsp;called&nbsp;inside&nbsp;func1,&nbsp;after&nbsp;func2&nbsp;is&nbsp;done&nbsp;scope&nbsp;can&nbsp;be&nbsp;returned&nbsp;to&nbsp;func1
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                 012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:scope-map&nbsp;{GLOBAL_SCOPE_NAME&nbsp;{}}&nbsp;&nbsp;&nbsp;;;Key&nbsp;=&nbsp;the&nbsp;string&nbsp;of&nbsp;the&nbsp;scope-name,&nbsp;value&nbsp;=&nbsp;the&nbsp;symbol&nbsp;table&nbsp;entry&nbsp;map
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 013&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 014&nbsp;&nbsp;
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 015&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 016&nbsp;&nbsp;(defn&nbsp;pretty-print-symbol-table&nbsp;[]
+                </span><br/>
+<span class="not-covered" title="0 out of 5 forms covered">
+                 017&nbsp;&nbsp;&nbsp;&nbsp;(pprint&nbsp;@symbol-table))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 018&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 019&nbsp;&nbsp;(defn&nbsp;reset-symbol-table!&nbsp;[]
+                </span><br/>
+<span class="covered" title="8 out of 8 forms covered">
+                 020&nbsp;&nbsp;&nbsp;&nbsp;(reset!&nbsp;symbol-table&nbsp;{:current-scope-name&nbsp;GLOBAL_SCOPE_NAME
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 021&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:previous-scope-name-stack&nbsp;[]
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                 022&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:scope-map&nbsp;{GLOBAL_SCOPE_NAME&nbsp;{}}
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 023&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 024&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 025&nbsp;&nbsp;(defn&nbsp;push-previous-scope-name-stack!
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 026&nbsp;&nbsp;&nbsp;&nbsp;&quot;Push&nbsp;a&nbsp;scope&nbsp;name&nbsp;(usually&nbsp;the&nbsp;current&nbsp;scope)&nbsp;onto&nbsp;the&nbsp;previous-scope-name-stack&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 027&nbsp;&nbsp;&nbsp;&nbsp;[scope-name]
+                </span><br/>
+<span class="covered" title="9 out of 9 forms covered">
+                 028&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[new-stack-value&nbsp;(conj&nbsp;(:previous-scope-name-stack&nbsp;@symbol-table)&nbsp;scope-name)]
+                </span><br/>
+<span class="covered" title="9 out of 9 forms covered">
+                 029&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(swap!&nbsp;symbol-table&nbsp;#(assoc&nbsp;%&nbsp;:previous-scope-name-stack&nbsp;new-stack-value))))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 030&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 031&nbsp;&nbsp;(defn&nbsp;pop-previous-scope-name-stack!
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 032&nbsp;&nbsp;&nbsp;&nbsp;&quot;Removes&nbsp;the&nbsp;last&nbsp;scope-name&nbsp;from&nbsp;the&nbsp;stack&nbsp;and&nbsp;returns&nbsp;that&nbsp;name&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 033&nbsp;&nbsp;&nbsp;&nbsp;[]
+                </span><br/>
+<span class="covered" title="8 out of 8 forms covered">
+                 034&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[popped-value&nbsp;(last&nbsp;(:previous-scope-name-stack&nbsp;@symbol-table))
+                </span><br/>
+<span class="covered" title="10 out of 10 forms covered">
+                 035&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new-stack-value&nbsp;(into&nbsp;[]&nbsp;(drop-last&nbsp;(:previous-scope-name-stack&nbsp;@symbol-table)))]
+                </span><br/>
+<span class="covered" title="9 out of 9 forms covered">
+                 036&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(swap!&nbsp;symbol-table&nbsp;#(assoc&nbsp;%&nbsp;:previous-scope-name-stack&nbsp;new-stack-value))
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 037&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;popped-value))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 038&nbsp;&nbsp;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 039&nbsp;&nbsp;;;&nbsp;Getter&nbsp;and&nbsp;Setters
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 040&nbsp;&nbsp;(defn&nbsp;get-current-scope-name&nbsp;[]
+                </span><br/>
+<span class="covered" title="5 out of 5 forms covered">
+                 041&nbsp;&nbsp;&nbsp;&nbsp;(:current-scope-name&nbsp;@symbol-table))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 042&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 043&nbsp;&nbsp;(defn&nbsp;set-current-scope-name!
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 044&nbsp;&nbsp;&nbsp;&nbsp;([scope-name&nbsp;save-previous?]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 045&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;if&nbsp;there&nbsp;is&nbsp;already&nbsp;a&nbsp;current&nbsp;scope,&nbsp;and&nbsp;if&nbsp;the&nbsp;save&nbsp;previous&nbsp;bool&nbsp;is&nbsp;set,
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 046&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;we&#x27;ll&nbsp;push&nbsp;it&nbsp;to&nbsp;the&nbsp;previous&nbsp;scope&nbsp;stack&nbsp;first&nbsp;before&nbsp;setting&nbsp;the&nbsp;new&nbsp;scope&nbsp;name&quot;
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                 047&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[current-scope&nbsp;(get-current-scope-name)]
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 048&nbsp;&nbsp;
+                </span><br/>
+<span class="partial" title="10 out of 11 forms covered">
+                 049&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(and&nbsp;(not&nbsp;(blank?&nbsp;current-scope))
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 050&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;save-previous?)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                 051&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(push-previous-scope-name-stack!&nbsp;current-scope))
+                </span><br/>
+<span class="covered" title="9 out of 9 forms covered">
+                 052&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(swap!&nbsp;symbol-table&nbsp;#(assoc&nbsp;%&nbsp;:current-scope-name&nbsp;scope-name))))
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 053&nbsp;&nbsp;&nbsp;&nbsp;([scope-name]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 054&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&nbsp;By&nbsp;default&nbsp;we&nbsp;will&nbsp;save&nbsp;the&nbsp;current&nbsp;scope&nbsp;to&nbsp;the&nbsp;previous&nbsp;stack,&nbsp;then&nbsp;update,
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 055&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;scope&nbsp;name&quot;
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                 056&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(set-current-scope-name!&nbsp;scope-name&nbsp;true)))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 057&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 058&nbsp;&nbsp;(defn&nbsp;set-current-scope-name-to-previous!
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 059&nbsp;&nbsp;&nbsp;&nbsp;&quot;Set&nbsp;the&nbsp;current&nbsp;scope&nbsp;name&nbsp;to&nbsp;the&nbsp;previous&nbsp;scope&nbsp;name.&nbsp;Does&nbsp;not&nbsp;save&nbsp;the
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 060&nbsp;&nbsp;&nbsp;&nbsp;current&nbsp;scope&nbsp;name&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 061&nbsp;&nbsp;&nbsp;&nbsp;[]
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                 062&nbsp;&nbsp;&nbsp;&nbsp;(set-current-scope-name!
+                </span><br/>
+<span class="covered" title="2 out of 2 forms covered">
+                 063&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(pop-previous-scope-name-stack!)&nbsp;false))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 064&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 065&nbsp;&nbsp;(defn&nbsp;add-to-scope
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 066&nbsp;&nbsp;&nbsp;&nbsp;([st-entry-name&nbsp;st-entry-map&nbsp;scope-name]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 067&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Adds&nbsp;the&nbsp;symbol-table-entry&nbsp;map&nbsp;to&nbsp;the&nbsp;specified&nbsp;scope&nbsp;under&nbsp;the&nbsp;st-entry-name&quot;
+                </span><br/>
+<span class="covered" title="12 out of 12 forms covered">
+                 068&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(swap!&nbsp;symbol-table&nbsp;#(assoc-in&nbsp;%&nbsp;[:scope-map&nbsp;scope-name&nbsp;st-entry-name]&nbsp;st-entry-map)))
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 069&nbsp;&nbsp;&nbsp;&nbsp;([st-entry-name&nbsp;st-entry-map]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 070&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Adds&nbsp;the&nbsp;symbol-table-entry&nbsp;map&nbsp;to&nbsp;the&nbsp;current&nbsp;scope&nbsp;under&nbsp;the&nbsp;st-entry-name&quot;
+                </span><br/>
+<span class="covered" title="6 out of 6 forms covered">
+                 071&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(add-to-scope&nbsp;st-entry-name&nbsp;st-entry-map&nbsp;(get-current-scope-name))))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 072&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 073&nbsp;&nbsp;(defn&nbsp;get-from-scope
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 074&nbsp;&nbsp;&nbsp;&nbsp;([st-entry-name&nbsp;scope-name]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 075&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Returns&nbsp;the&nbsp;st-entry-map&nbsp;for&nbsp;the&nbsp;st-entry-name&nbsp;in&nbsp;the&nbsp;specified&nbsp;scope.&nbsp;If
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 076&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;entry&nbsp;is&nbsp;not&nbsp;found&nbsp;in&nbsp;the&nbsp;specified&nbsp;scope,&nbsp;this&nbsp;will&nbsp;try
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 077&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;retrieve&nbsp;it&nbsp;from&nbsp;the&nbsp;global&nbsp;scope&quot;
+                </span><br/>
+<span class="covered" title="10 out of 10 forms covered">
+                 078&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[st-entry-map&nbsp;(get-in&nbsp;@symbol-table&nbsp;[:scope-map&nbsp;scope-name&nbsp;st-entry-name])]
+                </span><br/>
+<span class="covered" title="9 out of 9 forms covered">
+                 079&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(and&nbsp;(empty?&nbsp;st-entry-map)
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                 080&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(not=&nbsp;scope-name&nbsp;GLOBAL_SCOPE_NAME))
+                </span><br/>
+<span class="not-covered" title="0 out of 4 forms covered">
+                 081&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(get-from-scope&nbsp;st-entry-name&nbsp;GLOBAL_SCOPE_NAME)
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 082&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;st-entry-map)))
+                </span><br/>
+<span class="not-covered" title="0 out of 1 forms covered">
+                 083&nbsp;&nbsp;&nbsp;&nbsp;([st-entry-name]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 084&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;Returns&nbsp;the&nbsp;st-entry-map&nbsp;for&nbsp;the&nbsp;st-entry-name&nbsp;in&nbsp;the&nbsp;current&nbsp;scope&quot;
+                </span><br/>
+<span class="not-covered" title="0 out of 5 forms covered">
+                 085&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(get-from-scope&nbsp;st-entry-name&nbsp;(get-current-scope-name))))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 086&nbsp;&nbsp;
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 087&nbsp;&nbsp;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 088&nbsp;&nbsp;;;todo&nbsp;move&nbsp;this&nbsp;func&nbsp;to&nbsp;a&nbsp;common&nbsp;namespace
+                </span><br/>
+<span class="covered" title="2 out of 2 forms covered">
+                 089&nbsp;&nbsp;(defn-&nbsp;eval-code
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 090&nbsp;&nbsp;&nbsp;&nbsp;[unevaled-code]
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                 091&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(string?&nbsp;unevaled-code)
+                </span><br/>
+<span class="covered" title="5 out of 5 forms covered">
+                 092&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(read-string&nbsp;unevaled-code))
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                 093&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;unevaled-code)))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 094&nbsp;&nbsp;
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 095&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 096&nbsp;&nbsp;(defn&nbsp;create-symbol-table
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 097&nbsp;&nbsp;&nbsp;&nbsp;[ast-node]
+                </span><br/>
+<span class="partial" title="29 out of 34 forms covered">
+                 098&nbsp;&nbsp;&nbsp;&nbsp;(doseq&nbsp;[entry&nbsp;(:parsed-node-result&nbsp;ast-node)]
+                </span><br/>
+<span class="partial" title="1 out of 2 forms covered">
+                 099&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;we&nbsp;can&nbsp;have&nbsp;three&nbsp;types&nbsp;of&nbsp;map&nbsp;here,&nbsp;a&nbsp;token,&nbsp;another&nbsp;node&nbsp;and&nbsp;a&nbsp;st-func-call.
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 101&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;Here&nbsp;we&nbsp;only&nbsp;care&nbsp;for&nbsp;the&nbsp;last&nbsp;two
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 102&nbsp;&nbsp;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 103&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;recursive&nbsp;call&nbsp;for&nbsp;inner&nbsp;node
+                </span><br/>
+<span class="partial" title="4 out of 8 forms covered">
+                 104&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(:parsed-node-result&nbsp;entry)
+                </span><br/>
+<span class="partial" title="3 out of 6 forms covered">
+                 105&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(create-symbol-table&nbsp;entry))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 106&nbsp;&nbsp;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 107&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;symbol&nbsp;table&nbsp;function&nbsp;call
+                </span><br/>
+<span class="partial" title="4 out of 8 forms covered">
+                 108&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(:st-func-calls&nbsp;entry)
+                </span><br/>
+<span class="partial" title="1 out of 2 forms covered">
+                 109&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
+                </span><br/>
+<span class="partial" title="29 out of 68 forms covered">
+                 110&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(doseq&nbsp;[st-func&nbsp;(:st-func-calls&nbsp;entry)]
+                </span><br/>
+<span class="partial" title="9 out of 36 forms covered">
+                 111&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(eval-code&nbsp;((eval-code&nbsp;st-func)&nbsp;(:parsed-node-result&nbsp;ast-node)))))))))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 112&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 113&nbsp;&nbsp;(defn&nbsp;strip-st-functions
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 114&nbsp;&nbsp;&nbsp;&nbsp;&quot;Replaces&nbsp;the&nbsp;value&nbsp;for&nbsp;:st-func-calls&nbsp;with&nbsp;a&nbsp;string&nbsp;stating&nbsp;why&nbsp;it&nbsp;was&nbsp;stripped.
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 115&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;neccessary&nbsp;as&nbsp;anonymous&nbsp;functions&nbsp;are&nbsp;replaced&nbsp;with&nbsp;an&nbsp;auto-generated
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 116&nbsp;&nbsp;&nbsp;&nbsp;reference.&nbsp;So&nbsp;if&nbsp;two&nbsp;identical&nbsp;anonymous&nbsp;functions&nbsp;are&nbsp;stored&nbsp;two&nbsp;separate
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 117&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;strucutres,&nbsp;they&nbsp;will&nbsp;fail&nbsp;any&nbsp;comparison&nbsp;as&nbsp;the&nbsp;references&nbsp;are&nbsp;different.
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 118&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;why&nbsp;we&nbsp;must&nbsp;strip&nbsp;out&nbsp;these&nbsp;functions.&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 119&nbsp;&nbsp;&nbsp;&nbsp;[ast-tree]
+                </span><br/>
+<span class="not-covered" title="0 out of 132 forms covered">
+                 120&nbsp;&nbsp;&nbsp;&nbsp;(setval
+                </span><br/>
+<span class="not-covered" title="0 out of 2 forms covered">
+                 121&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(recursive-path&nbsp;[]&nbsp;p
+                </span><br/>
+<span class="not-covered" title="0 out of 4 forms covered">
+                 122&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(walker&nbsp;:st-func-calls)&nbsp;(stay-then-continue&nbsp;[:st-func-calls&nbsp;p])])
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 123&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:st-func-calls]&nbsp;&quot;SYMBOL&nbsp;TABLE&nbsp;FUNCTIONS&nbsp;ARE&nbsp;HERE.&nbsp;THE&nbsp;AUTO-GENERATED&nbsp;IDENTIFIER&nbsp;FOR&nbsp;THE&nbsp;FUNCTION&nbsp;CALL&nbsp;HAS&nbsp;BEEN&nbsp;STRIPPED&nbsp;OUT&nbsp;AND&nbsp;REPLACED&nbsp;WITH&nbsp;THIS&nbsp;MESSAGE&quot;
+                </span><br/>
+<span class="not-covered" title="0 out of 1 forms covered">
+                 124&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ast-tree))
+                </span><br/>
+ </body>
+</html>

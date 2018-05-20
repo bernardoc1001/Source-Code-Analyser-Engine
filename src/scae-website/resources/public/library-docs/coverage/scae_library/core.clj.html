@@ -1,0 +1,137 @@
+<html>
+ <head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="stylesheet" href="../coverage.css"/>  <title> scae_library/core.clj </title>
+ </head>
+ <body>
+<span class="covered" title="1 out of 1 forms covered">
+                 001&nbsp;&nbsp;(ns&nbsp;scae-library.core
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 002&nbsp;&nbsp;&nbsp;&nbsp;&quot;This&nbsp;namespace&nbsp;is&nbsp;the&nbsp;main&nbsp;&#x27;engine&#x27;&nbsp;or&nbsp;entry&nbsp;point&nbsp;of&nbsp;the&nbsp;library,&nbsp;it&nbsp;receives
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 003&nbsp;&nbsp;&nbsp;&nbsp;requests&nbsp;and&nbsp;calls&nbsp;the&nbsp;other&nbsp;namespaces&nbsp;to&nbsp;perform&nbsp;the&nbsp;analysis,&nbsp;then&nbsp;returns&nbsp;the
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 004&nbsp;&nbsp;&nbsp;&nbsp;result&nbsp;to&nbsp;the&nbsp;caller.&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 005&nbsp;&nbsp;&nbsp;&nbsp;(:require&nbsp;[scae-library.tokeniser&nbsp;:as&nbsp;tokeniser]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 006&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[scae-library.abstract-syntax-tree&nbsp;:as&nbsp;ast]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 007&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[scae-library.symbol-table&nbsp;:as&nbsp;st]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 008&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[scae-library.style-analyser&nbsp;:as&nbsp;sa]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 009&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[scae-library.node-ops&nbsp;:as&nbsp;node-ops]&nbsp;;;todo&nbsp;review&nbsp;if&nbsp;I&nbsp;need&nbsp;this&nbsp;here
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 010&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[clojure.data.json&nbsp;:as&nbsp;json]))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 011&nbsp;&nbsp;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 012&nbsp;&nbsp;;;todo&nbsp;make&nbsp;functions&nbsp;to&nbsp;just&nbsp;return&nbsp;ast&nbsp;or&nbsp;just&nbsp;return&nbsp;symbol&nbsp;table
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 013&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 014&nbsp;&nbsp;(defn&nbsp;analyse-source-code
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 015&nbsp;&nbsp;&nbsp;&nbsp;&quot;Expects&nbsp;a&nbsp;map&nbsp;with&nbsp;the&nbsp;following&nbsp;keys&nbsp;{:code&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x27;string&#x27;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 016&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:rulebook&nbsp;&#x27;string&#x27;}&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 017&nbsp;&nbsp;&nbsp;&nbsp;[request]
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                 018&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[code-string&nbsp;(:code&nbsp;request)
+                </span><br/>
+<span class="covered" title="7 out of 7 forms covered">
+                 019&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rulebook-map&nbsp;(json&#x2F;read-str&nbsp;(:rulebook&nbsp;request)&nbsp;:key-fn&nbsp;keyword)
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 020&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abstract-syntax-tree
+                </span><br/>
+<span class="covered" title="2 out of 2 forms covered">
+                 021&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&nbsp;code-string
+                </span><br/>
+<span class="covered" title="5 out of 5 forms covered">
+                 022&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tokeniser&#x2F;tokenise-code&nbsp;(:tokens&nbsp;rulebook-map))
+                </span><br/>
+<span class="covered" title="4 out of 4 forms covered">
+                 023&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ast&#x2F;create-abstract-syntax-tree&nbsp;(:productions&nbsp;rulebook-map)))]
+                </span><br/>
+<span class="covered" title="3 out of 3 forms covered">
+                 024&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(st&#x2F;create-symbol-table&nbsp;abstract-syntax-tree)
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 025&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(st&#x2F;pretty-print-symbol-table)&nbsp;;;todo&nbsp;remove&nbsp;this&nbsp;print
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 026&nbsp;&nbsp;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 027&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;todo&nbsp;tidy&nbsp;up&nbsp;by&nbsp;making&nbsp;symbol&nbsp;table&nbsp;non-global
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 028&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[suggestions
+                </span><br/>
+<span class="covered" title="6 out of 6 forms covered">
+                 029&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(sa&#x2F;analyse-style&nbsp;abstract-syntax-tree&nbsp;(:style-rules&nbsp;rulebook-map))]
+                </span><br/>
+<span class="covered" title="2 out of 2 forms covered">
+                 030&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(st&#x2F;reset-symbol-table!)
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 031&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;suggestions)))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 032&nbsp;&nbsp;
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 033&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 034&nbsp;&nbsp;(defn&nbsp;generate-ast
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 035&nbsp;&nbsp;&nbsp;&nbsp;&quot;Expects&nbsp;a&nbsp;map&nbsp;with&nbsp;the&nbsp;following&nbsp;keys&nbsp;{:code&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#x27;string&#x27;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 036&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:rulebook&nbsp;&#x27;string&#x27;}&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 037&nbsp;&nbsp;&nbsp;&nbsp;[request]
+                </span><br/>
+<span class="not-covered" title="0 out of 4 forms covered">
+                 038&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[code-string&nbsp;(:code&nbsp;request)
+                </span><br/>
+<span class="not-covered" title="0 out of 7 forms covered">
+                 039&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rulebook-map&nbsp;(json&#x2F;read-str&nbsp;(:rulebook&nbsp;request)&nbsp;:key-fn&nbsp;keyword)]
+                </span><br/>
+<span class="not-covered" title="0 out of 2 forms covered">
+                 040&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&nbsp;code-string
+                </span><br/>
+<span class="not-covered" title="0 out of 5 forms covered">
+                 041&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tokeniser&#x2F;tokenise-code&nbsp;(:tokens&nbsp;rulebook-map))
+                </span><br/>
+<span class="not-covered" title="0 out of 5 forms covered">
+                 042&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ast&#x2F;create-abstract-syntax-tree&nbsp;(:productions&nbsp;rulebook-map))
+                </span><br/>
+<span class="not-covered" title="0 out of 1 forms covered">
+                 043&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(st&#x2F;strip-st-functions))))
+                </span><br/>
+ </body>
+</html>

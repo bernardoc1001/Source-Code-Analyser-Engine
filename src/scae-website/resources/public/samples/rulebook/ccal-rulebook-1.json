@@ -104,7 +104,7 @@
   "style-rules" : {
     "style-rules-function-definitions" : {
 
-      "funcBInParamOfFuncA->funcC" : "(defn funcBInParamOfFuncA->funcC [ast-node] (if (and (= (-> (scae-library.node-ops/get-nth-named-child ast-node 0 \"identifier\") (scae-library.node-ops/get-nth-named-child 0 :ID) (:token-value)) \"funcA\") (= (-> (scae-library.node-ops/get-nth-named-child ast-node 0 \"statement-prime\") (scae-library.node-ops/get-nth-named-child 0 \"arg-list\") (scae-library.node-ops/get-nth-named-child 0 \"nemp-arg-list\") (scae-library.node-ops/get-nth-named-child 0 \"identifier\") (scae-library.node-ops/get-nth-named-child 0 :ID) (:token-value)) \"funcB\")) \"Instead of calling funcB as the first parameter of funcA, try calling funcC\" \"\"))"
+      "funcBInParamOfFuncA->funcC" : "(defn funcBInParamOfFuncA->funcC [ast-node] (if (and (= (-> (scae-library.node-ops/get-nth-named-child ast-node 0 \"identifier\") (scae-library.node-ops/get-nth-named-child 0 :ID) (:token-value)) \"funcA\") (= (-> (scae-library.node-ops/get-nth-named-child ast-node 0 \"statement-prime\") (scae-library.node-ops/get-nth-named-child 0 \"arg-list\") (scae-library.node-ops/get-nth-named-child 0 \"nemp-arg-list\") (scae-library.node-ops/get-nth-named-child 0 \"identifier\") (scae-library.node-ops/get-nth-named-child 0 :ID) (:token-value)) \"funcB\")) \"Instead of calling funcB as the first parameter of funcA, try calling funcC \" \"\"))"
 
   },
 

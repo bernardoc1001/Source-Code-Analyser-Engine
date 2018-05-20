@@ -1,4 +1,7 @@
 (ns scae-library.symbol-table
+  "This namespace is responsible for creating a symbol table for the Abstract
+  Sytnax Tree. This namespace is operational, but has currently not been incorporated
+  into the style analysis of the Abstract Syntax Tree"
   (:require [clojure.string :refer [blank?]]
             [clojure.pprint :refer [pprint]]
             [com.rpl.specter :refer :all]))
@@ -13,10 +16,14 @@
          }))
 
 
-(defn pretty-print-symbol-table []
+(defn pretty-print-symbol-table
+  "Pretty Print the symbol table"
+  []
   (pprint @symbol-table))
 
-(defn reset-symbol-table! []
+(defn reset-symbol-table!
+  "Reset the symbol table"
+  []
   (reset! symbol-table {:current-scope-name GLOBAL_SCOPE_NAME
                         :previous-scope-name-stack []
                         :scope-map {GLOBAL_SCOPE_NAME {}}
@@ -85,8 +92,8 @@
    (get-from-scope st-entry-name (get-current-scope-name))))
 
 
-;;todo move this func to a common namespace
 (defn- eval-code
+  "Evaluates a piece of code. Can take in the code as either a string or as code."
   [unevaled-code]
   (if (string? unevaled-code)
     (eval (read-string unevaled-code))
@@ -94,6 +101,7 @@
 
 
 (defn create-symbol-table
+  "Create the symbol table."
   [ast-node]
   (doseq [entry (:parsed-node-result ast-node)]
     (do

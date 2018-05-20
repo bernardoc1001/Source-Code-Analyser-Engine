@@ -6,14 +6,16 @@
             [scae-library.abstract-syntax-tree :as ast]
             [scae-library.symbol-table :as st]
             [scae-library.style-analyser :as sa]
-            [scae-library.node-ops :as node-ops] ;;todo review if I need this here
+            [scae-library.node-ops :as node-ops]
             [clojure.data.json :as json]))
 
-;;todo make functions to just return ast or just return symbol table
 
-#_(defn analyse-source-code
-  "Expects a map with the following keys {:code     'string'
-                                          :rulebook 'string'}"
+(defn analyse-source-code
+  "Expects a request containing a  hash-map with the following keys
+  {:code     'string'
+   :rulebook 'string'}
+   Will return a collection of strings denoting any style suggestions to improve
+   code quality."
   [request]
   (let [code-string (:code request)
         rulebook-map (json/read-str (:rulebook request) :key-fn keyword)
@@ -22,23 +24,23 @@
             (tokeniser/tokenise-code (:tokens rulebook-map))
             (ast/create-abstract-syntax-tree (:productions rulebook-map)))]
     (st/create-symbol-table abstract-syntax-tree)
-    ;;(st/pretty-print-symbol-table) ;;todo remove this print
+    ;;(st/pretty-print-symbol-table)
 
-    ;;todo tidy up by making symbol table non-global
     (let [suggestions
           (sa/analyse-style abstract-syntax-tree (:style-rules rulebook-map))]
       (st/reset-symbol-table!)
       suggestions)))
 
 
-(defn analyse-source-code
-  "Expects a map with the following keys {:code     'string'
-                                          :rulebook 'string'}"
+(defn generate-ast
+  "Expects a request containing a  hash-map with the following keys
+  {:code     'string'
+  :rulebook 'string'}
+  Will return the corresponding Abstract Syntax Tree"
   [request]
   (let [code-string (:code request)
-        rulebook-map (json/read-str (:rulebook request) :key-fn keyword)
-
-        ]
+        rulebook-map (json/read-str (:rulebook request) :key-fn keyword)]
     (-> code-string
         (tokeniser/tokenise-code (:tokens rulebook-map))
-        (ast/create-abstract-syntax-tree (:productions rulebook-map)))))
+        (ast/create-abstract-syntax-tree (:productions rulebook-map))
+        (st/strip-st-functions))))

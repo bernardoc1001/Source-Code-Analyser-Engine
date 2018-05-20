@@ -1,6 +1,12 @@
-<!--
-The video walk through is [here](FIX-ME).
--->
+
+The video walk through is [here](https://drive.google.com/open?id=1v7eWtw6HxhMDMXWvUoo8hI-FksJImupQ).
+
+The above link was the requested Google Drive Submision link.
+
+I have also uploaded the video directly to youtube on my DCU youtube account [here](https://www.youtube.com/watch?v=1J9sGMddxmo)
+
+The video and other documentation is also available on the project website [here](http://www.source-code-analyser-engine.com/documentation)
+
 
 Instructions:
 

@@ -1,0 +1,37 @@
+{"tokens" : [
+  {"skip":{
+    "COMMENT": "(?:;(?:.)*)",
+    "TAB" : "\t",
+    "NEWLINE" : "\n",
+    "CARRIAGE_RETURN" : "\r",
+    "FORM_FEED" : "\f"
+  }},
+
+
+  {"token" : {
+    "LPAR" : "\\(",
+    "RPAR" : "\\)",
+    "LSQU" : "\\[",
+    "RSQU" : "\\]",
+    "LCUR" : "\\{",
+    "RCUR" : "\\}"}}
+
+],
+  "productions": {
+    "scae-forward-declarations":"(declare scae-program YOUR-production-rule-1 YOUR-production-rule-2)",
+    "scae-program": "(defn scae-program [] [['(YOUR-production-rule-1)] [[]] ])",
+    "scae-entry-point": "(scae-program)",
+
+    "YOUR-production-rule-1": "(defn YOUR-production-rule-1 [] [['(YOUR-production-rule-2) :TOKEN-KEY-4)] [[]] ])",
+    "YOUR-production-rule-2":"(defn YOUR-production-rule-2 [] [[:TOKEN-KEY-1 :TOKEN-KEY-2] [:TOKEN-KEY-1 :TOKEN-KEY-3] ])"
+
+
+  },
+  "style-rules": {
+    "style-rules-function-definitions":{
+      "YOUR-style-function-1" : "(defn YOUR-style-function-1 [ast-node] your logic here. Return a string with a suggestion or an empty string)"
+    },
+    "node-based-style-rules" : {
+      "YOUR-node-name-to-apply-rules-to-1" : "[YOUR-style-function-1]"
+      }
+  }}

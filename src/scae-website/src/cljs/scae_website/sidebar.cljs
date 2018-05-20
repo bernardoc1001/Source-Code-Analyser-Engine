@@ -6,14 +6,14 @@
   [:div#sidebar-wrapper
    [:ul.sidebar-nav
     (let [home-link [:li>a {:href "/"} "Home"]
+          code-submission-link [:li>a {:href "/code-submission"} "Code Submission"]
           documentation-link [:li>a {:href "/documentation"} "Documentation"]
-          download-link [:li>a {:href "/download"} "Download"]
-          code-submission-link [:li>a {:href "/code-submission"} "Code Submission"]]
+          download-link [:li>a {:href "/download"} "Download"]]
       [:div
        home-link
+       code-submission-link
        documentation-link
-       download-link
-       code-submission-link])]])
+       download-link])]])
 
 (defn menu-toggle-render []
   [:div.btn.btn-default {:aria-label "Nav-Menu Toggle Button"}

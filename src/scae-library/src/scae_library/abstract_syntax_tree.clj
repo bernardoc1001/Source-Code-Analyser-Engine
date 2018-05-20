@@ -1,7 +1,10 @@
 (ns scae-library.abstract-syntax-tree
+  "This namespace is responsible for generating the Abstract Syntax Tree"
   (:require [clojure.pprint :refer [pprint]]))
 
 (defn code->node
+  "Converts a piece of code into a temporary production node, which will
+  then be converted into and Abstract Syntax Tree Node"
   [code]
   (let [unevaled-code (if (string? code)
                         (read-string code)
@@ -11,6 +14,7 @@
 
 ;; Credit for the function count-tokens: https://stackoverflow.com/a/48389794
 (defn count-tokens
+  "Returns a count of the nested tokens in a collection"
   [coll]
   (->> coll
        (tree-seq coll? seq)
@@ -18,10 +22,9 @@
        count))
 
 (declare parse-production-rule)
-;;todo investigate loop - recur combo for tail optimisation
-
 ;;recursively check single elem of inner vec at a time to easily parse through tokens
 (defn parse-single-option
+  "Parses a single option / branch / inner vector of a production rule"
   [tokens option-vec]
   ;;(println "current parse token: " (first tokens))
   ;;(println "current parse option-vec: " option-vec)
@@ -81,6 +84,7 @@
 
 
 (defn parse-production-rule
+  "Parses a single production rule."
   [tokenised-code production-rule]
   ;;(println "prod rule: " production-rule)
   (let [filtered-tokens (filter #(= (:token-type %) :token) tokenised-code)
@@ -91,13 +95,10 @@
             #_(println "node name: " (:node-name production-node))
             (hash-map :parsed-node-name (:node-name production-node)
                       :parsed-node-result (parse-single-option filtered-tokens option-vec))))]
-    ;;TODO remove prints
-    #_(println "CODE->Node input: \n" production-rule)
-    #_(println "CODE->NODE output: \n" production-node)
-
     (first (filter #(not (nil? (:parsed-node-result %))) all-options-parsed))))
 
 (defn create-abstract-syntax-tree
+  "Creates the Abstract Syntax Tree as a nested map of Nodes"
   [tokenised-code production-rules]
   (eval (read-string (:scae-forward-declarations production-rules)))
   (eval (read-string (:scae-program production-rules)))

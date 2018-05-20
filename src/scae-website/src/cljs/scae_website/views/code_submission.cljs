@@ -93,11 +93,14 @@
     [bad-style-regex "(SCAE Bad-Style:)(.*$)"]
     (->>
       (for [suggestion suggestions-response]
-        (->>
-          (re-seq (re-pattern bad-style-regex) suggestion)
-          (first)
-          (last)
-          (c-str/trim)))
+        (let [bad-style-pattern
+              (->>
+                (re-seq (re-pattern bad-style-regex) suggestion)
+                (first)
+                (last))]
+          (if (nil? bad-style-pattern)
+            ""
+            (c-str/trim bad-style-pattern))))
       (distinct)
       (vec)
       (remove nil?)
@@ -203,13 +206,13 @@
 
 (defn rulebook-url-success-handler
   [response]
+  ;; Swap data into page-state
   (swap! page-state assoc-in [:data :rulebook] (str response))
-  ;; now check if we have to retrieve any code from an external url. Else proceed
-  ;; with submitting the data to the library
-  (if (= (:code-method @page-state)
-         "url")
-    (submit-code-url-procedure)
-    (post-code-submission (:data @page-state))))
+  ;; Reflect the gotten data in the editors
+  (update-editor "code-text-area" "code")
+  (update-editor "rulebook-text-area" "rulebook")
+  ;;post to the library
+  (post-code-submission (:data @page-state)))
 
 (defn submit-rulebook-url-procedure []
   (GET (get-in @page-state [:rulebook-url-address])
@@ -271,10 +274,10 @@
                :defaultValue "default"
                :required     "required"
                :on-change    #(common/onchange-swap-atom! page-state [(keyword (str input-type "-method"))] %)}
-      [:option {:value (str "existing-" input-type)} (str "Use existing " input-type)]
-      [:option {:value "url"} (str "Link to external " input-type)]
-      [:option {:value "manually-enter"} (str "Manually enter " input-type)]
-      [:option {:value "file-upload"} (str "Upload " input-type " file")]]]
+      [:option {:value "manually-enter"} (str "Manually Enter " (c-str/capitalize input-type))]
+      [:option {:value (str "existing-" input-type)} (str "Use Existing " (c-str/capitalize input-type))]
+      [:option {:value "file-upload"} (str "Upload " (c-str/capitalize input-type) " File")]
+      [:option {:value "url"} (str "Link to External " (c-str/capitalize input-type))]]]
     (do
       (.error js/console "Invalid Input Type: " input-type)
       "ERROR INVALID INPUT TYPE: " input-type)))
@@ -378,7 +381,8 @@
             :form        "code-submission-form"
             :class       "form-control"
             :placeholder (str "Enter " (c-str/capitalize input-type) " URL...")
-            :value       (get-in @page-state [:code-url-address]) ;; initially set to current value
+            :value       (get-in @page-state [(keyword
+                                                (str input-type "-url-address"))]) ;; initially set to current value
             :on-change   #(common/onchange-swap-atom!
                             page-state [(keyword
                                           (str input-type "-url-address"))]
@@ -441,7 +445,7 @@
 (defn submission-form []
   [:div
    [:form {:id       "submission-form"
-           :onSubmit #(submit-procedure (:data @page-state) false)} ;;TODO look into ajax calls instead of form submission
+           :onSubmit #(submit-procedure (:data @page-state) false)}
     [:div {:id "code"}
      [submission-input "code"]]
     [:div {:id "rulebook"}
@@ -518,14 +522,7 @@
       [:div {:class "panel-body"}
        [:div {:class "row"}
         [:div {:class "col-sm-12"}
-         [submission-form]
-
-         ;;todo remove debugging info below
-         ;;[:p "pagestate: " @page-state]
-         ;;[:p "returned suggestons: " (:returned-suggestions @page-state)]
-         ;;[:p "returned errors: " (:returned-errors @page-state)]
-         ;;[:p "value in dropdown: " (.val (js/$ "#rulebook-type-selection"))]
-         ]]]]]]])
+         [submission-form]]]]]]]])
 
 (defn code-submission-did-mount []
   (refresh-dropdown-by-id "code-method-selection")
