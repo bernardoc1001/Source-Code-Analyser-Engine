@@ -54,7 +54,8 @@
        [:div
         [:ul {:class "list-unstyled"}
          [:li "Quickly prototype without having to install"]
-         [:li "Make calls to the public API"]]]]
+         [:li "Make calls to the public "
+          [:a {:href "https://documenter.getpostman.com/view/4021417/RW87op7E"} " API "]]]]]
       [common/text-pannel-template "col-xs-12 col-md-6 col-lg-3"
        "Contribute to the project"
        [:div

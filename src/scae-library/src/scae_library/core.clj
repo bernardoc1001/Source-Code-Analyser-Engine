@@ -24,7 +24,6 @@
             (tokeniser/tokenise-code (:tokens rulebook-map))
             (ast/create-abstract-syntax-tree (:productions rulebook-map)))]
     (st/create-symbol-table abstract-syntax-tree)
-    ;;(st/pretty-print-symbol-table)
 
     (let [suggestions
           (sa/analyse-style abstract-syntax-tree (:style-rules rulebook-map))]

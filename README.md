@@ -1,54 +1,17 @@
-# My Project Title
+## Source Code Analyser Engine
 
-This is a template for CA400 projects.  Please read these instructions carefully.
+The project is the Source Code Analyser Engine. The aim of the project is to create a library that can be 
+used to promote the writing of quality code, that other developers may use to asses their own code or 
+to incorporate into their own projects.
 
-This file is written in
-[markdown](https://guides.github.com/features/mastering-markdown/).  Markdown
-is a suitable format for documents stored in git repositories.
+The project is split into two sub projects / components; the Library and the Web
+Application.
 
-## Instructions
+The Library is the main focus of the project. The library is what analyses the source code and returns 
+either style suggestions or the generated
+Abstract Syntax Tree.
 
-You *must* do the following:
-
-1 - Fork this repo.
-
-2 - Rename your fork using the format (all lower case letters)
-
-    2018-ca400-username
-
-replacing `username` with your School of Computing login name.
-
-For example, if Stephen Blott were to be doing a fourth-year project, he would rename
-his repo as:
-
- 2018-ca400-sblott
-
-You can rename your repo by selecting *Edit Project* from the drop-down menu
-(with a gear icon) on the top right of your project's home page.  Change the
-*Project name* field **and** the *Path*.
-
-You should also update the *Project description*.
-
-3 - This directory has two sub-directories.
-
-- All of your source code should be placed in the `src` sub-directory.
-
-- All of your documentation should be placed in the `docs` sub-directory.
-
-- Your project blog should be placed in the `blog` sub-directory. 
-
-
-4 - There is further important documentation in the `docs` directory.  Read that next.
-
-When you are have followed all of these instructions and are sure that you
-understand what is expected, you may replace the contents of this file with a
-brief description of your project (two or three paragraphs).
-
-## Additional Resources
-
-- Git [cheat sheet](https://gitlab.computing.dcu.ie/sblott/local-gitlab-documentation/blob/master/cheat-sheet.md)
-- Gitlab [CI environment](https://gitlab.computing.dcu.ie/sblott/docker-ci-environment) and it's [available software](https://gitlab.computing.dcu.ie/sblott/docker-ci-environment/blob/master/Dockerfile)
-- Example projects with CI configured:
-   * [Python](https://gitlab.computing.dcu.ie/sblott/test-project-python)
-   * [Java](https://gitlab.computing.dcu.ie/sblott/test-project-java)
-   * [MySql](https://gitlab.computing.dcu.ie/sblott/test-project-mysql)
+The Web Application acts as both the home of the project and as an example of the types of
+applications a user of the Library could make. The Web Application
+offers a number of services that’s 
+allow the user to try out the library before installing it locally.

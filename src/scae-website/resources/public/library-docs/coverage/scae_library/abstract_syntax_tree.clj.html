@@ -8,292 +8,292 @@
                  001&nbsp;&nbsp;(ns&nbsp;scae-library.abstract-syntax-tree
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 002&nbsp;&nbsp;&nbsp;&nbsp;(:require&nbsp;[clojure.pprint&nbsp;:refer&nbsp;[pprint]]))
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                 003&nbsp;&nbsp;
-                </span><br/>
-<span class="covered" title="1 out of 1 forms covered">
-                 004&nbsp;&nbsp;(defn&nbsp;code-&gt;node
+                 002&nbsp;&nbsp;&nbsp;&nbsp;&quot;This&nbsp;namespace&nbsp;is&nbsp;responsible&nbsp;for&nbsp;generating&nbsp;the&nbsp;Abstract&nbsp;Syntax&nbsp;Tree&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 005&nbsp;&nbsp;&nbsp;&nbsp;[code]
+                 003&nbsp;&nbsp;&nbsp;&nbsp;(:require&nbsp;[clojure.pprint&nbsp;:refer&nbsp;[pprint]]))
+                </span><br/>
+<span class="blank" title="0 out of 0 forms covered">
+                 004&nbsp;&nbsp;
+                </span><br/>
+<span class="covered" title="1 out of 1 forms covered">
+                 005&nbsp;&nbsp;(defn&nbsp;code-&gt;node
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 006&nbsp;&nbsp;&nbsp;&nbsp;&quot;Converts&nbsp;a&nbsp;piece&nbsp;of&nbsp;code&nbsp;into&nbsp;a&nbsp;temporary&nbsp;production&nbsp;node,&nbsp;which&nbsp;will
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 007&nbsp;&nbsp;&nbsp;&nbsp;then&nbsp;be&nbsp;converted&nbsp;into&nbsp;and&nbsp;Abstract&nbsp;Syntax&nbsp;Tree&nbsp;Node&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 008&nbsp;&nbsp;&nbsp;&nbsp;[code]
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                 006&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[unevaled-code&nbsp;(if&nbsp;(string?&nbsp;code)
+                 009&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[unevaled-code&nbsp;(if&nbsp;(string?&nbsp;code)
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 007&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(read-string&nbsp;code)
+                 010&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(read-string&nbsp;code)
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 008&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code)]
+                 011&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code)]
                 </span><br/>
 <span class="covered" title="9 out of 9 forms covered">
-                 009&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(hash-map&nbsp;:node-name&nbsp;(name&nbsp;(first&nbsp;unevaled-code))
+                 012&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(hash-map&nbsp;:node-name&nbsp;(name&nbsp;(first&nbsp;unevaled-code))
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 010&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:node-value&nbsp;(eval&nbsp;unevaled-code))))
+                 013&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:node-value&nbsp;(eval&nbsp;unevaled-code))))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 011&nbsp;&nbsp;
+                 014&nbsp;&nbsp;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 012&nbsp;&nbsp;;;&nbsp;Credit&nbsp;for&nbsp;the&nbsp;function&nbsp;count-tokens:&nbsp;https:&#x2F;&#x2F;stackoverflow.com&#x2F;a&#x2F;48389794
+                 015&nbsp;&nbsp;;;&nbsp;Credit&nbsp;for&nbsp;the&nbsp;function&nbsp;count-tokens:&nbsp;https:&#x2F;&#x2F;stackoverflow.com&#x2F;a&#x2F;48389794
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 013&nbsp;&nbsp;(defn&nbsp;count-tokens
+                 016&nbsp;&nbsp;(defn&nbsp;count-tokens
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 014&nbsp;&nbsp;&nbsp;&nbsp;[coll]
+                 017&nbsp;&nbsp;&nbsp;&nbsp;&quot;Returns&nbsp;a&nbsp;count&nbsp;of&nbsp;the&nbsp;nested&nbsp;tokens&nbsp;in&nbsp;a&nbsp;collection&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 018&nbsp;&nbsp;&nbsp;&nbsp;[coll]
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 015&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&gt;&nbsp;coll
+                 019&nbsp;&nbsp;&nbsp;&nbsp;(-&gt;&gt;&nbsp;coll
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 016&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tree-seq&nbsp;coll?&nbsp;seq)
+                 020&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(tree-seq&nbsp;coll?&nbsp;seq)
                 </span><br/>
 <span class="covered" title="8 out of 8 forms covered">
-                 017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(keep&nbsp;#(get-in&nbsp;%&nbsp;[:token-key]))
+                 021&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(keep&nbsp;#(get-in&nbsp;%&nbsp;[:token-key]))
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 018&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count))
+                 022&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 019&nbsp;&nbsp;
+                 023&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 020&nbsp;&nbsp;(declare&nbsp;parse-production-rule)
+                 024&nbsp;&nbsp;(declare&nbsp;parse-production-rule)
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 021&nbsp;&nbsp;;;todo&nbsp;investigate&nbsp;loop&nbsp;-&nbsp;recur&nbsp;combo&nbsp;for&nbsp;tail&nbsp;optimisation
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                 022&nbsp;&nbsp;
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                 023&nbsp;&nbsp;;;recursively&nbsp;check&nbsp;single&nbsp;elem&nbsp;of&nbsp;inner&nbsp;vec&nbsp;at&nbsp;a&nbsp;time&nbsp;to&nbsp;easily&nbsp;parse&nbsp;through&nbsp;tokens
+                 025&nbsp;&nbsp;;;recursively&nbsp;check&nbsp;single&nbsp;elem&nbsp;of&nbsp;inner&nbsp;vec&nbsp;at&nbsp;a&nbsp;time&nbsp;to&nbsp;easily&nbsp;parse&nbsp;through&nbsp;tokens
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 024&nbsp;&nbsp;(defn&nbsp;parse-single-option
+                 026&nbsp;&nbsp;(defn&nbsp;parse-single-option
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 025&nbsp;&nbsp;&nbsp;&nbsp;[tokens&nbsp;option-vec]
+                 027&nbsp;&nbsp;&nbsp;&nbsp;&quot;Parses&nbsp;a&nbsp;single&nbsp;option&nbsp;&#x2F;&nbsp;branch&nbsp;&#x2F;&nbsp;inner&nbsp;vector&nbsp;of&nbsp;a&nbsp;production&nbsp;rule&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 026&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;current&nbsp;parse&nbsp;token:&nbsp;&quot;&nbsp;(first&nbsp;tokens))
+                 028&nbsp;&nbsp;&nbsp;&nbsp;[tokens&nbsp;option-vec]
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 027&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;current&nbsp;parse&nbsp;option-vec:&nbsp;&quot;&nbsp;option-vec)
+                 029&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;current&nbsp;parse&nbsp;token:&nbsp;&quot;&nbsp;(first&nbsp;tokens))
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 030&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;current&nbsp;parse&nbsp;option-vec:&nbsp;&quot;&nbsp;option-vec)
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 028&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(seq&nbsp;option-vec)
+                 031&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(seq&nbsp;option-vec)
                 </span><br/>
 <span class="covered" title="16 out of 16 forms covered">
-                 029&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do&nbsp;(if&nbsp;(and&nbsp;(list?&nbsp;(first&nbsp;option-vec))&nbsp;(not-empty&nbsp;(first&nbsp;option-vec)))
+                 032&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do&nbsp;(if&nbsp;(and&nbsp;(list?&nbsp;(first&nbsp;option-vec))&nbsp;(not-empty&nbsp;(first&nbsp;option-vec)))
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 030&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;&nbsp;If&nbsp;we&nbsp;see&nbsp;a&nbsp;list&nbsp;here,&nbsp;thats&nbsp;a&nbsp;function&nbsp;call&nbsp;to&nbsp;another&nbsp;production&nbsp;rule
+                 033&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;&nbsp;If&nbsp;we&nbsp;see&nbsp;a&nbsp;list&nbsp;here,&nbsp;thats&nbsp;a&nbsp;function&nbsp;call&nbsp;to&nbsp;another&nbsp;production&nbsp;rule
                 </span><br/>
 <span class="covered" title="7 out of 7 forms covered">
-                 031&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[inner-func-node&nbsp;(parse-production-rule&nbsp;tokens&nbsp;(first&nbsp;option-vec))]
+                 034&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[inner-func-node&nbsp;(parse-production-rule&nbsp;tokens&nbsp;(first&nbsp;option-vec))]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 032&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(:parsed-node-result&nbsp;inner-func-node)
+                 035&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(:parsed-node-result&nbsp;inner-func-node)
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 033&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
+                 036&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 034&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;inner&nbsp;func&nbsp;node&nbsp;result:&nbsp;\n&quot;&nbsp;(:parsed-node-result&nbsp;inner-func-node))
+                 037&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;inner&nbsp;func&nbsp;node&nbsp;result:&nbsp;\n&quot;&nbsp;(:parsed-node-result&nbsp;inner-func-node))
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 035&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;here&nbsp;i&nbsp;want&nbsp;to&nbsp;remove&nbsp;tokens&nbsp;in&nbsp;result&nbsp;from&nbsp;tokens,&nbsp;then&nbsp;remove&nbsp;head&nbsp;of&nbsp;option,
+                 038&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;here&nbsp;i&nbsp;want&nbsp;to&nbsp;remove&nbsp;tokens&nbsp;in&nbsp;result&nbsp;from&nbsp;tokens,&nbsp;then&nbsp;remove&nbsp;head&nbsp;of&nbsp;option,
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 036&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;&nbsp;then&nbsp;continue&nbsp;parsing&nbsp;the&nbsp;rest&nbsp;of&nbsp;the&nbsp;current&nbsp;option&nbsp;vector
+                 039&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;&nbsp;then&nbsp;continue&nbsp;parsing&nbsp;the&nbsp;rest&nbsp;of&nbsp;the&nbsp;current&nbsp;option&nbsp;vector
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 037&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[recursive-result-after-inner-func
+                 040&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[recursive-result-after-inner-func
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 038&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(parse-single-option&nbsp;(drop
+                 041&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(parse-single-option&nbsp;(drop
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                 039&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(count-tokens&nbsp;(:parsed-node-result&nbsp;inner-func-node))
+                 042&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(count-tokens&nbsp;(:parsed-node-result&nbsp;inner-func-node))
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 040&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tokens)
+                 043&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tokens)
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 041&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rest&nbsp;option-vec))]
+                 044&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(rest&nbsp;option-vec))]
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 042&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;recursive-result-after-inner-func:&nbsp;&quot;&nbsp;recursive-result-after-inner-func)
+                 045&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;recursive-result-after-inner-func:&nbsp;&quot;&nbsp;recursive-result-after-inner-func)
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 043&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;recursive-result-after-inner-func
+                 046&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;recursive-result-after-inner-func
                 </span><br/>
 <span class="covered" title="5 out of 5 forms covered">
-                 044&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(concat&nbsp;[inner-func-node]&nbsp;recursive-result-after-inner-func)))
+                 047&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(concat&nbsp;[inner-func-node]&nbsp;recursive-result-after-inner-func)))
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 045&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)))
+                 048&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)))
                 </span><br/>
 <span class="covered" title="11 out of 11 forms covered">
-                 046&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(=&nbsp;(:token-key&nbsp;(first&nbsp;tokens))&nbsp;(first&nbsp;option-vec))
+                 049&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(=&nbsp;(:token-key&nbsp;(first&nbsp;tokens))&nbsp;(first&nbsp;option-vec))
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 047&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
+                 050&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 048&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;(first&nbsp;tokens)&nbsp;&quot;&nbsp;==&nbsp;&quot;&nbsp;(first&nbsp;option-vec))
+                 051&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;(first&nbsp;tokens)&nbsp;&quot;&nbsp;==&nbsp;&quot;&nbsp;(first&nbsp;option-vec))
                 </span><br/>
 <span class="covered" title="9 out of 9 forms covered">
-                 049&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[recursive-call-result&nbsp;(parse-single-option&nbsp;(rest&nbsp;tokens)&nbsp;(rest&nbsp;option-vec))]
+                 052&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[recursive-call-result&nbsp;(parse-single-option&nbsp;(rest&nbsp;tokens)&nbsp;(rest&nbsp;option-vec))]
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 050&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;recursive-call-result
+                 053&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;recursive-call-result
                 </span><br/>
 <span class="covered" title="8 out of 8 forms covered">
-                 051&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(concat&nbsp;(vector&nbsp;(first&nbsp;tokens))&nbsp;recursive-call-result)
+                 054&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(concat&nbsp;(vector&nbsp;(first&nbsp;tokens))&nbsp;recursive-call-result)
                 </span><br/>
 <span class="not-covered" title="0 out of 2 forms covered">
-                 052&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
+                 055&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 053&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;recursive&nbsp;call&nbsp;result&nbsp;empty&quot;)
+                 056&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;recursive&nbsp;call&nbsp;result&nbsp;empty&quot;)
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 054&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil))))
+                 057&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil))))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 055&nbsp;&nbsp;
+                 058&nbsp;&nbsp;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 056&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;check&nbsp;for&nbsp;epsilon&nbsp;condition
+                 059&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;check&nbsp;for&nbsp;epsilon&nbsp;condition
                 </span><br/>
 <span class="covered" title="6 out of 6 forms covered">
-                 057&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(vector?&nbsp;(first&nbsp;option-vec))
+                 060&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(vector?&nbsp;(first&nbsp;option-vec))
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 058&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;&nbsp;If&nbsp;we&nbsp;see&nbsp;a&nbsp;vector&nbsp;here,&nbsp;it&#x27;s&nbsp;an&nbsp;epsilon&nbsp;transition
+                 061&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;&nbsp;If&nbsp;we&nbsp;see&nbsp;a&nbsp;vector&nbsp;here,&nbsp;it&#x27;s&nbsp;an&nbsp;epsilon&nbsp;transition
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 059&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
+                 062&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 060&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;Epsilon&nbsp;condition,&nbsp;token:&nbsp;&nbsp;&quot;&nbsp;(first&nbsp;tokens)&nbsp;&quot;&nbsp;&nbsp;and&nbsp;option-vec:&nbsp;&quot;&nbsp;option-vec)
+                 063&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;Epsilon&nbsp;condition,&nbsp;token:&nbsp;&nbsp;&quot;&nbsp;(first&nbsp;tokens)&nbsp;&quot;&nbsp;&nbsp;and&nbsp;option-vec:&nbsp;&quot;&nbsp;option-vec)
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 061&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[])
+                 064&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[])
                 </span><br/>
 <span class="covered" title="6 out of 6 forms covered">
-                 062&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(map?&nbsp;(first&nbsp;option-vec))
+                 065&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(map?&nbsp;(first&nbsp;option-vec))
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 063&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;If&nbsp;we&nbsp;see&nbsp;a&nbsp;map&nbsp;here,&nbsp;it&nbsp;contains&nbsp;symbol&nbsp;table&nbsp;function&nbsp;calls&nbsp;in&nbsp;a&nbsp;vector.
+                 066&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;If&nbsp;we&nbsp;see&nbsp;a&nbsp;map&nbsp;here,&nbsp;it&nbsp;contains&nbsp;symbol&nbsp;table&nbsp;function&nbsp;calls&nbsp;in&nbsp;a&nbsp;vector.
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 064&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;Return&nbsp;the&nbsp;map&nbsp;and&nbsp;continue&nbsp;with&nbsp;the&nbsp;parse&nbsp;without&nbsp;evaluating&nbsp;the&nbsp;symbol&nbsp;table&nbsp;calls
+                 067&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;Return&nbsp;the&nbsp;map&nbsp;and&nbsp;continue&nbsp;with&nbsp;the&nbsp;parse&nbsp;without&nbsp;evaluating&nbsp;the&nbsp;symbol&nbsp;table&nbsp;calls
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 065&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
+                 068&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
                 </span><br/>
 <span class="covered" title="7 out of 7 forms covered">
-                 066&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[continued-parsing-result&nbsp;(parse-single-option&nbsp;tokens&nbsp;(rest&nbsp;option-vec))&nbsp;;;recurisve&nbsp;call&nbsp;without&nbsp;consumming&nbsp;token
+                 069&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[continued-parsing-result&nbsp;(parse-single-option&nbsp;tokens&nbsp;(rest&nbsp;option-vec))&nbsp;;;recurisve&nbsp;call&nbsp;without&nbsp;consumming&nbsp;token
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 067&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]
+                 070&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 068&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;continued-parsing-result
+                 071&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;continued-parsing-result
                 </span><br/>
 <span class="covered" title="8 out of 8 forms covered">
-                 069&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(concat&nbsp;(vector&nbsp;(first&nbsp;option-vec))&nbsp;continued-parsing-result)&nbsp;;;concat&nbsp;the&nbsp;symbol&nbsp;table&nbsp;function&nbsp;call&nbsp;map&nbsp;with&nbsp;the&nbsp;result&nbsp;of&nbsp;the&nbsp;parse
+                 072&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(concat&nbsp;(vector&nbsp;(first&nbsp;option-vec))&nbsp;continued-parsing-result)&nbsp;;;concat&nbsp;the&nbsp;symbol&nbsp;table&nbsp;function&nbsp;call&nbsp;map&nbsp;with&nbsp;the&nbsp;result&nbsp;of&nbsp;the&nbsp;parse
                 </span><br/>
 <span class="not-covered" title="0 out of 2 forms covered">
-                 070&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
+                 073&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 071&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;recursive&nbsp;call&nbsp;result&nbsp;empty&quot;)
+                 074&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;recursive&nbsp;call&nbsp;result&nbsp;empty&quot;)
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 072&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil))))
+                 075&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil))))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 073&nbsp;&nbsp;
+                 076&nbsp;&nbsp;
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 074&nbsp;&nbsp;
+                 077&nbsp;&nbsp;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 075&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;else
+                 078&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;else
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 076&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
+                 079&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 077&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;(first&nbsp;tokens)&nbsp;&quot;&nbsp;!=&nbsp;&quot;&nbsp;(first&nbsp;option-vec))
+                 080&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;(first&nbsp;tokens)&nbsp;&quot;&nbsp;!=&nbsp;&quot;&nbsp;(first&nbsp;option-vec))
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 078&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil))))))
+                 081&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nil))))))
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 079&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[];;returning&nbsp;empty&nbsp;vec&nbsp;here&nbsp;so&nbsp;as&nbsp;not&nbsp;to&nbsp;return&nbsp;nil
+                 082&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[];;returning&nbsp;empty&nbsp;vec&nbsp;here&nbsp;so&nbsp;as&nbsp;not&nbsp;to&nbsp;return&nbsp;nil
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 080&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;))
+                 083&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 081&nbsp;&nbsp;
+                 084&nbsp;&nbsp;
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 082&nbsp;&nbsp;
+                 085&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 083&nbsp;&nbsp;(defn&nbsp;parse-production-rule
+                 086&nbsp;&nbsp;(defn&nbsp;parse-production-rule
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 084&nbsp;&nbsp;&nbsp;&nbsp;[tokenised-code&nbsp;production-rule]
+                 087&nbsp;&nbsp;&nbsp;&nbsp;&quot;Parses&nbsp;a&nbsp;single&nbsp;production&nbsp;rule.&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 085&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;prod&nbsp;rule:&nbsp;&quot;&nbsp;production-rule)
+                 088&nbsp;&nbsp;&nbsp;&nbsp;[tokenised-code&nbsp;production-rule]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 089&nbsp;&nbsp;&nbsp;&nbsp;;;(println&nbsp;&quot;prod&nbsp;rule:&nbsp;&quot;&nbsp;production-rule)
                 </span><br/>
 <span class="covered" title="11 out of 11 forms covered">
-                 086&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[filtered-tokens&nbsp;(filter&nbsp;#(=&nbsp;(:token-type&nbsp;%)&nbsp;:token)&nbsp;tokenised-code)
+                 090&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[filtered-tokens&nbsp;(filter&nbsp;#(=&nbsp;(:token-type&nbsp;%)&nbsp;:token)&nbsp;tokenised-code)
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 087&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;production-node&nbsp;(code-&gt;node&nbsp;production-rule)
+                 091&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;production-node&nbsp;(code-&gt;node&nbsp;production-rule)
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 088&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;all-options-parsed
+                 092&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;all-options-parsed
                 </span><br/>
 <span class="covered" title="31 out of 31 forms covered">
-                 089&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[option-vec&nbsp;(:node-value&nbsp;production-node)]
+                 093&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[option-vec&nbsp;(:node-value&nbsp;production-node)]
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 090&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
+                 094&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(do
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 091&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#_(println&nbsp;&quot;node&nbsp;name:&nbsp;&quot;&nbsp;(:node-name&nbsp;production-node))
+                 095&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#_(println&nbsp;&quot;node&nbsp;name:&nbsp;&quot;&nbsp;(:node-name&nbsp;production-node))
                 </span><br/>
 <span class="covered" title="7 out of 7 forms covered">
-                 092&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(hash-map&nbsp;:parsed-node-name&nbsp;(:node-name&nbsp;production-node)
+                 096&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(hash-map&nbsp;:parsed-node-name&nbsp;(:node-name&nbsp;production-node)
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 093&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:parsed-node-result&nbsp;(parse-single-option&nbsp;filtered-tokens&nbsp;option-vec))))]
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                 094&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;TODO&nbsp;remove&nbsp;prints
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                 095&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#_(println&nbsp;&quot;CODE-&gt;Node&nbsp;input:&nbsp;\n&quot;&nbsp;production-rule)
-                </span><br/>
-<span class="not-tracked" title="0 out of 0 forms covered">
-                 096&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#_(println&nbsp;&quot;CODE-&gt;NODE&nbsp;output:&nbsp;\n&quot;&nbsp;production-node)
-                </span><br/>
-<span class="blank" title="0 out of 0 forms covered">
-                 097&nbsp;&nbsp;
+                 097&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:parsed-node-result&nbsp;(parse-single-option&nbsp;filtered-tokens&nbsp;option-vec))))]
                 </span><br/>
 <span class="covered" title="13 out of 13 forms covered">
                  098&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(first&nbsp;(filter&nbsp;#(not&nbsp;(nil?&nbsp;(:parsed-node-result&nbsp;%)))&nbsp;all-options-parsed))))
@@ -305,22 +305,25 @@
                  100&nbsp;&nbsp;(defn&nbsp;create-abstract-syntax-tree
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 101&nbsp;&nbsp;&nbsp;&nbsp;[tokenised-code&nbsp;production-rules]
+                 101&nbsp;&nbsp;&nbsp;&nbsp;&quot;Creates&nbsp;the&nbsp;Abstract&nbsp;Syntax&nbsp;Tree&nbsp;as&nbsp;a&nbsp;nested&nbsp;map&nbsp;of&nbsp;Nodes&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 102&nbsp;&nbsp;&nbsp;&nbsp;[tokenised-code&nbsp;production-rules]
                 </span><br/>
 <span class="covered" title="7 out of 7 forms covered">
-                 102&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(read-string&nbsp;(:scae-forward-declarations&nbsp;production-rules)))
+                 103&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(read-string&nbsp;(:scae-forward-declarations&nbsp;production-rules)))
                 </span><br/>
 <span class="covered" title="7 out of 7 forms covered">
-                 103&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(read-string&nbsp;(:scae-program&nbsp;production-rules)))
+                 104&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(read-string&nbsp;(:scae-program&nbsp;production-rules)))
                 </span><br/>
 <span class="partial" title="29 out of 34 forms covered">
-                 104&nbsp;&nbsp;&nbsp;&nbsp;(doseq&nbsp;[production&nbsp;(vals&nbsp;production-rules)]
+                 105&nbsp;&nbsp;&nbsp;&nbsp;(doseq&nbsp;[production&nbsp;(vals&nbsp;production-rules)]
                 </span><br/>
 <span class="partial" title="5 out of 10 forms covered">
-                 105&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(read-string&nbsp;production)))
+                 106&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(read-string&nbsp;production)))
                 </span><br/>
 <span class="covered" title="6 out of 6 forms covered">
-                 106&nbsp;&nbsp;&nbsp;&nbsp;(parse-production-rule&nbsp;tokenised-code&nbsp;(:scae-entry-point&nbsp;production-rules)))
+                 107&nbsp;&nbsp;&nbsp;&nbsp;(parse-production-rule&nbsp;tokenised-code&nbsp;(:scae-entry-point&nbsp;production-rules)))
                 </span><br/>
  </body>
 </html>

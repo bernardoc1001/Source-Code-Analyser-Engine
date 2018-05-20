@@ -15,12 +15,6 @@
          :scope-map {GLOBAL_SCOPE_NAME {}}   ;;Key = the string of the scope-name, value = the symbol table entry map
          }))
 
-
-(defn pretty-print-symbol-table
-  "Pretty Print the symbol table"
-  []
-  (pprint @symbol-table))
-
 (defn reset-symbol-table!
   "Reset the symbol table"
   []

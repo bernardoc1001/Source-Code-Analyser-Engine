@@ -8,145 +8,163 @@
                  001&nbsp;&nbsp;(ns&nbsp;scae-library.style-analyser
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 002&nbsp;&nbsp;&nbsp;&nbsp;(:require&nbsp;[scae-library.node-ops&nbsp;:as&nbsp;node-ops]
+                 002&nbsp;&nbsp;&nbsp;&nbsp;&quot;This&nbsp;namespace&nbsp;is&nbsp;responsible&nbsp;for&nbsp;analysing&nbsp;an&nbsp;Abstract&nbsp;Syntax&nbsp;Tree&nbsp;for
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 003&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[clojure.string&nbsp;:as&nbsp;string]
+                 003&nbsp;&nbsp;&nbsp;&nbsp;Style&nbsp;Suggestions&quot;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 004&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[com.rpl.specter&nbsp;:refer&nbsp;:all]
+                 004&nbsp;&nbsp;&nbsp;&nbsp;(:require&nbsp;[scae-library.node-ops&nbsp;:as&nbsp;node-ops]
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 005&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[clojure.walk&nbsp;:as&nbsp;walk]))
+                 005&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[clojure.string&nbsp;:as&nbsp;string]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 006&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[com.rpl.specter&nbsp;:refer&nbsp;:all]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 007&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[clojure.walk&nbsp;:as&nbsp;walk]))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 006&nbsp;&nbsp;
+                 008&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 007&nbsp;&nbsp;(defn&nbsp;quote-first-parsed-node-result
+                 009&nbsp;&nbsp;(defn&nbsp;quote-first-parsed-node-result
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 008&nbsp;&nbsp;&nbsp;&nbsp;[ast-node]
+                 010&nbsp;&nbsp;&nbsp;&nbsp;&quot;Quotes&nbsp;the&nbsp;parsed&nbsp;node&nbsp;result&nbsp;of&nbsp;a&nbsp;node.&nbsp;This&nbsp;is&nbsp;needed&nbsp;to&nbsp;prevent&nbsp;the
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 009&nbsp;&nbsp;&nbsp;&nbsp;;;todo&nbsp;check&nbsp;if&nbsp;ordering&nbsp;of&nbsp;statement&nbsp;is&nbsp;free&nbsp;of&nbsp;side&nbsp;effects,&nbsp;check&nbsp;if&nbsp;I&nbsp;can&nbsp;get&nbsp;rid&nbsp;of&nbsp;specter
+                 011&nbsp;&nbsp;&nbsp;&nbsp;Clojure&nbsp;Reader&#x2F;Evaluater&nbsp;from&nbsp;pre-emptively&nbsp;evaluating&nbsp;the&nbsp;node&nbsp;as&nbsp;a&nbsp;function&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 012&nbsp;&nbsp;&nbsp;&nbsp;[ast-node]
                 </span><br/>
 <span class="partial" title="47 out of 64 forms covered">
-                 010&nbsp;&nbsp;&nbsp;&nbsp;(transform&nbsp;[:parsed-node-result]&nbsp;#(str&nbsp;&quot;&#x27;&quot;&nbsp;(reverse&nbsp;(into&nbsp;(list)&nbsp;%)))&nbsp;ast-node))
+                 013&nbsp;&nbsp;&nbsp;&nbsp;(transform&nbsp;[:parsed-node-result]&nbsp;#(str&nbsp;&quot;&#x27;&quot;&nbsp;(reverse&nbsp;(into&nbsp;(list)&nbsp;%)))&nbsp;ast-node))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 011&nbsp;&nbsp;
+                 014&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 012&nbsp;&nbsp;(defn&nbsp;parse-style-rules
+                 015&nbsp;&nbsp;(defn&nbsp;parse-style-rules
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 013&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;node-based-style-rules]
+                 016&nbsp;&nbsp;&nbsp;&nbsp;&quot;Evaluate&nbsp;a&nbsp;particular&nbsp;node&nbsp;on&nbsp;the&nbsp;Abstract&nbsp;Syntax&nbsp;Tree&nbsp;for&nbsp;any&nbsp;style&nbsp;suggestions&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 017&nbsp;&nbsp;&nbsp;&nbsp;[ast-node&nbsp;node-based-style-rules]
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 014&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[current-node-suggestions
+                 018&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[current-node-suggestions
                 </span><br/>
 <span class="covered" title="29 out of 29 forms covered">
-                 015&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[node-key-style-vector-val-pair&nbsp;node-based-style-rules]
+                 019&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[node-key-style-vector-val-pair&nbsp;node-based-style-rules]
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 016&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;if&nbsp;current&nbsp;node&nbsp;matches&nbsp;any&nbsp;style&nbsp;rules
+                 020&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;if&nbsp;current&nbsp;node&nbsp;matches&nbsp;any&nbsp;style&nbsp;rules
                 </span><br/>
 <span class="covered" title="9 out of 9 forms covered">
-                 017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(=&nbsp;(name&nbsp;(first&nbsp;node-key-style-vector-val-pair))
+                 021&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if&nbsp;(=&nbsp;(name&nbsp;(first&nbsp;node-key-style-vector-val-pair))
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 018&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(node-ops&#x2F;get-node-name&nbsp;ast-node))
+                 022&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(node-ops&#x2F;get-node-name&nbsp;ast-node))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 019&nbsp;&nbsp;
+                 023&nbsp;&nbsp;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 020&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;eval&nbsp;all&nbsp;style&nbsp;rules
+                 024&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;eval&nbsp;all&nbsp;style&nbsp;rules
                 </span><br/>
 <span class="covered" title="6 out of 6 forms covered">
-                 021&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[style-rule-vector&nbsp;(read-string&nbsp;(second&nbsp;node-key-style-vector-val-pair))]
+                 025&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(let&nbsp;[style-rule-vector&nbsp;(read-string&nbsp;(second&nbsp;node-key-style-vector-val-pair))]
                 </span><br/>
 <span class="covered" title="29 out of 29 forms covered">
-                 022&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[style-rule&nbsp;style-rule-vector]
+                 026&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[style-rule&nbsp;style-rule-vector]
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 023&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;note&nbsp;when&nbsp;putting&nbsp;a&nbsp;vector&nbsp;into&nbsp;a&nbsp;list&nbsp;it&nbsp;is&nbsp;done&nbsp;in&nbsp;reverse&nbsp;order
+                 027&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;note&nbsp;when&nbsp;putting&nbsp;a&nbsp;vector&nbsp;into&nbsp;a&nbsp;list&nbsp;it&nbsp;is&nbsp;done&nbsp;in&nbsp;reverse&nbsp;order
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 024&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;also&nbsp;note&nbsp;I&nbsp;have&nbsp;to&nbsp;insert&nbsp;a&nbsp;quoted&nbsp;string&nbsp;to&nbsp;prevent&nbsp;unintended&nbsp;evaluation
+                 028&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;also&nbsp;note&nbsp;I&nbsp;have&nbsp;to&nbsp;insert&nbsp;a&nbsp;quoted&nbsp;string&nbsp;to&nbsp;prevent&nbsp;unintended&nbsp;evaluation
                 </span><br/>
 <span class="covered" title="11 out of 11 forms covered">
-                 025&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(into&nbsp;(list)&nbsp;[(quote-first-parsed-node-result&nbsp;ast-node)&nbsp;style-rule]))))
+                 029&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(into&nbsp;(list)&nbsp;[(quote-first-parsed-node-result&nbsp;ast-node)&nbsp;style-rule]))))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 026&nbsp;&nbsp;
+                 030&nbsp;&nbsp;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 027&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;Else&nbsp;return&nbsp;an&nbsp;empty&nbsp;string
+                 031&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;;Else&nbsp;return&nbsp;an&nbsp;empty&nbsp;string
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 028&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&quot;))
+                 032&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;&quot;))
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 029&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;children-node-suggestions
+                 033&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;children-node-suggestions
                 </span><br/>
 <span class="covered" title="33 out of 33 forms covered">
-                 030&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[child&nbsp;(node-ops&#x2F;get-node-children&nbsp;ast-node)
+                 034&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;[child&nbsp;(node-ops&#x2F;get-node-children&nbsp;ast-node)
                 </span><br/>
 <span class="covered" title="3 out of 3 forms covered">
-                 031&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:when&nbsp;(node-ops&#x2F;node?&nbsp;child)]
+                 035&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:when&nbsp;(node-ops&#x2F;node?&nbsp;child)]
                 </span><br/>
 <span class="covered" title="4 out of 4 forms covered">
-                 032&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(parse-style-rules&nbsp;child&nbsp;node-based-style-rules))]
+                 036&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(parse-style-rules&nbsp;child&nbsp;node-based-style-rules))]
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 033&nbsp;&nbsp;
+                 037&nbsp;&nbsp;
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 034&nbsp;&nbsp;
+                 038&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="8 out of 8 forms covered">
-                 035&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(filter&nbsp;#(not&nbsp;(string&#x2F;blank?&nbsp;%))
+                 039&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(filter&nbsp;#(not&nbsp;(string&#x2F;blank?&nbsp;%))
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 036&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(flatten
+                 040&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(flatten
                 </span><br/>
 <span class="covered" title="2 out of 2 forms covered">
-                 037&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(concat
+                 041&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(concat
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 038&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current-node-suggestions
+                 042&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current-node-suggestions
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 039&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;children-node-suggestions)))))
+                 043&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;children-node-suggestions)))))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 040&nbsp;&nbsp;
+                 044&nbsp;&nbsp;
                 </span><br/>
 <span class="covered" title="1 out of 1 forms covered">
-                 041&nbsp;&nbsp;(defn&nbsp;analyse-style
+                 045&nbsp;&nbsp;(defn&nbsp;analyse-style
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 042&nbsp;&nbsp;&nbsp;&nbsp;[root-ast-node&nbsp;style-rules]
+                 046&nbsp;&nbsp;&nbsp;&nbsp;&quot;Analyses&nbsp;the&nbsp;Abstract&nbsp;Syntax&nbsp;Tree&nbsp;and&nbsp;returns&nbsp;a&nbsp;collection&nbsp;of&nbsp;strings
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 043&nbsp;&nbsp;&nbsp;&nbsp;;;define&nbsp;the&nbsp;style&nbsp;rules&nbsp;in&nbsp;the&nbsp;namespace
+                 047&nbsp;&nbsp;&nbsp;&nbsp;denoting&nbsp;any&nbsp;style&nbsp;suggestions&nbsp;that&nbsp;were&nbsp;returned.&quot;
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 048&nbsp;&nbsp;&nbsp;&nbsp;[root-ast-node&nbsp;style-rules]
+                </span><br/>
+<span class="not-tracked" title="0 out of 0 forms covered">
+                 049&nbsp;&nbsp;&nbsp;&nbsp;;;define&nbsp;the&nbsp;style&nbsp;rules&nbsp;in&nbsp;the&nbsp;namespace
                 </span><br/>
 <span class="partial" title="31 out of 36 forms covered">
-                 044&nbsp;&nbsp;&nbsp;&nbsp;(doseq&nbsp;[style-function-definition&nbsp;(vals&nbsp;(:style-rules-function-definitions&nbsp;style-rules))]
+                 050&nbsp;&nbsp;&nbsp;&nbsp;(doseq&nbsp;[style-function-definition&nbsp;(vals&nbsp;(:style-rules-function-definitions&nbsp;style-rules))]
                 </span><br/>
 <span class="partial" title="5 out of 10 forms covered">
-                 045&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(read-string&nbsp;style-function-definition)))
+                 051&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(eval&nbsp;(read-string&nbsp;style-function-definition)))
                 </span><br/>
 <span class="blank" title="0 out of 0 forms covered">
-                 046&nbsp;&nbsp;
+                 052&nbsp;&nbsp;
                 </span><br/>
 <span class="not-tracked" title="0 out of 0 forms covered">
-                 047&nbsp;&nbsp;&nbsp;&nbsp;;;parse&nbsp;through&nbsp;the&nbsp;AST,&nbsp;evaluating&nbsp;style&nbsp;rules&nbsp;for&nbsp;the&nbsp;nodes&nbsp;that&nbsp;have&nbsp;them
+                 053&nbsp;&nbsp;&nbsp;&nbsp;;;parse&nbsp;through&nbsp;the&nbsp;AST,&nbsp;evaluating&nbsp;style&nbsp;rules&nbsp;for&nbsp;the&nbsp;nodes&nbsp;that&nbsp;have&nbsp;them
                 </span><br/>
 <span class="covered" title="6 out of 6 forms covered">
-                 048&nbsp;&nbsp;&nbsp;&nbsp;(parse-style-rules&nbsp;root-ast-node&nbsp;(:node-based-style-rules&nbsp;style-rules)))
+                 054&nbsp;&nbsp;&nbsp;&nbsp;(parse-style-rules&nbsp;root-ast-node&nbsp;(:node-based-style-rules&nbsp;style-rules)))
                 </span><br/>
  </body>
 </html>
