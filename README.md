@@ -10,6 +10,8 @@ but have otherwise left the project unchanged.
 
 The project received a First Class Honours with a mark of 85.
 
+A live version of the project is hosted on AWS at: http://www.source-code-analyser-engine.com/
+
 
 ## Source Code Analyser Engine
 
